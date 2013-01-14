@@ -11,7 +11,7 @@ tagline: 思考，笔记和分享
       {% for post in site.posts %}	
         <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
         <p>
-            {{ post.content | strip_html | truncatewords:75}}
+            {{ post.content | strip_html | truncatewords:25}}
         </p>
         <p>
           <a href="{{ post.url }}"><strong>阅读更多...</strong></a><br/>
