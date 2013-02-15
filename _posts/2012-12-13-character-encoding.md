@@ -11,9 +11,9 @@ tags : [encoding, share]
 
 **字符集(Character set)** 是多个文字/字符的集合, 比如ASCII字符集，Unicode字符集
 
-**字符编码(Character encoding)** 字符集中，每个字符都分配一个编码，称为字符编码， 例如“汉”字的Unicode编码是6C49
+**字符编码(Character encoding)** 字符集中，每个字符都分配一个编码，称为字符编码， 例如"汉"字的Unicode编码是6C49
 
-**文字编码方式(Character encoding Scheme)** 规定如何传输、保存字符编码, 例如都是用Unicode字符集的UTF-8、UTF-16、UTF-32, “汉”字的在UTF-8中使用3个连续的字节E6 B1 89来表示，但是在UTF-16（Big-Endian）中刚好是2字节6C 49
+**文字编码方式(Character encoding Scheme)** 规定如何传输、保存字符编码, 例如都是用Unicode字符集的UTF-8、UTF-16、UTF-32, "汉"字的在UTF-8中使用3个连续的字节E6 B1 89来表示，但是在UTF-16（Big-Endian）中刚好是2字节6C 49
 
 
 ## 主要编码介绍
@@ -37,15 +37,15 @@ tags : [encoding, share]
   
 **分区表示**
 
-* `GB 2312中对所收汉字进行了“分区”处理，每区含有94个汉字/符号。这种表示方式也称为区位码。`
+* `GB 2312中对所收汉字进行了"分区"处理，每区含有94个汉字/符号。这种表示方式也称为区位码。`
 * `01-09区为特殊符号。`
 * `16-55区为一级汉字，按拼音排序。`
 * `56-87区为二级汉字，按部首/笔画排序。`
 * `10-15区及88-94区则未有编码。`
 
-  “高位字节”使用了0xA1-0xF7(把01-87区的区号加上0xA0)，“低位字节”使用了0xA1-0xFE(把01-94加上 0xA0)。
-  由于一级汉字从16区起始，汉字区的“高位字节”的范围是0xB0-0xF7，“低位字节”的范围是0xA1-0xFE，占用的码位是 72\*94=6768。其中有5个空位是D7FA-D7FE。
-  例如“啊”字会以两个字节，0xB0（第一个字节） 0xA1（第二个字节）储存。区位码=区字节+位字节（与区位码对比：0xB0=0xA0+16,0xA1=0xA0+1）。
+  "高位字节"使用了0xA1-0xF7(把01-87区的区号加上0xA0)，"低位字节"使用了0xA1-0xFE(把01-94加上 0xA0)。
+  由于一级汉字从16区起始，汉字区的"高位字节"的范围是0xB0-0xF7，"低位字节"的范围是0xA1-0xFE，占用的码位是 72\*94=6768。其中有5个空位是D7FA-D7FE。
+  例如"啊"字会以两个字节，0xB0（第一个字节） 0xA1（第二个字节）储存。区位码=区字节+位字节（与区位码对比：0xB0=0xA0+16,0xA1=0xA0+1）。
   
 ###三. GBK
 
@@ -66,9 +66,9 @@ GB系列编码字节序列都是采用大端法
   
   UTF-8、UTF-16、UTF-32都是将数字转换到程序数据的编码方案。
   
-  * UTF-8 可变长度字符编码，也是一种前缀码，使用一至六个字节为每个字符编码，兼容ASCII编码。不存在字节序列问题。
-  * UTF-16 以固定长度的字节 (2字节) 储存, 无法兼容于ASCII编码，存在字节序问题
-  * UTF-32 每个字符都使用4字节
+* UTF-8 可变长度字符编码，也是一种前缀码，使用一至六个字节为每个字符编码，兼容ASCII编码。不存在字节序列问题。
+* UTF-16 以固定长度的字节 (2字节) 储存, 无法兼容于ASCII编码，存在字节序问题
+* UTF-32 每个字符都使用4字节
   
   
 <blockquote><pre><span>
@@ -91,11 +91,11 @@ GB系列编码字节序列都是采用大端法
   
   Encoding Representation 
   
-  * UTF-8 EF BB BF 
-  * UTF-16 Big Endian FE FF 
-  * UTF-16 Little Endian FF FE 
-  * UTF-32 Big Endian 00 00 FE FF 
-  * UTF-32 Little Endian FF FE 00 00
+* UTF-8 EF BB BF 
+* UTF-16 Big Endian FE FF 
+* UTF-16 Little Endian FF FE 
+* UTF-32 Big Endian 00 00 FE FF 
+* UTF-32 Little Endian FF FE 00 00
   
 ###五. ANSI
   
@@ -107,20 +107,18 @@ GB系列编码字节序列都是采用大端法
   
   ANSI编码兼容ASCII，0x00~0x7F之间的字符，依旧是1个字节代表1个字符。使用 0x80~0xFF 范围的 2 个字节来表示 1 个字符
   
-  ASCII字符集是与ANSI字符集中的前面128个(0-127)字符相同。  
+  ASCII字符集是与ANSI字符集中的前面128个(0-127)字符相同。
   
-**notepad 中 ANSI “联通” 乱码原因：**
+**notepad 中 ANSI "联通" 乱码原因：**
 
 "联通"的ANSI（GB2312）编码：
 
-  c1 1100 0001 
-  aa 1010 1010 
-  cd 1100 1101 
-  a8 1010 1000
+    c1 1100 0001
+    aa 1010 1010
+    cd 1100 1101
+    a8 1010 1000
 
-  结论：
-  
-  * txt 中保存ANSI编码，当txt文档中一切字符都在 C0≤高字节≤DF 80≤低字节≤BF 这个范围时（误认为是UTF-8），notepad都无法确认文档地格式
+**结论：**  txt 中保存ANSI编码，当txt文档中一切字符都在 C0≤高字节≤DF 80≤低字节≤BF 这个范围时（误认为是UTF-8），notepad都无法确认文档地格式
 
 ## 乱码及其原因
 
@@ -135,8 +133,8 @@ GB系列编码字节序列都是采用大端法
 
 几乎所有情况下，文本数据都不附加文字编码方式的信息，软件大体会按一下方式来尝试自动推测数据编码：
 
-* 检查只有在某种字符编码方式下才会出现的字节排列，从而来确定编码方式。（比如notpad中“联通的”乱码， 微软用EF BB BF判定UTF-8,）
-* 如果不能确定，则安照文字出现的频率来推测
+* 检查只有在某种字符编码方式下才会出现的字节排列，从而来确定编码方式。（比如notpad中"联通的"乱码， 微软用EF BB BF判定UTF-8）
+* 如果不能确定，则按照文字出现的频率来推测
 
 这样并不能100%确定字符编码方式，字符编码方式一旦错了，数据就完全没有意义。即产生乱码
 
@@ -165,44 +163,36 @@ GB系列编码字节序列都是采用大端法
 * 把meta标签放在head区域的最前面
 * 始终指定文档类型
 
-  如果没有在头信息或meta标签中指定文档类型（content-type），浏览器就会通过很复杂的算法去“嗅探”文档的类型。这个过程会造成额外的延迟，而且还会带来安全漏洞。
+  如果没有在头信息或meta标签中指定文档类型（content-type），浏览器就会通过很复杂的算法去"嗅探"文档的类型。这个过程会造成额外的延迟，而且还会带来安全漏洞。
 * 务必指定正确的字符编码
   HTTP头信息或meta标签中指定的字符编码设置一定要和编辑HTML文档时的实际字符编码一致，如果同时通过HTTP头信息和Meta标签两种方式指定了字符编码，它们一定要保持一致。否则浏览器发现两者相互矛盾，会造成页面渲染错误或者为了重绘页面而造成额外的延迟。
 
 
 ### 二．URL编码
-  只有字母和数字`[0-9a-zA-Z]`、一些特殊符号`$-_.+!*'(),` 以及某些保留字，才可以不经过编码直接用于 URL。
-  这意味着，如果URL中有汉字，就必须编码后使用。但是麻烦的是url编码是交给应用程序（浏览器）自己决定。这导致“URL编码”成为了一个混乱的领域。
+只有字母和数字`[0-9a-zA-Z]`、一些特殊符号`$-_.+!*'(),` 以及某些保留字，才可以不经过编码直接用于 URL。
+  这意味着，如果URL中有汉字，就必须编码后使用。但是麻烦的是url编码是交给应用程序（浏览器）自己决定。这导致"URL编码"成为了一个混乱的领域。
 
-  * 网址路径的编码，用的是utf-8编码
+* 网址路径的编码，用的是utf-8编码
 
->http://zh.wikipedia.org/wiki/春节
+>http://zh.wikipedia.org/wiki/春节  
+>"春"和"节"的utf-8编码分别是"E6 98 A5"和"E8 8A 82"  
+>http请求中 "春节"编码被成了"%E6%98%A5%E8%8A%82"
 
->“春”和“节”的utf-8编码分别是“E6 98 A5”和“E8 8A 82”
+* 查询字符串的编码，用的是操作系统的默认编码。
 
->http请求中 “春节”编码被成了“%E6%98%A5%E8%8A%82”
+>http://www.baidu.com/s?wd=春节  
+>"春"和"节"的GB2312编码  
+>http请求中 wd=%B4%BA%BD%DA  
 
+* GET和POST方法的编码，用的是网页的编码
+* 在Ajax调用中，IE总是采用GB2312编码（操作系统的默认编码），而Firefox总是采用utf-8编码
 
-  * 查询字符串的编码，用的是操作系统的默认编码。
-
->http://www.baidu.com/s?wd=春节
-
->“春”和“节”的GB2312编码
-
->http请求中 wd=%B4%BA%BD%DA
-
-    
-  * GET和POST方法的编码，用的是网页的编码
-
-  * 在Ajax调用中，IE总是采用GB2312编码（操作系统的默认编码），而Firefox总是采用utf-8编码
-  
 **最佳实践**
-  先用Javascript先对URL编码，然后再向服务器提交，不要给浏览器插手的机会。因为Javascript的输出总是一致的，所以就保证了服务器得到的数据是格式统一的。
-  
-  具体编码规则：除了ASCII字母、数字、标点符号和一些特殊字符以外，对其他所有字符进行编码。在\u0000到\u00ff之间的符号被转成%xx的形式，其余符号被转成%uxxxx的形式
-  
-  相关javascript函数： escape(), encodeURI(), encodeURIComponent()
-  
+
+  先用Javascript先对URL编码，然后再向服务器提交，不要给浏览器插手的机会。因为Javascript的输出总是一致的，所以就保证了服务器得到的数据是格式统一的。  
+  具体编码规则：除了ASCII字母、数字、标点符号和一些特殊字符以外，对其他所有字符进行编码。在\u0000到\u00ff之间的符号被转成%xx的形式，其余符号被转成%uxxxx的形式  
+  相关javascript函数： escape(), encodeURI(), encodeURIComponent()  
+
 ###　三．vim 中的编码
 
 Vim 有四个跟字符编码方式有关的选项：
@@ -227,20 +217,20 @@ Vim 的多字符编码方式支持是如何工作的：
 ### 四. mysql 中的编码
   mysql中有若干关于编码的配置，用`show variables like '%character%';` 可以查询：
   
-  * `character_set_client` 客户端字符集
-  * `character_set_connection` 客户端与服务器端连接采用的字符集
-  * `character_set_database` 数据库采用的字符集， 创建table时的默认编码
-  * `character_set_filesystem` 
-  * `character_set_results` SELECT查询返回数据的字符集
-  * `character_set_server` 服务器的字符集,创建数据库时默认的编码
-  * `character_set_system` 
-  * `character_sets_dir` 
+* `character_set_client` 客户端字符集
+* `character_set_connection` 客户端与服务器端连接采用的字符集
+* `character_set_database` 数据库采用的字符集， 创建table时的默认编码
+* `character_set_filesystem` 
+* `character_set_results` SELECT查询返回数据的字符集
+* `character_set_server` 服务器的字符集,创建数据库时默认的编码
+* `character_set_system` 
+* `character_sets_dir` 
   
 在php中 `set names 'gbk'` 等同于同时设定了 
 
-  set @@character_set_client = 'gbk'
-  set @@character_set_connection = 'gbk'
-  set @@character_set_results = 'gbk'
+    set @@character_set_client = 'gbk'
+    set @@character_set_connection = 'gbk'
+    set @@character_set_results = 'gbk'
 
   通常情况将`set names '编码'` 设置得和mysql的`character_set_database`一直，可以避免大部分乱码问题，但是当程序编码(如web页面)和数据库编码不一致时，必须设置`character_set_results`和程序编码一致。
   
@@ -283,11 +273,11 @@ Vim 的多字符编码方式支持是如何工作的：
 
 ruby1.9中String相关的函数：
 
-  #length 或 #size 返回字符数
-  #bytesize 返回字节数
-  #encoding 返回字符串编码方式，通常一个字符串字面值的编码方式是基于其所在的源文件（但并不总一致）
-  #force_encoding(某种编码方式) 设置字符串编码方式，该方法没有进行字符转换，字符串底层字节没有变化，只是ruby对它的解释发生了变化
-  #encode(某种编码方式) 返回与调用者含义相同的字符序列，但是编码方式不同，底层字节改变
+    #length 或 #size 返回字符数
+    #bytesize 返回字节数
+    #encoding 返回字符串编码方式，通常一个字符串字面值的编码方式是基于其所在的源文件（但并不总一致）
+    #force_encoding(某种编码方式) 设置字符串编码方式，该方法没有进行字符转换，字符串底层字节没有变化，只是ruby对它的解释发生了变化
+    #encode(某种编码方式) 返回与调用者含义相同的字符序列，但是编码方式不同，底层字节改变
 
   
 ## 参考资料
