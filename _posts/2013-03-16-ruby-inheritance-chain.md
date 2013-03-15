@@ -2,7 +2,7 @@
 layout: post
 category : Ruby
 title: Ruby 继承链
-tags : [ruby OOP]
+tags : [ruby, OOP]
 ---
 {% include JB/setup %}
 
