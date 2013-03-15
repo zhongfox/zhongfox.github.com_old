@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 永远遵守最佳实践
+title: Finding the best practice
 tagline: 思考，笔记和分享
 ---
 {% include JB/setup %}

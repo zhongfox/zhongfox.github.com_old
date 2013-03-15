@@ -85,6 +85,8 @@ Firefox及其扩展都是基于当前网络开发广泛使用的技术。其结�
 
 **chrome协议** 类似http://协议是用来请求web资源，chrome://协议用来请求chrome, 我们可以在firefox的地址栏通过chrome协议访问任何chrome资源，大部分资源会以文本文件显示，但是XUL文件会被执行，正如你在浏览器窗口上正常看到的一样。
 
+常见的 firefox chrome : <http://kb.mozillazine.org/Dev_:_Firefox_Chrome_URLs>
+
 Chrome 提供者能为特定的窗口类型（如浏览器窗口）提供 chrome。有三种基本的 chrome 提供者：
 
 * 内容（Content）：通常是 XUL 文件。
