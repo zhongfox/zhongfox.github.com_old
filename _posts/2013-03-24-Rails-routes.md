@@ -49,39 +49,72 @@ tags : [rails, routes]
 
 ##三. 使用命名空间
 
-`namespace :admin` 增加helper前缀，增加路由前缀，增加控制器命名空间
-<pre><code>
-    admin_posts GET    /admin/posts(.:format)             admin/posts#index
-                POST   /admin/posts(.:format)             admin/posts#create
- new_admin_post GET    /admin/posts/new(.:format)         admin/posts#new
-edit_admin_post GET    /admin/posts/:id/edit(.:format)    admin/posts#edit
-     admin_post GET    /admin/posts/:id(.:format)         admin/posts#show
-                PUT    /admin/posts/:id(.:format)         admin/posts#update
-                DELETE /admin/posts/:id(.:format)         admin/posts#destroy
-</code></pre>
+1.  `namespace :admin` 增加helper前缀，增加路由前缀，增加控制器命名空间
+    <pre><code>
+        admin_posts GET    /admin/posts(.:format)             admin/posts#index
+                    POST   /admin/posts(.:format)             admin/posts#create
+     new_admin_post GET    /admin/posts/new(.:format)         admin/posts#new
+    edit_admin_post GET    /admin/posts/:id/edit(.:format)    admin/posts#edit
+         admin_post GET    /admin/posts/:id(.:format)         admin/posts#show
+                    PUT    /admin/posts/:id(.:format)         admin/posts#update
+                    DELETE /admin/posts/:id(.:format)         admin/posts#destroy
+    </code></pre>
 
-`scope :module => "admin"` 只增加控制器命名空间, 对于单个resources，等效于`resources :users, :module => "admin"`
-<pre><code>
-          users GET    /users(.:format)                   admin/users#index
-                POST   /users(.:format)                   admin/users#create
-       new_user GET    /users/new(.:format)               admin/users#new
-      edit_user GET    /users/:id/edit(.:format)          admin/users#edit
-           user GET    /users/:id(.:format)               admin/users#show
-                PUT    /users/:id(.:format)               admin/users#update
-                DELETE /users/:id(.:format)               admin/users#destroy
-</code></pre>
+2.  `scope :module => "admin"` 只增加控制器命名空间, 对于单个resources，等效于`resources :users, :module => "admin"`
 
-`scope "/admin"`  只增加路由前缀, 对于单个resources， 等效于`resources :posts, :path => "/admin/comments"`
-<pre><code>
-       comments GET    /admin/comments(.:format)          comments#index
-                POST   /admin/comments(.:format)          comments#create
-    new_comment GET    /admin/comments/new(.:format)      comments#new
-   edit_comment GET    /admin/comments/:id/edit(.:format) comments#edit
-        comment GET    /admin/comments/:id(.:format)      comments#show
-                PUT    /admin/comments/:id(.:format)      comments#update
-                DELETE /admin/comments/:id(.:format)      comments#destroy
-</code></pre>
+    <pre><code>
+              users GET    /users(.:format)                   admin/users#index
+                    POST   /users(.:format)                   admin/users#create
+           new_user GET    /users/new(.:format)               admin/users#new
+          edit_user GET    /users/:id/edit(.:format)          admin/users#edit
+               user GET    /users/:id(.:format)               admin/users#show
+                    PUT    /users/:id(.:format)               admin/users#update
+                    DELETE /users/:id(.:format)               admin/users#destroy
+    </code></pre>
 
+3.  `scope "/admin"`  只增加路由前缀, 对于单个resources， 等效于`resources :posts, :path => "/admin/comments"`
+
+    <pre><code>
+           comments GET    /admin/comments(.:format)          comments#index
+                    POST   /admin/comments(.:format)          comments#create
+        new_comment GET    /admin/comments/new(.:format)      comments#new
+       edit_comment GET    /admin/comments/:id/edit(.:format) comments#edit
+            comment GET    /admin/comments/:id(.:format)      comments#show
+                    PUT    /admin/comments/:id(.:format)      comments#update
+                    DELETE /admin/comments/:id(.:format)      comments#destroy
+    </code></pre>
+
+4.  下面2中是等效的，使用as增加了helper前缀，scope增加了路由前缀，controller没变
+
+        scope 'admin' do
+            resources :users, :as => 'admin_users'
+        end
+
+        scope "admin", :as => "admin" do
+            resources :users
+        end      
+
+    <pre><code>
+         admin_users GET    /admin/users(.:format)              users#index
+                     POST   /admin/users(.:format)              users#create
+      new_admin_user GET    /admin/users/new(.:format)          users#new
+     edit_admin_user GET    /admin/users/:id/edit(.:format)     users#edit
+          admin_user GET    /admin/users/:id(.:format)          users#show
+                     PUT    /admin/users/:id(.:format)          users#update
+                     DELETE /admin/users/:id(.:format)          users#destroy
+    </code></pre>
+
+5.  `scope ":username"` 向scope传递symbol会被认为是一个片段参数：
+
+    <pre><code>
+               posts GET    /:username/posts(.:format)          posts#index
+                     POST   /:username/posts(.:format)          posts#create
+            new_post GET    /:username/posts/new(.:format)      posts#new
+           edit_post GET    /:username/posts/:id/edit(.:format) posts#edit
+                post GET    /:username/posts/:id(.:format)      posts#show
+                     PUT    /:username/posts/:id(.:format)      posts#update
+                     DELETE /:username/posts/:id(.:format)      posts#destroy
+    </code></pre>
 
 ##四. 嵌套资源 这个对于一对多的资源相当有用：
 
@@ -211,7 +244,7 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
 
 2. 指定constraint：`resources :photos, :constraints => {:id => /[A-Z][A-Z][0-9]+/}` 这将约束7条路由中需要id的4条路由的id格式
 
-  也可以使用如下的block形式的constraint：
+   也可以使用如下的block形式的constraint：
 
         constraints(:id => /[A-Z][A-Z][0-9]+/) do
           resources :photos
@@ -220,16 +253,21 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
 
 3. 使用as复写自动生成的路由helper： `resources :photos, :as => "images"` 这将把4个helper变成：
 
-  `images_path images_path new_image_path edit_image_path(:id)`
+   `images_path images_path new_image_path edit_image_path(:id)`
 
-  当然我觉得还是不要干这种事， 因为 convention over configuration
+   当然我觉得还是不要干这种事， 因为 convention over configuration
 
-4. 
+4. 使用only 和except来减少路由：
+
+   `resources :photos, :only => [:index, :show]`
+
+   `resources :photos, :except => :destroy`
+
+八. 路由测试
+
+查看现有路由： `rake routes`, 可以传入controller以查看指定控制器对于的路由：`CONTROLLER=users rake routes`
 
 
-
-<pre><code>
-</code></pre>
 
 ## 参考资料
 [Rails Routing from the Outside In](http://guides.rubyonrails.org/routing.html)
