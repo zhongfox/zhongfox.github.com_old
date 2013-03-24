@@ -8,7 +8,7 @@ tags : [rails, routes]
 
 总觉得rails的routes有些容易混淆的地方，总结一下吧
 
-##一. 复数resources：`resources :students`, 7条路由
+###一. 复数resources：`resources :students`, 7条路由
 <pre><code>
          students GET    /students(.:format)                students#index
                   POST   /students(.:format)                students#create
@@ -37,7 +37,7 @@ tags : [rails, routes]
 
 还可以同时定义多个资源 `resources :photos, :books, :videos`
 
-##二. 单数resource：`resource :car`, 6条路由，因为没有了index方法
+###二. 单数resource：`resource :car`, 6条路由，因为没有了index方法
 <pre><code>
             car POST   /car(.:format)                     cars#create
         new_car GET    /car/new(.:format)                 cars#new
@@ -47,7 +47,7 @@ tags : [rails, routes]
                 DELETE /car(.:format)                     cars#destroy
 </code></pre>
 
-##三. 使用命名空间
+###三. 使用命名空间
 
 1.  `namespace :admin` 增加helper前缀，增加路由前缀，增加控制器命名空间
     <pre><code>
@@ -116,7 +116,7 @@ tags : [rails, routes]
                      DELETE /:username/posts/:id(.:format)      posts#destroy
     </code></pre>
 
-##四. 嵌套资源 这个对于一对多的资源相当有用：
+###四. 嵌套资源 这个对于一对多的资源相当有用：
 
         class Magazine < ActiveRecord::Base
           has_many :ads
@@ -141,7 +141,7 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
                  DELETE /magazines/:magazine_id/ads/:id(.:format)      ads#destroy
 </code></pre>
 
-##五. 添加自定义的RESTful路由
+###五. 添加自定义的RESTful路由
 
 * 使用member，可以创建一个针对单个ORM对象的路由，如
 
@@ -171,7 +171,7 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
 
     对于单个action，也可以使用`get 'total_score', :on => :collection`
 
-##六. 非 Resourceful 路由
+###六. 非 Resourceful 路由
 
 * 参数绑定：在自定义路由中的symbol代表着传入的片段参数，片段参数和实际参数(问号后面的参数)一样会出现在params里
 
@@ -238,7 +238,7 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
 * 指定root：`root :to => 'pages#main'` root最好在routes文件开始指定，因为通常root是访问量最大的，应该优先匹配。
 
 
-七. 个性化的Resourceful路由
+###七. 个性化的Resourceful路由
 
 1. 指定controller：`resources :photos, :controller => "images"`
 
@@ -263,7 +263,7 @@ edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
 
    `resources :photos, :except => :destroy`
 
-八. 路由测试
+###八. 路由测试
 
 查看现有路由： `rake routes`, 可以传入controller以查看指定控制器对于的路由：`CONTROLLER=users rake routes`
 
