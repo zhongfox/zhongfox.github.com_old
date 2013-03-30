@@ -21,7 +21,7 @@ tagline: 思考，笔记和分享
             {{ post.date | date: "%B %e, %Y" }}
           </strong>
             | {{ post.category }}
-            | <a href="http://zhongfox.github.com{{ post.url }}/#disqus_thread" data-disqus-identifier="{{ post.url }}">comments</a>
+            | <a href="http://zhongfox.github.com{{ post.url }}/#uyan_frame" data-disqus-identifier="{{ post.url }}">comments</a>
         </p>
         {% if forloop.last %}
         {% else %}
