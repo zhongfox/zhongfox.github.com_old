@@ -138,4 +138,50 @@ tags : [ruby, OOP, metaprograming]
 
 9. 类方法就是类的单件方法。
 
+10. 对象扩展：类include一个模块，是把模块的实例方法变成类的实例方法
+
+    类扩展：在类/对象的单件类中include一个模块，就把模块的实例方法变成了类/对象的单件方法。
+
+        module MyModule
+          def my_method; 'hi'; end
+        end
+
+        class MyClass
+          class << self
+            include MyModule
+          end
+        end
+
+        MyClass.my_method #hi
+
+    类扩展的快捷方式是extend，如
+
+        module MyModule
+          def my_method; 'hi'; end
+        end
+
+        class MyClass
+          extend MyModule
+        end
+
+        MyClass.my_method #hi
+
+11. 使用`alias`来实现环绕命名
+
+    alias是ruby的关键字而不是方法，所以使用是新旧方法名间无逗号： alias new_method_name old_method_name
+
+    Module#alias功能与关键字alias功能相同，新旧方法名间有逗号。
+
+    环绕命名使用场景：希望把旧的方法功能重新升级，但是新功能的实现依赖旧方法（如重写Fixnum#+使1+1=3）
+
+    步骤：
+
+    1. alias 旧方法代理名 旧方法名
+
+    2. 重新定义 旧方法，在重写定义中调用旧方法代理; 或者：
+
+       定义新方法名，在新方法中调用旧方法代理，然后 alias 旧方法名 新方法名; 这种方式比上面一种多了一个新方法名可以用而已。
+
+    总之可以实现调用旧方法名，实现了新功能。
+
 
