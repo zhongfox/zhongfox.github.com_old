@@ -104,9 +104,11 @@ tags : [ruby, OOP, metaprograming]
 
     其实method_two 也成为了Myclass的实例方法
 
-    **结论：在def的时候，**当前`class = self.is_a? Class ? self : self.class`
+    **结论：在def的时候，**当前`class = self.is_a? Class ? self : self.class` 下面的 instance_eval 例外。
 
     关于`class_eval`， 它会修改self和当前class，class_eval比关键字class更灵活，它可以用在常量和变量上。
+
+    关于`instance_eval`, 它除了修改self外，还修改了接收者的单件类，也就是说在 instance_eval 中使用def定义的方法，并不是该对象的类的实例方法，而是该对象的单件方法。
 
 6. 类的实例变量和类变量：
 
@@ -124,5 +126,16 @@ tags : [ruby, OOP, metaprograming]
    原因是全局定义@@v是属于Object的，MyClass继承了Object，所以上面的代码出现了子类复写类变量。
 
    So最佳实践是：避免使用类变量，尽量使用类的实例变量。
+
+7. 匿名类：使用 Class.new 可以创建一个匿名类，传一个参数作为该匿名类的超类，以及一个代码块。每个类对象都有name方法返回自己的类名（字符串），但是匿名类的name是nil，直到把该匿名类赋值给一个常量，该常量的字符串表示将成为这个类的name：
+
+        c = Class.new(Object) {}
+        c.name # nil
+        MyClass = c
+        c.name # "MyClass"
+
+8. Duck Typing: ruby在乎的不是一个对象是什么类，而是这个对象能相应的方法，方法可以是普通方法（实例方法），单键方法或者幽灵方法。
+
+9. 类方法就是类的单件方法。
 
 
