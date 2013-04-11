@@ -9,15 +9,14 @@ tags : [rails, routes]
 总觉得rails的routes有些容易混淆的地方，总结一下吧
 
 ###一. 复数resources：`resources :students`, 7条路由
-<pre><code>
-         students GET    /students(.:format)                students#index
-                  POST   /students(.:format)                students#create
-      new_student GET    /students/new(.:format)            students#new
-     edit_student GET    /students/:id/edit(.:format)       students#edit
-          student GET    /students/:id(.:format)            students#show
-                  PUT    /students/:id(.:format)            students#update
-                  DELETE /students/:id(.:format)            students#destroy
-</code></pre>
+
+            students GET    /students(.:format)                students#index
+                     POST   /students(.:format)                students#create
+         new_student GET    /students/new(.:format)            students#new
+        edit_student GET    /students/:id/edit(.:format)       students#edit
+             student GET    /students/:id(.:format)            students#show
+                     PUT    /students/:id(.:format)            students#update
+                     DELETE /students/:id(.:format)            students#destroy
 
 通过使用helper获得url，需要传入id的方法，至少有三种方式：
 
@@ -125,15 +124,14 @@ helper和url都使用了单数，但是controller还是复数!
         end
 
 以上路由除了生成magazine的常规路由外，生成了ads的路由如下, 对所有路由都加上了前缀`/magazines/:magazine_id/`
-<pre><code>
-    magazine_ads GET    /magazines/:magazine_id/ads(.:format)          ads#index
-                 POST   /magazines/:magazine_id/ads(.:format)          ads#create
- new_magazine_ad GET    /magazines/:magazine_id/ads/new(.:format)      ads#new
-edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
-     magazine_ad GET    /magazines/:magazine_id/ads/:id(.:format)      ads#show
-                 PUT    /magazines/:magazine_id/ads/:id(.:format)      ads#update
-                 DELETE /magazines/:magazine_id/ads/:id(.:format)      ads#destroy
-</code></pre>
+
+            magazine_ads GET    /magazines/:magazine_id/ads(.:format)          ads#index
+                         POST   /magazines/:magazine_id/ads(.:format)          ads#create
+         new_magazine_ad GET    /magazines/:magazine_id/ads/new(.:format)      ads#new
+        edit_magazine_ad GET    /magazines/:magazine_id/ads/:id/edit(.:format) ads#edit
+             magazine_ad GET    /magazines/:magazine_id/ads/:id(.:format)      ads#show
+                         PUT    /magazines/:magazine_id/ads/:id(.:format)      ads#update
+                         DELETE /magazines/:magazine_id/ads/:id(.:format)      ads#destroy
 
 ###五. 添加自定义的RESTful路由
 
