@@ -88,7 +88,7 @@ helper和url都使用了单数，但是controller还是复数!
                     DELETE /admin/comments/:id(.:format)      comments#destroy
     </code></pre>
 
-4.  下面2中是等效的，使用as增加了helper前缀，scope增加了路由前缀，controller没变
+4.  下面2种是等效的，使用as增加了helper前缀，scope增加了路由前缀，controller没变
 
         scope 'admin' do
             resources :users, :as => 'admin_users'
