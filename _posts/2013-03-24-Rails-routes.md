@@ -54,15 +54,13 @@ helper和url都使用了单数，但是controller还是复数!
 
 1.  `namespace :admin` 增加helper前缀，增加路由前缀，增加控制器命名空间
 
-    <pre><code>
-        admin_posts GET    /admin/posts(.:format)             admin/posts#index
-                    POST   /admin/posts(.:format)             admin/posts#create
-     new_admin_post GET    /admin/posts/new(.:format)         admin/posts#new
-    edit_admin_post GET    /admin/posts/:id/edit(.:format)    admin/posts#edit
-         admin_post GET    /admin/posts/:id(.:format)         admin/posts#show
-                    PUT    /admin/posts/:id(.:format)         admin/posts#update
-                    DELETE /admin/posts/:id(.:format)         admin/posts#destroy
-    </code></pre>
+            admin_posts GET    /admin/posts(.:format)             admin/posts#index
+                        POST   /admin/posts(.:format)             admin/posts#create
+         new_admin_post GET    /admin/posts/new(.:format)         admin/posts#new
+        edit_admin_post GET    /admin/posts/:id/edit(.:format)    admin/posts#edit
+             admin_post GET    /admin/posts/:id(.:format)         admin/posts#show
+                        PUT    /admin/posts/:id(.:format)         admin/posts#update
+                        DELETE /admin/posts/:id(.:format)         admin/posts#destroy
 
 2.  `scope :module => "admin"` 只增加控制器命名空间, 对于单个resources，等效于`resources :users, :module => "admin"`
 
