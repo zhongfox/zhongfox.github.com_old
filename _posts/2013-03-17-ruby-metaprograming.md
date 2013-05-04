@@ -25,9 +25,11 @@ tags : [ruby, OOP, metaprograming]
 
     该方法成为每个模块/类的类方法，所以任何模块/类都可以用 define_method 为本模块/类增加实例方法
 
+    如果要为一个类动态增加类方法（方法名是动态的字符串），可以考虑在该类的单件类中, 调用define_method(只要保证调用者是该类的单件类)
+
     经常在Kernel上使用该类方法，来定义一个**内核方法**： `Kernel.send :define_method, :test do puts 'Im a test' end` 因为define_method是Kernel的私有方法，所有用send来调用。
 
-    Calss是Module的subclass，Object是Class的实例，所以：
+    Class是Module的subclass，Object是Class的实例，所以：
 
     `Object.private_methods.grep(/define_method/) => [:define_method]`
 
