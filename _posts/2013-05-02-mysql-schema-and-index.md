@@ -92,4 +92,20 @@ tags : [mysql schema index]
 
   * SET TODO
 
+### 索引
 
+####索引类型：
+
+* B-Tree索引：除了Archive引擎外都支持
+
+* Hash索引：Memory引擎， 
+
+  可以在其它B-Tree索引上建立自己的Hash索引：增加一列被索引的列（作为Hash的key），该列允许一定得碰撞，需要一个hash函数（如CRC32）,不应该使用强加密函数（如SHA1 MD5等，碰撞低但是费空间，查找速度慢）
+
+* R-Tree索引：MyISAM支持 #TODO
+
+* FULLTEXT： MyISAM支持 #TODO
+
+1. 高性能索引策略
+
+* 隔离列：列不是表达式的一部分，也不在函数之中
