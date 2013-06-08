@@ -32,6 +32,12 @@ tags : [rails, console]
 
      `["/home/Zhong/.rvm/gems/ruby-1.9.3-p125/gems/actionpack-3.2.11/lib/action_dispatch/testing/integration.rb", 32] `
 
+## 其他
+
+  * Rails.application.config 返回 Rails::Application::Configuration 对象。
+
+  * Rails.root 返回当前项目的根目录
+
 ## 参考资料
 [Three quick Rails console tips](http://37signals.com/svn/posts/3176-three-quick-rails-console-tips)
 
