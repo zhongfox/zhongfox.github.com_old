@@ -44,3 +44,7 @@ title: nginx 配置指令的执行顺序
 * 静态资源服务模块,按照它们在 content 阶段的运行顺序，依次是 ngx_index 模块， ngx_autoindex 模块，以及 ngx_static 模块
 
 * ngx_index 和 ngx_autoindex 模块都只会作用于那些 URI 以 / 结尾的请求，例如请求 GET /cats/，而对于不以 / 结尾的请求则会直接忽略，同时把处理权移交给 content 阶段的下一个模块。而 ngx_static 模块则刚好相反，直接忽略那些 URI 以 / 结尾的请求
+
+
+### 参考资料
+* agentzh 的 Nginx 教程 <http://agentzh.org/misc/nginx/agentzh-nginx-tutorials-zhcn.html>

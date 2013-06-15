@@ -142,13 +142,37 @@ tags : [mysql]
 
 * 查看某表的索引： `show index from deals;` 或者 `show keys from deals;`
 
-    Table | Non_unique | Key_name     | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment 
+    Table 表的名称
+    
+    Non_unique 如果索引不能包括重复词，则为0。如果可以，则为1.(对于联合索引，该索引的所有列按一个整体来看)
+    
+    Key_name 索引的名称(联合索引会有好几行)
+    
+    Seq_in_index 索引中的列序列号，从1开始（联合索引的顺序）
+    
+    Column_name 列名称 
+    
+    Collation 列以什么方式存储在索引中。在MySQLSHOW INDEX语法中，有值 A 升序或 NULL 无分类
+
+    Cardinality 索引中唯一值的数目的估计值
+    
+    Sub_part 被编入索引的字符的数目。如果整列被编入索引，则为NULL
+    
+    Packed 指示关键字如何被压缩。如果没有被压缩，则为NULL ？？
+    
+    Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO 
+    
+    Index_type 索引类型（BTREE, FULLTEXT, HASH, RTREE）
+    
+    Comment 评注 ？？
 
 ----
 
 ###数据库状态
 
 * `show [full] processlist` 查看链接数
+
+* `show status like 'last_query_cost'` 查看上次查询开销（对4kb页面随机读取的次数）
 
 ----
 
@@ -193,6 +217,8 @@ TABLE_COMMENT
 ####COLUMNS表
 
 提供了表中的列信息。详细表述了某张表的所有列以及每个列的信息。是`show columns from schemaname.tablename [like '某个字段']` `desc schemaname.tablename`的结果取之此表。
+
+`show full columns from 表名` 可以查看字段的字符编码
 
 TABLE_CATALOG 
 TABLE_SCHEMA 所属数据库
