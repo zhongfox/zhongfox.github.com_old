@@ -25,9 +25,9 @@ title: Rails 命令行
 ### Rails Command Line
 
   * rails new 项目名称
-  
+
     可以添加SCM 和数据库选项：`rails new . --git --database=postgresql`， 但必须先手动创建项目目录，并git init
-    
+
     SCM选项有什么好处？数据库选项会自动配置database.yml文件
 
   * rails console = rails c
@@ -90,7 +90,7 @@ title: Rails 命令行
 
    将生成：
 
-   * controller文件 
+   * controller文件
 
    * view文件 `-e` 指定模板引擎，默认是erb
 
@@ -102,13 +102,15 @@ title: Rails 命令行
 
    * asset文件 `--assets` 指定是否生成资源文件，默认是true，传递`--no_assets`将其禁止
 
+   * 添加路由
+
 3. rails generate helper NAME [options]
 
    NAME 可以是CamelCased 或者 under_scored，如果需要在模块中生成，可以传递`parent_module/helper_name`
 
    将生成：
 
-   * helper文件 
+   * helper文件
 
    * test文件 `-t` 指定测试框架，默认是test_unit
 
@@ -120,7 +122,7 @@ title: Rails 命令行
 
 5. rails generate model NAME [field[:type][:index] field[:type][:index]] [options]
 
-   NAME 可以是CamelCased 或者 under_scored，如果需要在模块中生成，可以传递`e.g. admin/account` 或 `Admin::Account` 
+   NAME 可以是CamelCased 或者 under_scored，如果需要在模块中生成，可以传递`e.g. admin/account` 或 `Admin::Account`
 
    将生成：
 
@@ -128,7 +130,7 @@ title: Rails 命令行
 
       `--timestamps`指定是否创建`created_at:datetime updated_at:datetime`, 传递`--timestamps`将其禁止
 
-      在类型后面添加`:index`将在migrate中为该列添加索引
+      在类型后面添加`:index`将在migrate中为该列添加索引,`:uniq`将创建唯一索引
 
    * model文件 `--parent=PARENT`  可以指定其父类
 
@@ -136,11 +138,43 @@ title: Rails 命令行
 
       `--fixture`指定是否创建测试文件, 传递`--no_--fixture`将其禁止
 
+6. rails generate scaffold NAME [field[:type][:index] field[:type][:index]] [options]
+
+   NAME需要是单数形式，CamelCased 或 under_scored 均可
+
+   将生成：
+
+   * migrate文件 `--migration`指定是否生成migrate文件，传递`--no_migration`将其禁止
+
+      `--timestamps`指定是否创建`created_at:datetime updated_at:datetime`, 传递`--timestamps`将其禁止
+
+      在类型后面添加`:index`将在migrate中为该列添加索引,`:uniq`将创建唯一索引
+
+   * model文件 `--parent=PARENT`  可以指定其父类
+
+   * controller文件
+
+   * view文件 `-e` 指定模板引擎，默认是erb
+
+   * test文件 `-t` 指定测试框架，默认是test_unit
+
+      `--fixture`指定是否创建测试文件, 传递`--no_--fixture`将其禁止
+
+   * helper文件 `--helper` 指定是否生成helper，默认是true, 传递`--no_helper`将其禁止
+
+   * asset文件 `--assets` 指定是否生成资源文件，默认是true，传递`--no_assets`将其禁止
+
+   * 添加路由
+
+7. rails generate scaffold_controller CreditCard
+
+  基本同上，只是不生成model，不生成migrate，不修改路由，貌似也没有资源文件！
+
 ----
 
 ### Rake
 
- 大多数rake都可以传入环境名称以指定运行环境, 如 `rake db:migrat RAILS_ENV=production` 
+ 大多数rake都可以传入环境名称以指定运行环境, 如 `rake db:migrat RAILS_ENV=production`
 
   * **rake --tasks** 或者 **rake -T** 查看所有rake
 
@@ -242,6 +276,21 @@ title: Rails 命令行
 
     schema文件方便开发者快速检视Active Record 对象的字段属性
 
+----
+
+**对于mysql的migrate**
+
+migration中的integer只能表示signed integers，要使用` t.column :join_ip, 'integer unsigned'`
+
+migration 文件中integer的limit用法：
+
+|:limit      |Numeric Type  |Column Size |Max value
+|:-----------|:-------------|:-----------|:-------------
+|1           |tinyint       |1 byte      |127
+|2           |smallint      |2 bytes     |32767
+|3           |mediumint     |3 byte      |8388607
+|nil, 4, 11  |int(11)       |4 byte      |2147483647
+|5..8        |bigint        |8 byte      |9223372036854775807
 
 ### 参考资料
 * A Guide to The Rails Command Line <http://guides.rubyonrails.org/command_line.html>

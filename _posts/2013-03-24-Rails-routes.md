@@ -2,7 +2,7 @@
 layout: post
 category : Rails
 title: Rails 路由
-tags : [rails, routes]
+tags : [rails,rails guides, routes]
 ---
 {% include JB/setup %}
 

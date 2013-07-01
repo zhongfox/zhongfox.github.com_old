@@ -1,7 +1,7 @@
 ---
 layout: post
 category : rails
-tags : [rails, config]
+tags : [rails, rails guides, config]
 title: Rails 常见配置
 ---
 {% include JB/setup %}
@@ -12,4 +12,7 @@ title: Rails 常见配置
 
 * `config.autoload_paths` 接受一个数组，当需找未加载的变量时，去这些数组里的路径寻找. Default is all directories under app
 
+* `config.active_record.record_timestamps` 控制是否自动维护字段` created_at/created_on updated_at/updated_on.`
 lib修改后重新加载与否与什么有关？
+
+* `config.log_tags`  rails logger 前缀如 [:uuid, :remote_ip]

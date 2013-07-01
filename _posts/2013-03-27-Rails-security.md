@@ -2,7 +2,7 @@
 layout: post
 category : Rails
 title: Rails Security
-tags : [rails, security]
+tags : [rails, rails guides, security]
 ---
 {% include JB/setup %}
 

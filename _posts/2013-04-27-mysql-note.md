@@ -1,8 +1,8 @@
 ---
 layout: post
 category : mysql
-title: Mysql 点滴
 tags : [mysql]
+title: Mysql 点滴
 ---
 {% include JB/setup %}
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 category : server side
-tags : [nginx]
+tags : [nginx, command]
 title: nginx 配置指令的执行顺序
 ---
 {% include JB/setup %}

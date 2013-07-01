@@ -186,4 +186,6 @@ tags : [ruby, OOP, metaprograming]
 
     总之可以实现调用旧方法名，实现了新功能。
 
+### Ruby 2
 
+1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>

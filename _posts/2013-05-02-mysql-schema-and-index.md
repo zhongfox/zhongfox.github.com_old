@@ -1,8 +1,8 @@
 ---
 layout: post
 category : mysql
+tags : [mysql, schema, index]
 title: Mysql 架构和索引
-tags : [mysql schema index]
 ---
 {% include JB/setup %}
 
