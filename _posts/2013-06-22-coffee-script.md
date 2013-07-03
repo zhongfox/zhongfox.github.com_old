@@ -20,8 +20,6 @@ title: Coffee Script
 
 * 安装VIM插件 <https://github.com/kchmck/vim-coffee-script>
 
-###:q
-
 
 ### 参考资料
 * Caching with Rails: An overview <http://guides.rubyonrails.org/caching_with_rails.html>

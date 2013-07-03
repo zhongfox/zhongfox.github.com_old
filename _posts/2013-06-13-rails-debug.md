@@ -26,8 +26,6 @@ title: Rails 调试
 
   * 检视对象技巧
 
-  * Rails 相关命令行
-
 ----
 
 ### 异常调用栈 stack trace
@@ -124,7 +122,7 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 **对于ruby对象**
 
-传递false给以下方法，将排除继承来的方法
+传递false给xxx_methods方法，将排除继承来的方法
 
 1. methods
 
@@ -136,7 +134,7 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 4. private_methods
 
-5. singleton_methods
+5. singleton_methods 单键方法
 
 6. instance_variables 返回该对象拥有的实例变量
 
