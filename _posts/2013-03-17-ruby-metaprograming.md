@@ -186,6 +186,14 @@ tags : [ruby, OOP, metaprograming]
 
     总之可以实现调用旧方法名，实现了新功能。
 
+12. 关于方法访问：
+
+    * `public`
+
+    * `protected` 可以继承，只能在类内部访问，可以指定接收对象
+
+    * `private` 可以继承，只能在类内部访问，不能指定接收对象（只能隐式使用self）
+
 ### Ruby 2
 
 1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>

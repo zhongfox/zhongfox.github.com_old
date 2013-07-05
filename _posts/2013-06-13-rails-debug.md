@@ -52,7 +52,7 @@ title: Rails 调试
 
    在Rails中指定其他logger：
 
-   在某个environment.rb中 Rails.logger = Logger.new(STDOUT) #这个配置将导致日志只输出到终，不会记录到{environment_name}.log
+   在某个environment.rb中 Rails.logger = Logger.new(STDOUT) #这个配置将导致日志只输出到终端，不会记录到{environment_name}.log
 
    在Initializer部分：config.logger = Logger.new(STDOUT)
 
@@ -124,43 +124,44 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 传递false给xxx_methods方法，将排除继承来的方法
 
-1. methods
+1. `methods`
 
    快速得知对象上是不是有某些方法：`o.methods.include? :some_method`  或者 `o.methods.grep /some_method/`
 
-2. public_methods
+2. `public_methods`
 
-3. protected_methods
+3. `protected_methods`
 
-4. private_methods
+4. `private_methods`
 
-5. singleton_methods 单键方法
+5. `singleton_methods` 单键方法
 
-6. instance_variables 返回该对象拥有的实例变量
+6. `instance_variables` 返回该对象拥有的实例变量
 
-7. respond_to? 查询对象是否可调用指定的方法，要注意只有public方法才返回true，protected或private方法返回false。
+7. `respond_to?` 查询对象是否可调用指定的方法，要注意只有public方法才返回true，protected或private方法返回false。
 
 **对于类或者模块**
 
-传递false给以下方法，将排除继承来的方法
+传递false给xxx_methods方法，将排除继承来的方法
 
-1. instance_methods 获得非private实例方法
+1. `instance_methods` 获得非private实例方法
 
-2. public_instance_methods 获得public实例方法
+2. `public_instance_methods` 获得public实例方法
 
-3. protected_instance_methods 获得protected实例方法
+3. `protected_instance_methods` 获得protected实例方法
 
-4. private_instance_methods 获得private实例方法
+4. `private_instance_methods` 获得private实例方法
 
-5. class_variables 返回类拥有的类变量
+5. `class_variables` 返回类拥有的类变量
 
 
 **变量检视**
 
-1. local_variables 局部变量
+1. `local_variables` 局部变量
 
-2. global_variables 全局变量
+2. `global_variables` 全局变量
 
+----
 
 ### 参考资料
 
