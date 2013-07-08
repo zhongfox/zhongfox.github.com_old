@@ -1,7 +1,7 @@
 ---
 layout: post
 category : rails
-tags : [rails, bundle, Gemfile, gem]
+tags : [rails, ruby, bundle, Gemfile, gem]
 title: Bundle小记
 ---
 {% include JB/setup %}
