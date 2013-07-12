@@ -2,11 +2,38 @@
 layout: post
 category : rails
 tags : [rails, ruby, bundle, Gemfile, gem]
-title: Bundle小记
+title: RVM Gem Bundle小记
 ---
 {% include JB/setup %}
 
+### RVM
+
+1. `rvm list known` 可装ruby版本
+
+2. `rvm list` 已装ruby版本
+
+3. `rvm requirements` 查看安装rvm的前提
+
+4. 指定默认版本 `rvm --default use 1.9.2`
+
+5. 查看当前版本 `ruby -v`
+
+6. 显示默认版本 `rvm list default`
+
+7. 使用默认版本 `rvm default`
+
+8. 显示当前ruby的环境信息 `rvm info`
+
+9. 列出当前ruby的所有gemset`rvm gemset list`
+
+   列出所有ruby的所有gemset`rvm gemset list_all`
+
+10. `gem list` 显示当前gemset里的所有gem
+
+    `gem list [gemname]` 显示当前gemset里的指定gem
+
 ### Gem
+
 1. `gem install`
 
    * `gem install gemname` 从本地或远程服务器
@@ -20,6 +47,10 @@ title: Bundle小记
      `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
 
 2. 默认不安装文档：在用户主目录新建`.gemrc` 内容 ` gem: --no-ri --no-rdoc`
+
+3. 在rails console中列出当前项目使用的gem和路径
+
+        Gem.loaded_specs.values.each { |g| puts g.full_gem_path };nil
 
 ### Bundle
 
@@ -62,6 +93,8 @@ title: Bundle小记
 12. `bundle install --deployment` TODO?
 
 13. 使用capistrano部署自动bundle：`require 'bundler/capistrano'` 将会在任务`cap deploy` 中自动添加 ` bundle install`
+
+14. `bundle show [gemname]` 展示该bundle项目中使用的所有/指定gem
 
 
 ### 参考资料

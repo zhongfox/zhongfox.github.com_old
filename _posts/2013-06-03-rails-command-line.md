@@ -176,7 +176,9 @@ title: Rails 命令行
 
  大多数rake都可以传入环境名称以指定运行环境, 如 `rake db:migrat RAILS_ENV=production`
 
-  * **rake --tasks** 或者 **rake -T** 查看所有rake
+  * **rake --tasks** 或者 **rake -T** 查看所有有描述的rake, **rake -t taskname**查看指定task的描述
+
+  * **rake -P** 查看所有rake，不展示描述
 
   * **rake about** 环境相关信息
 
@@ -253,6 +255,8 @@ title: Rails 命令行
     * `rake db:seed` 加载  db/seeds.rb 文件
 
     * `rake db:setup` 基本上等于 db:reset + db:create + db:schema:load + db:seed
+
+    * `rake db:test:prepare` 将`db/schema.rb`加载到测试数据库，在这之前会检查`db/schema.rb`是否迁移更新到最新的，如果不是将会有提示
 
 ----
 
