@@ -40,6 +40,8 @@ title: 使用Rspec进行Rails单元测试
 ### rspec rspec-rails
 
 <https://github.com/rspec/rspec-rails>
+<http://lmws.net/describe-vs-context-in-rspec>
+[Built-in Matchers](https://www.relishapp.com/rspec/rspec-expectations/docs/built-in-matchers)
 
 
 1. `rails g rspec:install` rspec 需要包含在development分组，因为rspec要扩展若干generator以生成rspec测试

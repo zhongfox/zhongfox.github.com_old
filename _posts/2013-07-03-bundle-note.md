@@ -32,6 +32,8 @@ title: RVM Gem Bundle小记
 
     `gem list [gemname]` 显示当前gemset里的指定gem
 
+11. `rvm --create --ruby-version use ruby-2.0.0-p195` 在项目里创建`.ruby-version` 文件来管理ruby和gemset
+
 ### Gem
 
 1. `gem install`
@@ -95,6 +97,8 @@ title: RVM Gem Bundle小记
 13. 使用capistrano部署自动bundle：`require 'bundler/capistrano'` 将会在任务`cap deploy` 中自动添加 ` bundle install`
 
 14. `bundle show [gemname]` 展示该bundle项目中使用的所有/指定gem
+
+15. `bundle open [gemname]` 打开该gem所在的目录
 
 
 ### 参考资料
