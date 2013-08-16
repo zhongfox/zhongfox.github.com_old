@@ -80,6 +80,15 @@ association 是2个Active Record 模型之间的关联。
 
    结构和`has_many :through`完全一样, 只是隐藏中间表
 
+   该关联表不能有id主键`create_table :xxx_xxxs, id: false do |t|`
+
+   **如何确定关联表**：
+
+   * 使用参数`:join_table`指定
+
+   * rails将使用2个关联表(复数)组合一个中间表名，顺序是依照2个关联表的字母顺序
+
+
    ![has_and_belongs_to_many](http://guides.rubyonrails.org/images/habtm.png)
 
 7. 选择`belongs_to`和`has_one`
@@ -104,6 +113,8 @@ association 是2个Active Record 模型之间的关联。
         t.string  :imageable_type #TODO这里面存的是什么？
         或者直接：
         t.references :imageable, polymorphic: true
+        或者直接：
+        t.belongs_to :imageable, polymorphic: true
 
    ![Polymorphic](http://guides.rubyonrails.org/images/polymorphic.png)
 
@@ -120,6 +131,16 @@ association 是2个Active Record 模型之间的关联。
 
         @employee.subordinates 
         @employee.manager
+
+----
+
+### Tips, Tricks, and Warnings
+
+1. association 方法内建缓存，多次调用将不会重复查询，需要reload结果，可以传递true为方法的参数以实现
+
+2. 关联关系查找class默认只在本class当前的命名空间下，如果想跨越module，使用`class_name`参数指定：
+
+   has_one :account, class_name: "MyApplication::Billing::Account"
 
 ### 参考资料
 * Active Record Associations <http://guides.rubyonrails.org/association_basics.html>
