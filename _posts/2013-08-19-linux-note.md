@@ -33,7 +33,7 @@ title: Linux 笔记
 
 * 文件目录管理
 
-  * `mkdir [-mp] name`  -m 指定权限, -p 递归创建, 可以接很多name 
+  * `mkdir [-mp] name`  -m 指定权限, -p 递归创建, 可以接很多name
 
   * `rmdir [-p] name` 删除**空的**目录，-p递归删除，只能删除空的
 
@@ -80,7 +80,7 @@ title: Linux 笔记
 
   * `df` 查看当前磁盘挂载情况 -a 所有文件系统包括/proc等用于内存的，-h 易读单位， -i 不用硬盘容量使用inode数
 
-  * `dumpe2fs 设备文件名` 
+  * `dumpe2fs 设备文件名`
 
   * `du -ahsS 目录文件`  默认只列出目录大小-a 列出目录和文件，-h易读单位，默认会递归遍历，-s列出目录总大小，不递归，-S递归时不计算子目录大小不计入父目录大小中。常用`du -hs 某一目录/*/`展示该目录下第一层子目录大小
 
@@ -98,7 +98,7 @@ title: Linux 笔记
 
   * `bzip2 -vdck` 默认是压缩，后缀`bz2`, -vdc同上，-k保留原文件
 
-    `bzcat` 用于查看bzip2压缩后的文本文件 
+    `bzcat` 用于查看bzip2压缩后的文本文件
 
 * 打包 tar
 
@@ -121,11 +121,11 @@ title: Linux 笔记
   * shell命令中的**优先执行命令**： $(优先执行命令) 或者用反引号
 
   * 变量：
-  
+
     环境变量通常全大写,和shell操作接口相关的自定义变量通常也大写
 
     export: 后面跟变量将会把该变量转化成环境变量，不加变量同env
-  
+
     读变量有2种：`$VAR`或者`${VAR}`, 写变量不需要$
 
     写变量用`=`两边不能有空格，值可以用可选的单双引号，双引号支持变量内插
@@ -140,3 +140,86 @@ title: Linux 笔记
 
     常用变量：$ 本shell的pid， ?上一条命令的回传码
 
+* 软件安装
+
+  * DEB:
+
+    `dpkg -L/--listfiles 包` 查看已安装包所有相关联的文件
+
+    `dpkg -S/--search 文件` 查看该文件属于哪个包，文件必须用绝对路径
+
+    `dpkg -i XXX.deb` 安装指定本地包
+
+    `dpkg  -l/--list [包]` 查看[指定包/所有已安装包]列表
+
+    使用`aptitude` 通常需要先安装`apt-get install aptitude`
+
+    aptitude库: `/etc/apt/sources.list` 修改该文件后需要`apt-get update` 使之生效
+
+    `aptitude` 全屏交互式界面查看软件状态
+
+    `aptitude show 包` 查看软件库中该包状态，也能看到该包是否已经安装
+
+    `aptitude search 包` 搜索软件包，自动使用通配符匹配， i表示已安装，p未安装
+
+    `aptitude install 包` 安装该包
+
+    `aptitude safe-upgrade` 将所有已安装软件包安全升级
+
+    `aptitude remove 包` 删除软件，保留配置
+
+    `aptitude purge 包` 删除软件和配置
+
+    使用`apt-get` <http://wiki.ubuntu.org.cn/UbuntuHelp:AptGet/Howto/zh>
+
+
+
+  * rpm/yum
+
+    rpm 安装信息位于`/var/lib/rpm/`数据库内
+
+    * 查询
+
+      `rpm -qa ` 列出所有已安装包
+
+      `rpm -q 包` 查询该包是否安装
+
+      `rpm -ql 包` 列出该包所有的文件和目录
+
+      `yum search 包` 列出库中该包所有相关包
+
+      `yum list installed` 列出所有已安装包
+
+      `yum list` 列出服务器上所有包
+
+      `yum list 包` 列出服务器上该包相关包，分为已安装，可升级或未安装
+
+      `yum list updates` 列出可供本机升级的包
+
+    * 安装软件包
+
+      `yum install <package>` 
+
+      `rpm -ivh XXX.rpm` -i 安装 -v详细安装画面 -h 安装进度
+
+    * 升级
+
+      `rpm -UFvh <package>`  U 表示没有安装则安装，安装了则升级，F表示只升级
+
+      `yum update` 升级所有可升级的包
+
+      `yum update 包` 升级指定包 
+
+    * 卸载
+
+      `rpm -e 包` 卸载，注意可能会提示依赖
+
+      `yum remove 包` 卸载指定包 
+
+  * yum 设置
+
+    * `yum repolist all` 列出使用的所有仓库
+
+    * `yum version nogroups` 查看变量 $releasever 和 $basearch 或者 `python -c 'import yum, pprint; yb = yum.YumBase(); pprint.pprint(yb.conf.yumvar, width=1)'`
+
+    * <http://zhumeng8337797.blog.163.com/blog/static/100768914201231852812921/>
