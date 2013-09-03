@@ -88,6 +88,8 @@ title: Rails 命令行
 
    NAME 可以是CamelCased 或者 under_scored，如果需要在模块中生成，可以传递`parent_module/controller_name`
 
+   **NAME 通常要自己手动指定复数**
+
    将生成：
 
    * controller文件
