@@ -1,6 +1,6 @@
 ---
 layout: post
-category : Ruby
+category : ruby
 title: Ruby 常量查找
 tags : [ruby, OOP, constant]
 ---
