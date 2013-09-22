@@ -430,9 +430,9 @@ title: Rspec 代码规范和最佳实践
 
 8. rspec 中使用jbuilder，默认不会render view，需要手动`render_views` [Why is JBuilder not returning a response body](http://stackoverflow.com/questions/9965945/why-is-jbuilder-not-returning-a-response-body-in-json-when-testing-rspec)
 
+----
 
-
-参考资料：
+###参考资料：
 
 <https://www.relishapp.com/rspec/>
 
