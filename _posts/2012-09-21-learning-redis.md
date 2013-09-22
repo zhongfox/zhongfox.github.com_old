@@ -1,7 +1,7 @@
 ---
 layout: post
-category : server side
-tags : [cache, share]
+category : server-side
+tags : [cache, share, redis]
 title: 使用Redis
 tagline: 高性能的key-value数据存储服务器
 ---

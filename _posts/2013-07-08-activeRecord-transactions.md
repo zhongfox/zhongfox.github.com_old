@@ -1,6 +1,6 @@
 ---
 layout: post
-category : server side
+category : server-side
 tags : [rails, activeRecord, transactions]
 title: ActiveRecord Transactions
 ---

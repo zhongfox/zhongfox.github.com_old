@@ -1,8 +1,8 @@
 ---
 layout: post
 category : ruby
-title: Ruby 元编程学习笔记
 tags : [ruby, OOP, metaprograming]
+title: Ruby 元编程学习笔记
 ---
 {% include JB/setup %}
 

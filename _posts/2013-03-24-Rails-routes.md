@@ -1,8 +1,8 @@
 ---
 layout: post
-category : Rails
+category : rails
 title: Rails 路由
-tags : [rails,rails guides, routes]
+tags : [rails, rails guides, routes]
 ---
 {% include JB/setup %}
 

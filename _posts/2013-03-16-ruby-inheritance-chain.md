@@ -1,8 +1,8 @@
 ---
 layout: post
-category : Ruby
+category: ruby
+tags: [ruby, OOP]
 title: Ruby 继承链
-tags : [ruby, OOP]
 ---
 {% include JB/setup %}
 

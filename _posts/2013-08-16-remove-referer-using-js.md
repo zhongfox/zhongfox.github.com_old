@@ -1,7 +1,7 @@
 ---
 layout: post
 category : javascript
-tags : [referer]
+tags : [referer, javascript]
 title: 使用javascript去掉referer
 ---
 {% include JB/setup %}

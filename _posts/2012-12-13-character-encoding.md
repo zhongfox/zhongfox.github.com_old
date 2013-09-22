@@ -1,6 +1,7 @@
 ---
 layout: post
 category : sundry
+tags : [encoding, share]
 title: 编码学习分享
 tags : [encoding, share]
 ---

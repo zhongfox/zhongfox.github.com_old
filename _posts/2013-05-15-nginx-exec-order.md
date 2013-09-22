@@ -1,6 +1,6 @@
 ---
 layout: post
-category : server side
+category : server-side
 tags : [nginx, command]
 title: nginx 配置指令的执行顺序
 ---

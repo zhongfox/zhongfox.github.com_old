@@ -1,7 +1,7 @@
 ---
 layout: post
 category : linux
-tags : [linux process]
+tags : [linux, process, ruby]
 title: 《Working with Unix Processes》读书笔记
 ---
 {% include JB/setup %}

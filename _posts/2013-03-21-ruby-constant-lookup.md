@@ -1,8 +1,8 @@
 ---
 layout: post
 category : ruby
-title: Ruby 常量查找
 tags : [ruby, OOP, constant]
+title: Ruby 常量查找
 ---
 {% include JB/setup %}
 

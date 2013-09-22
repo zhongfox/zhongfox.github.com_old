@@ -1,8 +1,8 @@
 ---
 layout: post
 category : front-end
+tags : [firefox, extension, share, javascript, xul]
 title: firefox 扩展开发分享
-tags : [firefox extension, share]
 ---
 {% include JB/setup %}
 

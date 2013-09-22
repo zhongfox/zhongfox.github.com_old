@@ -1,8 +1,8 @@
 ---
 layout: post
-category : Rails
-title: Rails 控制台技巧
+category : rails
 tags : [rails, console]
+title: Rails 控制台技巧
 ---
 {% include JB/setup %}
 

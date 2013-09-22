@@ -1,6 +1,6 @@
 ---
 layout: post
-category : Rails
+category : rails
 title: Rails Security
 tags : [rails, rails guides, security]
 ---

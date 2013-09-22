@@ -1,7 +1,7 @@
 ---
 layout: post
 category : sundry
-tags : [rails, share]
+tags : [rails, share, oauth2]
 title: 基于oauth2的新浪微博app开发
 ---
 
