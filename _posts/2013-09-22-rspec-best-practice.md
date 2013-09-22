@@ -444,4 +444,3 @@ title: Rspec 代码规范和最佳实践
 
 <http://blog.carbonfive.com/2010/10/21/rspec-best-practices/>
 
-test
