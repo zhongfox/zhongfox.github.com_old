@@ -1,6 +1,6 @@
 ---
 layout: post
-category : Ruby
+category : ruby
 title: Ruby 元编程学习笔记
 tags : [ruby, OOP, metaprograming]
 ---
