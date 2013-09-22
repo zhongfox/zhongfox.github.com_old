@@ -118,6 +118,8 @@ title: Linux 笔记
 
 * shell
 
+  * 命令查找顺序：1)绝对/相对路径执行命令 2)alias 3)bash内置命令 4)$PATH中查找到的第一个命令
+
   * shell命令中的**优先执行命令**： $(优先执行命令) 或者用反引号
 
   * 变量：
@@ -223,3 +225,78 @@ title: Linux 笔记
     * `yum version nogroups` 查看变量 $releasever 和 $basearch 或者 `python -c 'import yum, pprint; yb = yum.YumBase(); pprint.pprint(yb.conf.yumvar, width=1)'`
 
     * <http://zhumeng8337797.blog.163.com/blog/static/100768914201231852812921/>
+
+* 查看所有别名 `alias`
+
+* 重定向标准输出 `> file` `>> file` 标准错误输出 `2> file` `2>> file` 2者同时 `&> file`
+
+  双向重定向：`tee -a file ` 把标准输出转存文件并且输出到屏幕，-a表示追加到文件，否则新建文件
+
+* 判断执行： 
+
+  * `cmd1;cmd2`  顺序执行 不考虑成功
+
+  * `cmd1 && cmd1` 前面执行成功才执行后面，回传码`$?`==0即为成功
+
+  * `cmd1 || cmd2` 前面不成功才执行后面
+
+  * 常用：`cmd1 && cmd2 || cmd3` cmd2是一个一定成功的命令，用于 cmd1 ? cmd2 :cmd3
+
+* 管道：管道命令必须能接受标准输入。前一条命令的**标准输出**作为后一条的**标准输入**
+
+  * `cut` 每次处理一行，每行也对应一行结果
+
+    -d '单个分隔字符' -f 指示输出切割后的第几段，可接多个段，逗号分隔 `-`表示到最前/末
+
+    -c '每行输出的范围' 用于输出排列整齐的数据， 范围如 `5` `2-` `3-5` `-7`
+
+  * `wc` 默认输出行，单词，字符，分别对应参数 -lwm
+
+  * `tr -ds` 
+
+    -d 删除指定字符 `cat dos.rb | tr -d '\r' > dos.rb ` 把其中dos回车去掉
+
+    -s 替换，貌似只能对等的替换，替换目标和结果字符数必须一致,是全局替换
+
+  * `split`文件切割
+
+    -b 以文件大小来切割 接单位bkm等，`split -b 30k bigfile smallfile` 会生成smallfileaa smallfileab等
+
+    -l 按行数切割 `ls -al / | split -l 10 - listbackup` **注意最后一个-, 可以代表标准输入或者输出**
+
+* `mail username@host`: 如果是localhost，host可以省略，会让你输入subject和正文，换行输入点号结束。
+
+  收邮件`mail` `N`表示未读邮件
+
+* jobs 
+  
+  -l 可以展示pid
+
+  `fg %jobid` 将该job转到前台，running
+
+  `bg %jobid` 将该后台（suspended stopped） 进程转为 后台running
+
+  jobs 的状态： running suspended stopped killed
+
+  `ctrl + Z` 前台job转变为 suspended 或者 stopped后台进程 （怎么区别？？？？？？）
+
+  `command & ` 以后台进程运行，job状态为 running 或者 suspended（怎么区别？？？）
+
+  `kill -signal %jobsid` 发送信号给后台job， 注意%表示后面是jobsid，1 reload配置，2 同ctrl+C 9立即强制结束  15正常结束
+
+* top
+
+  -d 秒数，刷新频率
+
+  -p 进程转为号，指定进程监控
+
+  us 用户空间占用CPU百分比
+  sy 内核空间占用CPU百分比
+  ni 用户进程空间内改变过优先级的进程占用CPU百分比
+  id 空闲CPU百分比
+  wa 等待输入输出的CPU时间百分比
+  hi 硬件中断
+  si 软件中断 
+  st: 实时
+
+* pstree -u 同时列出进程所属账号 -p 同时列出pid

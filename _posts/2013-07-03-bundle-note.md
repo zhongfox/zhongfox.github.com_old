@@ -92,7 +92,7 @@ title: RVM Gem Bundle小记
 
     `bundle package --no-prune` 不移除在`./vendor/cache`已有的gem
 
-12. `bundle install --deployment` TODO?
+12. `bundle install --deployment` 把gem安装到本项目的vendor/bundle
 
 13. 使用capistrano部署自动bundle：`require 'bundler/capistrano'` 将会在任务`cap deploy` 中自动添加 ` bundle install`
 
