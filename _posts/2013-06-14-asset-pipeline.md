@@ -231,7 +231,11 @@ nginx 配置使用gzip：
       add_header Cache-Control public;
     }
 
+----
 
+###其他
+
+1. 如果在development模式下，public/assets存在资源文件，rails会去读取其中的资源，导致修改app/assets不生效，此时应该清除public下的资源文件: `rake assets:clean`.其实按道理说development下不应该出现public/assets资源，所有应该ignore该资源目录
 
 
 ### 参考资料
