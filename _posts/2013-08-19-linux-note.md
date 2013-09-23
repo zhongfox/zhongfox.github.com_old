@@ -300,3 +300,25 @@ title: Linux 笔记
   st: 实时
 
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
+
+* daemon/service
+
+  文件/etc/services 设置了服务和端口的对应
+
+  daemon分为`stand alone`和`super daemon`
+
+  相关配置文件：
+
+  `/etc/init.d/*` 启动脚本放置处
+
+  **stand alone 管理**
+
+  `/etc/init.d/some_daemon` 不加参数会返回所有可用命令
+  
+  如`Usage: /etc/init.d/mongod {start|stop|status|restart|reload|force-reload|condrestart}`
+
+  辅助命令`service`实现以上功能：
+
+  `service [service name] (start|stop|restart|...)`
+
+  `service --status-all`展示系统所有服务的状态
