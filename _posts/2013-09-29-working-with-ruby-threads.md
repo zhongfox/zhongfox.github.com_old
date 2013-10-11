@@ -250,7 +250,6 @@ title: 《Working With Ruby Threads》读书笔记
 
   GIL是抑制并发，Mutex抑制并行，所以应该只对**需要原子性的，关键的，尽可能少的**步骤使用mutex
 
-* ruby 中的Queue是原子性的，Array不是
 
 * 死锁(deadlock)
 
@@ -264,6 +263,10 @@ title: 《Working With Ruby Threads》读书笔记
 
 **ConditionVariable** 可以在某些指定的事件发生后，发送信号给某些线程
 
+一个使用的场景：
+
+        For instance, if one thread should sleep until it receives some work to do, another thread can pass it some work, then signal it with a condition variable to keep it from having to constantly check for new input
+
 * `ConditionVariable#signal` 调用时不带参数，也没有有意义的返回值，它仅仅是唤醒正在等待它自己的**第一个**线程，如果没有等待线程，那什么也不会发生
 
 * `ConditionVariable#wait(locked_mutex)` 调用时传递一个已经锁定的mutex，该操作会将该mutex释放，并把持有mutex的线程sleep，调用`ConditionVariable#signal`会唤醒在等待的第一个线程(wait貌似可以中断mutex的原子操作？？)
@@ -273,3 +276,15 @@ title: 《Working With Ruby Threads》读书笔记
 ----
 
 ### Chapter 11 Thread-safe Data Structures
+
+* 对于实现了线程安全的数据结构，mutex应该放在对象内，而不是全局的，对象再各个线程中共享并发读写，mutex也就是共享的。
+
+* 书中实现的BlockingQueue，使用了ConditionVariable以实现阻塞的队列(如果读取空的队列将导致该线程sleep等待)
+
+* ruby 标准库提供的Queue是ruby提供的唯一线程安全的数据结构，它是通过`require 'thread'`加载的，它也是阻塞队列
+
+* ruby 中的Queue是原子性的，Array和Hash不是，如需要，可以使用`thread_safe` rubygem中的`ThreadSafe::Array` `ThreadSafe::Hash`
+
+### Chapter 12 Writing Thread-safe Code
+
+
