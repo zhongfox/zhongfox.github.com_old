@@ -126,6 +126,8 @@ title: 《Working with Unix Processes》读书笔记
 
     * `Process.waitpid2` 和以上类似
 
+    * `Process.waitall` 循环调用Process.wait, 等待所有的子进程退出，然后返回一个进程状态数组,阻塞
+
     内核会将已退出的子进程的状态信息加入队列。因此，即便父进程处理每个退出子进程的速度缓慢，当它准备妥当的时候，也总能获取到每个子进程的退出信息。
 
     如果不存在子进程，wait系列会抛出异常(Errno::ECHILD)。所以最好记录一下到底创建了多少个子进程，以免出现这种异常
