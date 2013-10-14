@@ -25,6 +25,6 @@ title: Ruby 纤程小记
 
 * Fiber和Thread的区别：
 
-  * Fiber不会马上执行代码块，需要手动resume调用
+  * Fiber不会马上执行代码块，需要手动resume/transfer调用
 
-  * 操作系统对线程有控制权调度器，纤程可以使用`transfer`显示的调度
+  * 操作系统对线程有控制权调度器，纤程可以使用resume/transfer显示的调度
