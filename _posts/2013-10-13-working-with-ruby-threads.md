@@ -357,17 +357,13 @@ title: 《Working With Ruby Threads》读书笔记
 
 ----
 
+TODO
+
 ### Chapter 13 Thread-safety on Rails
 
 ----
 
 ### Chapter 15 How Sidekiq Uses Celluloid
-
-
-
-
-  
-
 
 
 
