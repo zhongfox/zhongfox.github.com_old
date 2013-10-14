@@ -18,7 +18,7 @@ tagline: 高性能的key-value数据存储服务器
     cd redis-2.4.17
     make
     cp src/redis-server src/redis-cli /usr/bin
-  
+
 ## Redis的特点
 1. __丰富的数据类型__
 2. __单进程单线程__ redis利用队列技术将并发访问变为串行访问，消除了传统数据库串行控制的开销
@@ -48,7 +48,7 @@ Resis的是键字符串。
 
     太短的坏处： （可读性不好不易理解）
 
-2. 命名尽量坚持一个模式， 比如"object-type:id:field"  
+2. 命名尽量坚持一个模式， 比如"object-type:id:field"
 
 键的操作：
 
@@ -56,7 +56,7 @@ Resis的是键字符串。
 * `EXISTS key`
 * `EXPIRE key seconds`
 * `RENAME key newkey`
-  
+
 ## 数据类型和操作
 
 **一. String 字符串类型**
@@ -65,7 +65,7 @@ Resis的是键字符串。
 
 * `SET key value`
 * `GET key`
-* `INCR key` 
+* `INCR key`
 
 **二. Linked List 链表**
 
@@ -77,22 +77,22 @@ Resis的是键字符串。
 * `LINDEX key index`
 * `LLEN key`
 
-应用：  
+应用：
 
 * 实现先进先出队列，消息机制等。
 
 **三. Set 集合**
 
   无序的不重复字符串集合
-  
+
   实现： value永远为null的HashMap
-  
+
 * `SADD key member [member ...]`
 * `SISMEMBER key member`
 * `SMEMBERS key`
 * `SINTER key [key ...]` （交集）
 
-应用：  
+应用：
 
 * 可以使用Redis的Set数据类型跟踪一些唯一性数据
 * 充分利用Set类型的服务端聚合操作方便、高效的特性，可以用于维护数据对象之间的关联关系。
@@ -100,9 +100,9 @@ Resis的是键字符串。
 **四. Sorted Set 有序集合**
 
   有序不重复字符串的集合，每个元素关联了一个用于排序的权重
-  
+
   实现： HashMap和跳跃表(SkipList)
-  
+
 * `ZADD key score member [score] [member]`
 * `ZRANGE`
 * `ZRANGE key start stop [WITHSCORES]` （默认升序）
@@ -112,7 +112,7 @@ Resis的是键字符串。
 应用：
 
 * 可以用于大型在线积分排行榜
-    
+
 **五. Hash 哈希**
 
   实现： 一维数组（成员较少时）或HashMap
@@ -121,25 +121,25 @@ Resis的是键字符串。
 * `HGET key field`
 * `HDEL key field [field ...]`
 
-应用：  
+应用：
 
 * 从内存优化角度， 应尽量使用hash
 
 ## 名词解释
 
-**竞态条件（race condition）** 
+**竞态条件（race condition）**
 
   从多进程间通信的角度来讲，是指两个或多个进程对共享的数据进行读或写的操作时，最终的结果取决于这些进程的执行顺序。
-  
+
   对值的读和写发生在不同的时间，会引起竞态条件
-  
-**原子操作** 
+
+**原子操作**
 
   原子操作是不可分割的，在执行完毕不会被任何其它任务或事件中断
-  
+
   在同一个操作对值进行读写可以解决竟态条件
-  
-  
+
+
 ## Redis内存模型
 
 在Redis中，并不是所有的数据都一直存储在内存中的，Redis只会缓存所有的key的信息。
@@ -166,7 +166,7 @@ Redis虚拟内存相关配置：
     vm-page-size 32                     #每个页面的大小32个字节
     vm-pages 134217728                  #最多使用在文件中使用多少页面,交换文件的大小 = vm-page-size * vm-pages
     vm-max-threads 4                    #用于执行value对象换入换出的工作线程数量。0表示不使用工作线程
-  
+
 和os一样redis也是按页面来交换对象的。redis规定同一个页面只能保存一个对象。但是一个对象可以保存在多个页面中。在redis使用的内存没超过vm-max-memory之前是不会交换任何value的。redis会在内存中对应一个1bit值来记录页面的空闲状态。
 
 
@@ -208,14 +208,14 @@ AOF可以选择每秒同步、每操作同步和不同步。
   * 根据同步策略的不同，AOF在运行效率上往往会慢于RDB。
 
 缺省的机制是RDB， redis会把数据集快照写入文件dump.rdb（可配置）， 我们还可以配置redis每隔N秒检查一次是否有M个key值更新，如果是，则进行一次持久化。
-比如 `save 60 1000` 
+比如 `save 60 1000`
 
 
 ## Redis和其他两种数据存储系统的比较
 
 Redis, Memcache, MongoDB 都是k/v类型的NOSQL.
 
-区别： 
+区别：
 
 **Memcache**
 
@@ -230,9 +230,9 @@ Redis, Memcache, MongoDB 都是k/v类型的NOSQL.
 **MongoDB**
 
   Redis是将key和部分value存于内存， 可以用作缓存系统， MongoDB数据是存于硬盘。
-  
-  
-  
+
+
+
 
 ## Redis其他主题
 
@@ -258,7 +258,7 @@ Redis事务特点：
 
 * 连续性保证
 * 原子性保证，执行事务期间，不再为其他请求服务。
-* 和关系型数据库中的事务相比，在Redis事务中如果有某一条命令执行失败，其后的命令仍然会被继续执行  
+* 和关系型数据库中的事务相比，在Redis事务中如果有某一条命令执行失败，其后的命令仍然会被继续执行
 
 ###其他
 
@@ -267,11 +267,12 @@ Redis事务特点：
 * Redis 管线 <http://redis.io/topics/pipelining>
 
     客户端在发送命令之后，不用立刻等待来自服务器的应答，而是可以继续发送后面的命令。在命令发送完毕后，再一次性的读取之前所有命令的应答。这样便节省了同步方式中RTT的开销
-  
+
 * Redis 内存优化 <http://redis.io/topics/memory-optimization>
     * 特殊编码
     * bit和byte级别的操作
     * 尽可能使用Hash
+
 ## 参考资料
 * Redis官网 <http://redis.io>
 * redis-objects <https://github.com/nateware/redis-objects>

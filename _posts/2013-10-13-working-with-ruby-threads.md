@@ -239,9 +239,9 @@ title: 《Working With Ruby Threads》读书笔记
         if status == 'paid'
           # send shipping notification
         end
-  
+
   原因是OS的缓存机制的影响，比如当变量刚被修改，新值只在缓存L2中应用，在内存中还是旧值，此时另一线程很可能读到了旧值
-  
+
   该现象在单线程编程中不会出现，但是在多线程编程中无法保证
 
   解决方案是叫做**memory barrier**的机制，Mutex实现了该机制
@@ -261,9 +261,9 @@ title: 《Working With Ruby Threads》读书笔记
 
 ### Chapter 10 Signaling Threads with Condition Variables
 
-**ConditionVariable** 可以在某些指定的事件发生后，发送信号给某些线程
+* **ConditionVariable** 可以在某些指定的事件发生后，发送信号给某些线程
 
-一个使用的场景：
+  一个使用的场景：
 
         For instance, if one thread should sleep until it receives some work to do, another thread can pass it some work, then signal it with a condition variable to keep it from having to constantly check for new input
 
@@ -285,6 +285,87 @@ title: 《Working With Ruby Threads》读书笔记
 
 * ruby 中的Queue是原子性的，Array和Hash不是，如需要，可以使用`thread_safe` rubygem中的`ThreadSafe::Array` `ThreadSafe::Hash`
 
+----
+
 ### Chapter 12 Writing Thread-safe Code
+
+* Idiomatic Ruby code is most often thread-safe Ruby code
+
+  惯用的(Idiomatic)Ruby 代码往往是线程安全的代码
+
+* Avoid mutating globals 避免修改全局事物 全局变量会在所有线程中共享
+
+  * 即使是全局变量，也可以有办法(如mutex)使之线程安全
+
+  * 任何只有一个共享的实例都是全局的，如常量，AST(abstract syntax trees)，类变量，类方法，这类东西也要被看做全局事物
+
+    modifying the AST at runtime is almost always a bad idea, especially when multiple threads are involved
+
+    在运行时修改AST往往不是好主意，特别是在多线程的环境下
+
+    In other words, it's expected that the AST will be modified at startup time
+
+    换句话说，AST的修改最好发生在项目启动时
+
+    所以只是从全局事物中读取是ok的，考虑了线程安全问题的全局并发写也是ok的，如Rails.logger
+
+* Create more objects, rather than sharing one
+
+  共享的长连接必须是有状态的连接，解决各个线程获得自己正确的返回的办法有：
+
+  * Thread-locals
+
+        # Instead of
+        $redis = Redis.new
+        # use
+        Thread.current[:redis] = Redis.new
+
+    该思想对其他全局事物同样有效，创建N：N的连接对于小规模的多线程是ok的，但是对于并发较高的多线程编程不太适合(开销)，这种情况连接池更加合适
+
+  * Resource pools
+
+    通常是保持连接的数量大于1但是小于线程总数。该机制同样禁止共享单条连接，但是不需要每个线程持有自己的链接
+
+    学习材料`connection_pool rubygem`
+
+* Avoid lazy loading
+
+  Rails 3 中的`autoload`是非线程安全的，除非手动调用`config.threadsafe!`
+
+  Rails 4+中`autoload`是线程安全的
+
+* Prefer data structures over mutexes 优先考虑线程安全的数据结构，而不是mutex
+
+  mutex通常很难用得恰到好处，往往我们要考虑以下问题：
+
+  * mutex的使用粒度
+
+  * 判断需要锁定最小的关键代码
+
+  * 有死锁的可能吗
+
+  * mutex是和实例绑定？还是用全局的？
+
+  对于mutex有深入理解的同学，回答这些问题倒是很容易，但是直接使用线程安全的数据结构就可以消除了这些考虑
+
+* Finding bugs
+
+  即使遵循了所有的最佳实践，有时候也会有线程安全的bug出现，不幸的是，线程安全的bug不能轻易重现，最好的解决方式是去阅读分析代码
+
+  可以总全局事物开始分析，假设有2个线程同时访问，通过一些这样的练习，问题的原因有可能就突然显现出来
+
+
+----
+
+### Chapter 13 Thread-safety on Rails
+
+
+
+
+
+  
+
+
+
 
 
