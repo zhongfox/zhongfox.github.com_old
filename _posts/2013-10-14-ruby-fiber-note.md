@@ -1,6 +1,6 @@
 ---
 layout: post
-category : linux
+category : ruby
 tags : [fiber, ruby]
 title: Ruby 纤程小记
 ---
@@ -27,4 +27,4 @@ title: Ruby 纤程小记
 
   * Fiber不会马上执行代码块，需要手动resume/transfer调用
 
-  * 操作系统对线程有控制权调度器，纤程可以使用resume/transfer显示的调度
+  * 操作系统对线程有控制权调度器，纤程小记必须使用resume/transfer显式调度
