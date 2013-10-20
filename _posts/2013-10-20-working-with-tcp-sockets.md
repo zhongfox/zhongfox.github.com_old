@@ -429,19 +429,19 @@ TCP/IP数据被编码为分组，分组是有边界的
 
   3. **connect** 
 
-        begin
-          #发起到google.com端口80的非阻塞式连接。
-          socket.connect_nonblock(remote_addr)
-        rescue Errno::EINPROGRESS
-          IO.select(nil, [socket]) #阻塞等待连接成功，socket可写
-          begin
-            socket.connect_nonblock(remote_addr) #再次尝试连接
-          rescue Errno::EISCONN #连接已经成功的链接，抛出异常，表明成功
-            # 成功！
-          rescue Errno::ECONNREFUSED
-            # 被远程主机拒绝。
-          end
-        end
+            begin
+              #发起到google.com端口80的非阻塞式连接。
+              socket.connect_nonblock(remote_addr)
+            rescue Errno::EINPROGRESS
+              IO.select(nil, [socket]) #阻塞等待连接成功，socket可写
+              begin
+                socket.connect_nonblock(remote_addr) #再次尝试连接
+              rescue Errno::EISCONN #连接已经成功的链接，抛出异常，表明成功
+                # 成功！
+              rescue Errno::ECONNREFUSED
+                # 被远程主机拒绝。
+              end
+            end
 
      感觉下面的端口监控代码有问题
 
@@ -533,5 +533,9 @@ TODO
 ---
 
 ### 第20章 串行化
+
+....
+
+----
 
 ps. 今天终于把大神Jesse Storimer的三本书看完了，三本书都非常的短小精悍，举一反三。虽然有的章节的理解还是比较粗略，但是这三本书的确是帮助我对进程，线程和Socket的认识有了很大的提高。感觉非常幸运！书中的示例都是ruby写的，推荐给所有ruby程序员，但不局限于此。
