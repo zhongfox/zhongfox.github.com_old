@@ -14,7 +14,7 @@ title: Ruby 元编程学习笔记
 
     `BasicObject.public_methods.grep(/^send/) => [:send]`
 
-    `BasicObject.public_methods(false).grep(/^send/) => []` 
+    `BasicObject.public_methods(false).grep(/^send/) => []`
 
     send的一个用处是用来调用某一对象的私有方法
 
@@ -53,8 +53,8 @@ title: Ruby 元编程学习笔记
 
     `->(arg) {block} => lambda`
 
-    proc 和 lambda 的区别： 
-   
+    proc 和 lambda 的区别：
+
     * proc中的return会从**定义**proc的作用域返回，lambda会更合理的从lambda中返回
 
     * proc自适应传递的参数个数，lambda严格要求参数个数
@@ -78,15 +78,15 @@ title: Ruby 元编程学习笔记
 
         (function () {
           var share = 10;
-          
+
           function increaseA()  {
             share++;
-          } 
+          }
 
           function showA()  {
             alert(share);
           }
-          
+
           window.increaseA = increaseA;
           window.showA = showA
 
@@ -193,6 +193,23 @@ title: Ruby 元编程学习笔记
     * `protected` 可以继承，只能在类内部访问，可以指定接收对象
 
     * `private` 可以继承，只能在类内部访问，不能指定接收对象（只能隐式使用self）
+
+13. `attr_accessor`
+
+    在类定义中，使用该方法为类的实例声明读写方法, 每对写方法内部对应着一个实例变量可以使用`object.instance_variables`获得
+
+    该操作同样可以对类对象实施：
+
+        class Client
+          class << self
+            attr_accessor :host, :port
+          end
+        end
+
+    类Client可以使用host，port读写方法
+
+    `Client.instance_variables` => [:@host, :@port]
+
 
 ### Ruby 2
 
