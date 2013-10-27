@@ -361,7 +361,48 @@ TODO
 
 ### Chapter 13 Thread-safety on Rails
 
-----
+* If you stick to Rails conventions, and write idiomatic Rails code, your Rails application will be thread-safe
+
+* Gem dependencies 大部分gem都是线程安全的，但是最好检查一下新引入的gem的bug tracker以确认
+
+* 每个web request都是一个新的线程，对于多线程web server，很重要的一点是不要在不同request之间共享事物。
+
+  确保各个action中各自创建所需的对象，而不是共享全局对象
+
+  比如常用的current_user 如果把该对象存于controller的实例变量中，这会是各个线程独立创建的（估计每次request会创建一个对应controller类的对象），但是如果放到`User.current`，这将是所有线程共享
+
+* 后台job processor 也遵循同样的道理，每个job将在独立的线程中执行，一个线程可能(顺序)处理多个jobs，但是一个job将只在一个线程中被处理
+
+---
+
+### Chapter 14 Wrap Your Threads in an Abstraction
+
+* 抽象分离(单层抽象)：
+
+  "one level of abstraction per function." -- 《Clean Code》
+
+  threads, mutexes这些代码属于低级抽象，需要和业务逻辑代码分离
+
+* Actor model
+
+  每个Actor对应一个独立的long-lived 线程，有自己的地址
+
+  使用mailbox, 对actor发送消息，actor将异步地处理这些消息
+
+  Actor模式有多种实现
+
+* Celluloid 使用概述
+
+  `require 'celluloid/autostart'` 并在class中`include Celluloid`, 该类的实例就会成为一个actor，每个actor对于一个独立的线程
+
+  对Celluloid 的actor调用普通方法即是发送消息，Celluloid将会阻塞对普通方法的调用，这样看起来和对象正常调用方法一样
+
+  异步且不关心返回值的调用：`actor.async.a_object_method`
+
+  异步并获得返回值：`actor.future.a_object_public_method` 该调用返回`Celluloid::Future`对象，对该对象调用`value`将阻塞地获得返回值
+
+
+---
 
 ### Chapter 15 How Sidekiq Uses Celluloid
 
