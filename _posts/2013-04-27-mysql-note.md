@@ -268,6 +268,19 @@ B：my.cnf上加入参数
 
 这样B的auto_increment字段产生的数值是：2, 4, 6, 8, …等偶数ID了
 
+ActiveRecord的数据库插入方法会忽略id的设置：
+
+        > Showcase.last.id
+          Showcase Load (1.2ms)  SELECT `showcases`.* FROM `showcases` ORDER BY `showcases`.`id` DESC LIMIT 1
+          => 7 
+        > Showcase.create(id: 19, name: 'zhongtest', parent_id: 0)
+          SQL (2.1ms)  INSERT INTO `showcases` (`name`, `parent_id`) VALUES ('zhongtest', 0)
+          => #<Showcase id: 8, name: "zhongtest", parent_id: 0>
+
+除非是用execute
+
+        sql = "insert into users(id, username) values(10, 'iam')"
+        ActiveRecord::Base.connection.execute(sql)
 
 ----
 
