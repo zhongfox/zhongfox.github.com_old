@@ -79,7 +79,7 @@ title: Mysql 点滴
     * `describe 表名` `desc 表名`:
 
         Field字段名  Type类型 Null可空否 Key有点复杂哇 Default默认值 Extra其他比如auto_increment
-        
+
         关于Key，网上找来的：
 
         1. 如果Key是空的, 那么该列值的可以重复, 表示该列没有索引, 或者是一个非唯一的复合索引的非前导列
@@ -128,9 +128,9 @@ title: Mysql 点滴
 
 ###文件
 
-* `mysqldump -h 主机名 -u 用户名 -p[密码] 库名 > /tmp/文件名.sql`  备份数据库 
+* `mysqldump -h 主机名 -u 用户名 -p[密码] 库名 > /tmp/文件名.sql`  备份数据库
 
-* 运行sql文件： 
+* 运行sql文件：
 
   1. `可以成功连接的mysql 库名 < sql批处理文件`
 
@@ -143,27 +143,27 @@ title: Mysql 点滴
 * 查看某表的索引： `show index from deals;` 或者 `show keys from deals;`
 
     Table 表的名称
-    
+
     Non_unique 如果索引不能包括重复词，则为0。如果可以，则为1.(对于联合索引，该索引的所有列按一个整体来看)
-    
+
     Key_name 索引的名称(联合索引会有好几行)
-    
+
     Seq_in_index 索引中的列序列号，从1开始（联合索引的顺序）
-    
-    Column_name 列名称 
-    
+
+    Column_name 列名称
+
     Collation 列以什么方式存储在索引中。在MySQLSHOW INDEX语法中，有值 A 升序或 NULL 无分类
 
     Cardinality 索引中唯一值的数目的估计值
-    
+
     Sub_part 被编入索引的字符的数目。如果整列被编入索引，则为NULL
-    
+
     Packed 指示关键字如何被压缩。如果没有被压缩，则为NULL ？？
-    
-    Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO 
-    
+
+    Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO
+
     Index_type 索引类型（BTREE, FULLTEXT, HASH, RTREE）
-    
+
     Comment 评注 ？？
 
 ----
@@ -220,25 +220,54 @@ TABLE_COMMENT
 
 `show full columns from 表名` 可以查看字段的字符编码
 
-TABLE_CATALOG 
+TABLE_CATALOG
 TABLE_SCHEMA 所属数据库
 TABLE_NAME 所属表
 COLUMN_NAME 字段名
-ORDINAL_POSITION 
-COLUMN_DEFAULT 
-IS_NULLABLE 
-DATA_TYPE 
+ORDINAL_POSITION
+COLUMN_DEFAULT
+IS_NULLABLE
+DATA_TYPE
 CHARACTER_MAXIMUM_LENGTH
-CHARACTER_OCTET_LENGTH 
-NUMERIC_PRECISION 
-NUMERIC_SCALE 
-CHARACTER_SET_NAME 
-COLLATION_NAME 
-COLUMN_TYPE 
-COLUMN_KEY 
-EXTRA 
-PRIVILEGES 
-COLUMN_COMMENT 
+CHARACTER_OCTET_LENGTH
+NUMERIC_PRECISION
+NUMERIC_SCALE
+CHARACTER_SET_NAME
+COLLATION_NAME
+COLUMN_TYPE
+COLUMN_KEY
+EXTRA
+PRIVILEGES
+COLUMN_COMMENT
+
+----
+
+### Mysql双主自增长冲突处理
+
+方案是设置不同的自增长量，一般是奇偶分开：
+
+`auto_increment_increment`和`auto_increment_offset`用于主服务器－主服务器（master-to-master）复制，并可以用来控制AUTO_INCREMENT列的操作。两个变量均可以设置为全局或局部变量
+
+auto_increment_increment控制列中的值的增量值
+
+auto_increment_offset确定AUTO_INCREMENT列值的起点
+
+查看全局配置：`SHOW VARIABLES LIKE 'auto_inc%'`
+
+A：my.cnf上加入参数
+
+        auto_increment_offset = 1
+        auto_increment_increment = 2
+
+这样A的auto_increment字段产生的数值是：1, 3, 5, 7, …等奇数ID了
+
+B：my.cnf上加入参数
+
+        auto_increment_offset = 2
+        auto_increment_increment = 2
+
+这样B的auto_increment字段产生的数值是：2, 4, 6, 8, …等偶数ID了
+
 
 ----
 
