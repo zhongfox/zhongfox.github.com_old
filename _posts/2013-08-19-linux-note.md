@@ -290,14 +290,14 @@ title: Linux 笔记
 
   -p 进程转为号，指定进程监控
 
-  us 用户空间占用CPU百分比
-  sy 内核空间占用CPU百分比
-  ni 用户进程空间内改变过优先级的进程占用CPU百分比
-  id 空闲CPU百分比
-  wa 等待输入输出的CPU时间百分比
-  hi 硬件中断
-  si 软件中断 
-  st: 实时
+        us 用户空间占用CPU百分比
+        sy 内核空间占用CPU百分比
+        ni 用户进程空间内改变过优先级的进程占用CPU百分比
+        id 空闲CPU百分比
+        wa 等待输入输出的CPU时间百分比
+        hi 硬件中断
+        si 软件中断 
+        st: 实时
 
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
 
@@ -322,3 +322,13 @@ title: Linux 笔记
   `service [service name] (start|stop|restart|...)`
 
   `service --status-all`展示系统所有服务的状态
+
+* 查看线程
+
+ ` ps -eLf |grep 命令 |grep -v grep` 将打印出：
+
+ UID PID PPID C(?)  LWP(轻量级进程，即线程标识符) NLWP(线程数量) STIME TTY TIME CMD
+
+ `top -bH -d 3 -p  ${pid}` top动态查看线程情况
+
+ `ps -mp $pid ` 简略查看进程的线程数，每行一个线程
