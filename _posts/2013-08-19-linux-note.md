@@ -325,10 +325,22 @@ title: Linux 笔记
 
 * 查看线程
 
- ` ps -eLf |grep 命令 |grep -v grep` 将打印出：
+  ` ps -eLf |grep 命令 |grep -v grep` 将打印出：
 
- UID PID PPID C(?)  LWP(轻量级进程，即线程标识符) NLWP(线程数量) STIME TTY TIME CMD
+  UID PID PPID C(?)  LWP(轻量级进程，即线程标识符) NLWP(线程数量) STIME TTY TIME CMD
 
- `top -bH -d 3 -p  ${pid}` top动态查看线程情况
+  `top -bH -d 3 -p  ${pid}` top动态查看线程情况
 
- `ps -mp $pid ` 简略查看进程的线程数，每行一个线程
+  `ps -mp $pid ` 简略查看进程的线程数，每行一个线程
+
+* 键盘操作
+
+  `ctrl + WhdK` 删除光标(之前所有，之前一个，之后一个，之后所有)
+
+  `ctrl + u` 整行删除
+
+  `ctrl + L` 清屏
+
+  `ctrl + a e` 光标前置/后置
+
+  `ctrl + 光标` 按照word移动，xsehll里无效
