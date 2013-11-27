@@ -8,8 +8,6 @@ title: Layouts and Rendering in Rails
 
 1. Overview: How the Pieces Fit Together
 
----
-
 2. Creating Responses
 
    有三种方式创建http response：
