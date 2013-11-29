@@ -162,6 +162,28 @@ POST也可以自动发起，比如在html中给啊标签加上onclick属性。
 
 跨站脚本（XSS）漏洞绕过所有的CSRF保护。XSS可以让攻击者访问页面的所有元素，所以他可以从一个表单里读取CSRF Security token  或者直接提交表单.
 
+如果手动给post添加token,name 应该是`authenticity_token` (待定)
+
+用beforeSend手动构造：
+确保layout中有<%= csrf_meta_tag %>
+用beforeSend 设置:
+
+        $.ajax({ url: 'YOUR URL HERE',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: 'someData=' + someData,
+          success: function(response) {
+            $('#someDiv').html(response);
+          }
+        });
+        To send token in all requests you can use:
+
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
 ## 4 重定向和文件
 
 ### 4.1 重定向
