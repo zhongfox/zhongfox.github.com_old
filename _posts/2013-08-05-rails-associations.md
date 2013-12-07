@@ -444,21 +444,82 @@ association 是2个Active Record 模型之间的关联。
 
    You can use any of the standard querying methods inside the scope block. The following ones are discussed below:
 
-  * where
+   * where
 
-    对where传递hash参数，不仅会作用于查询被关联对象，还会自动添加到创建被关联对象，如build 和create
+     对where传递hash参数，不仅会作用于查询被关联对象，还会自动添加到创建被关联对象，如build 和create
 
-    不清楚以上关系有无这个特性，TODO
+     不清楚以上关系有无这个特性，TODO
 
-  * extending
-  * group
-  * includes
-  * limit
-  * offset
-  * order
-  * readonly
-  * select
-  * uniq
+   * extending
+
+     见后面Association Extensions
+
+   * group
+
+   * includes
+   * limit
+   * offset
+   * order
+   * readonly
+   * select
+
+      使用这个方法要注意需要包含被关联对象的主键和外键
+
+   * distinct
+
+     确保被关联对象唯一
+
+     对`has_many trough`比较有用 如`has_many :posts, -> { distinct }, through: :readings`
+
+   **When are Objects Saved?**
+
+   和上面has_one 规则一样
+
+4. 关联对象**has_and_belongs_to_many **被关联对象
+
+   该关系表示有中间表，中间表有指向其他2个表的外键
+
+   **Methods Added by has_and_belongs_to_many**
+
+   Additional Column Methods
+
+   如果中间表除了2个外键还有其他字段，他们会作为被关联对象的只读属性返回。
+
+   但是在中间表中存在其他字段的方式是不赞成使用的，如果有这种需求，应该使用`has_many :through`
+
+   * collection(force_reload = false)
+   * collection<<(object, ...)
+
+     还有2个别名方法 `collection.concat` 和 `collection.push`
+
+   * collection.delete(object, ...)
+
+     通过sql删除中间表（中间表的callback不执行），但是被关联对象并不会被删除
+
+   * collection.destroy(object, ...)
+
+     通过destroy删除中间表（中间表的callback会执行），但是被关联对象并不会被删除
+
+   * collection=objects
+   * collection_singular_ids
+   * collection_singular_ids=ids
+   * collection.clear
+
+     只影响中间表
+
+   * collection.empty?
+   * collection.size
+   * collection.find(...)
+   * collection.where(...)
+   * collection.exists?(...)
+   * collection.build(attributes = {})
+   * collection.create(attributes = {})
+
+   **Options for has_and_belongs_to_many**
+
+
+
+
 
 ### 其他补充
 
