@@ -259,6 +259,7 @@ title: Rails 命令行
     * `rake db:setup` 基本上等于 db:reset + db:create + db:schema:load + db:seed
 
     * `rake db:test:prepare` 将`db/schema.rb`加载到测试数据库，在这之前会检查`db/schema.rb`是否迁移更新到最新的，如果不是将会有提示
+    * `rake db:test:clone` 开发数据库结构会克隆到测试数据库。不过，这个任务不会复制数据库中的数据
 
 ----
 
