@@ -231,6 +231,17 @@ title: Ruby 元编程学习笔记
           include A
         end
 
+16. 查看module下的所有常量：`#constants` 如`User.constants`
+
+17. 关于代码块参数的定义，以及代码块的调用：
+
+    * 方法定义时没有代码块参数，方法中调用代码块只能用 yield
+
+    * 方法定义时用&b，如`def do_something(x, y, z, &b)` 调用时可以用`b.call(参数)` 或者 `yield(参数)`
+
+    * 方法定义时用b，如`def do_something(x, y, z, b)` 调用时可以用`b.call(参数)` 这其实是传递普通对象
+
+    * 总结： &b是表示代码块，b是表示 Proc 对象
 
 ### Ruby 2
 
