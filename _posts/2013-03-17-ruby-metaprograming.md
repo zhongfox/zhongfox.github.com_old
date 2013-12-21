@@ -196,7 +196,7 @@ title: Ruby 元编程学习笔记
 
 13. `attr_accessor`
 
-    在类定义中，使用该方法为类的实例声明读写方法, 每对写方法内部对应着一个实例变量可以使用`object.instance_variables`获得
+    在类定义中，使用该方法为类的实例声明读方法和写方法, 每对写方法内部对应着一个实例变量可以使用`object.instance_variables`获得
 
     该操作同样可以对类对象实施：
 
@@ -209,6 +209,27 @@ title: Ruby 元编程学习笔记
     类Client可以使用host，port读写方法
 
     `Client.instance_variables` => [:@host, :@port]
+
+14. `attr`
+
+    在类定义中，使用该方法为类的实例声明读方法，但是没有写方法
+
+    可以传递true设置写方法：`attr_accessor :a` 等于 `attr :a, true`
+
+15. module被include时的钩子：
+
+    可以在included钩子中对base extend other，以实现添加类方法(这样一个include既添加了实例方法，又添加了类方法)
+
+        module A
+          def self.included(base)
+            puts 'do something for base'
+            puts "base is #{base}"
+          end
+        end
+
+        class B
+          include A
+        end
 
 
 ### Ruby 2

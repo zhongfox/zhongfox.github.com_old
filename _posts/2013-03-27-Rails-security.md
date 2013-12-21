@@ -162,6 +162,15 @@ POST也可以自动发起，比如在html中给啊标签加上onclick属性。
 
 跨站脚本（XSS）漏洞绕过所有的CSRF保护。XSS可以让攻击者访问页面的所有元素，所以他可以从一个表单里读取CSRF Security token  或者直接提交表单.
 
+在controller中取消forgery验证
+
+        protect_from_forgery :only => [:update, :delete, :create]
+        #or
+        protect_from_forgery :except => [:update, :delete, :create]
+        For an entire controller, you can do:
+
+        skip_before_filter :verify_authenticity_token
+
 如果手动给post添加token,name 应该是`authenticity_token` (待定)
 
 用beforeSend手动构造：
