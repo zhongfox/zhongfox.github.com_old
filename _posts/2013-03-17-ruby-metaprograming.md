@@ -18,6 +18,14 @@ title: Ruby 元编程学习笔记
 
     send的一个用处是用来调用某一对象的私有方法
 
+    include 是 Kernel 的私有方法，因此如果在模块/类外对其加入mixin，可以使用send：
+
+        module Validations
+
+          def self.included(base)
+            base.send :include, ActiveSupport::Callbacks
+          end
+        end
 
 2.  Module有一个私有实例方法 define_method
 
@@ -262,7 +270,7 @@ title: Ruby 元编程学习笔记
     * $\ 输出记录分隔符
     * $? 最近一次执行的子进程退出状态
 
-11. require load autoload
+19. require load autoload
 
     * require:
 
@@ -290,11 +298,13 @@ title: Ruby 元编程学习笔记
 
       module 可以是字符串或者符号
 
-      注册将以后会被加载的文件，当module()被首次使用时
+      注册以后将会被加载的文件，当module被首次使用时
 
       加载时使用的是 Kernel::require
 
 
-### Ruby 2
+
+
+##n Ruby 2
 
 1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
