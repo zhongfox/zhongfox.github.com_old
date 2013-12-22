@@ -243,6 +243,58 @@ title: Ruby 元编程学习笔记
 
     * 总结： &b是表示代码块，b是表示 Proc 对象
 
+18. ruby 特殊常量：
+
+    * $: = default search path (array of paths)
+    * $" 已经加载过的文件
+    * $0 Ruby脚本的文件名
+    * $* 命令行参数
+    * $$ 解释器进程ID
+    * $! 最近一次的错误信息
+    * $@ 错误产生的位置
+    * $_ gets最近读的字符串
+    * $. 解释器最近读的行数(line number)
+    * $& 最近一次与正则表达式匹配的字符串
+    * $~ 作为子表达式组的最近一次匹配
+    * $n 最近匹配的第n个子表达式(和$~[n]一样)
+    * $= 是否区别大小写的标志
+    * $/ 输入记录分隔符
+    * $\ 输出记录分隔符
+    * $? 最近一次执行的子进程退出状态
+
+11. require load autoload
+
+    * require:
+
+      若是相对路径，则查找$:
+
+      若省略扩展名则按以下顺序查找[.rb,.so,.dll]
+
+      rb文件作为源文件载入，其它作为扩展载入
+
+      已经载入的文件存放于$"中
+
+      require不会载入已存在于$"中的文件，如果载入成功返回true，否则false
+
+    * load:
+
+      load加载文件
+
+      不记录在$" 中，可以多次加载
+
+      必须要加扩展名
+
+      load的作用：在development模式下，当你修改一段代码后，不用重启服务器，你的代码更改会被自动reload，这就是load的作用 而如果你使用require的话，多次require并不会起作用 
+
+    * autoload(module, filename): 已经不推荐使用
+
+      module 可以是字符串或者符号
+
+      注册将以后会被加载的文件，当module()被首次使用时
+
+      加载时使用的是 Kernel::require
+
+
 ### Ruby 2
 
 1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
