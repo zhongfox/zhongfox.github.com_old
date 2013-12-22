@@ -10,6 +10,8 @@ title: Ruby 元编程学习笔记
 
 最近又在翻看《Ruby元编程》，觉得有些东西记下来印象会更深刻。决定用这篇文章来记录Ruby元编程的相关笔记，持续更新。
 
+as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记，还有很多是和ruby相关的一些知识和技巧。
+
 1.  send 是BasicObject的公用类方法, 但却不是它的单键方法，因为BasicObject已无超类，怀疑是BasicObject mixin 了什么模块？
 
     `BasicObject.public_methods.grep(/^send/) => [:send]`
@@ -302,9 +304,34 @@ title: Ruby 元编程学习笔记
 
       加载时使用的是 Kernel::require
 
+20. 给Hash中不存在的key加上默认值技巧
+
+        1.9.3p125 :008 > a = Hash.new {|h,k| h[k] = []}
+        => {} 
+        1.9.3p125 :009 > a[:no_exist_key]
+        => [] 
+
+    关于Hash.new
+
+        h = Hash.new("Go Fish") #设置默认值
+        h["a"] = 100
+        h["b"] = 200
+        h["a"]           #=> 100
+        h["c"]           #=> "Go Fish" #没设置过的键会返回默认值，但是此键仍然不存在！
+        # The following alters the single default object
+        h["c"].upcase!   #=> "GO FISH" #修改没显示设置过的key，实际上会修改默认值
+        h["d"]           #=> "GO FISH"
+        h.keys           #=> ["a", "b"] #没设置过的键，虽然会返回默认值，但是key还是没设置过
+
+        # While this creates a new default object each time
+        h = Hash.new { |hash, key| hash[key] = "Go Fish: #{key}" } #在block里设置了key，因此key存在。key的值将是block的返回值
+        h["c"]           #=> "Go Fish: c"
+        h["c"].upcase!   #=> "GO FISH: C"
+        h["d"]           #=> "Go Fish: d"
+        h.keys           #=> ["c", "d"]
 
 
 
-##n Ruby 2
+### Ruby 2
 
 1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
