@@ -255,7 +255,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 18. ruby 特殊常量：
 
-    * $: = default search path (array of paths)
+    * $: 或者 $LOAD_PATH  default search path (array of paths)
     * $" 已经加载过的文件
     * $0 Ruby脚本的文件名
     * $* 命令行参数
@@ -331,6 +331,17 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
         h.keys           #=> ["c", "d"]
 
 
+* `instance_of?` 不考虑继承链
+
+  `is_a?` `kind_of?` 都会考虑继承，也包括继承链上的module 
+
+* 对象实例变量操作
+
+  `Object#instance_variable_set(symbol, obj)`
+
+  `Object#instance_variable_get(symbol) → obj`
+
+  `Object#instance_variable_defined?(symbol) → true or false`
 
 ### Ruby 2
 
