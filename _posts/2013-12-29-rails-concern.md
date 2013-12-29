@@ -8,6 +8,10 @@ title: Rails Concern
 
 * 先学习几个ruby中Module的**实例方法**：
 
+  * `include(module, ...) → self`
+
+    Invokes Module.append_features on each parameter in reverse order.
+
   * `extended(base)`
 
     当`other_module.extend this_module` 时，触发回调`this_module.extended`, base 将是other_module

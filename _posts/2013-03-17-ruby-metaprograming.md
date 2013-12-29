@@ -20,7 +20,9 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
     send的一个用处是用来调用某一对象的私有方法
 
-    include 是 Kernel 的私有方法，因此如果在模块/类外对其加入mixin，可以使用send：
+    <s>include 是 Kernel 的私有方法</s>，include是Module的私有实例方法(因为Kernel是一个Module实例，所有Kernel也有该方法)。
+
+    因此如果在模块/类外对其加入mixin，可以使用send：
 
         module Validations
 
@@ -178,6 +180,18 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
         MyClass.my_method #hi
 
+    `base_class.extend feature_class`不会改变base_class的继承链，但是会改变base_class的单件类的继承链：
+
+        module A
+        end
+
+        class B
+          extend A
+        end
+
+        B.ancestors #=>[B, Object, Kernel, BasicObject]
+        B.singleton_class.ancestors #=> [A, Class, Module, Object, Kernel, BasicObject]
+
 11. 使用`alias`来实现环绕命名
 
     alias是ruby的关键字而不是方法，所以使用是新旧方法名间无逗号： alias new_method_name old_method_name
@@ -294,7 +308,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
       必须要加扩展名
 
-      load的作用：在development模式下，当你修改一段代码后，不用重启服务器，你的代码更改会被自动reload，这就是load的作用 而如果你使用require的话，多次require并不会起作用 
+      load的作用：在development模式下，当你修改一段代码后，不用重启服务器，你的代码更改会被自动reload，这就是load的作用 而如果你使用require的话，多次require并不会起作用
 
     * autoload(module, filename): 已经不推荐使用
 
@@ -307,9 +321,9 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 20. 给Hash中不存在的key加上默认值技巧
 
         1.9.3p125 :008 > a = Hash.new {|h,k| h[k] = []}
-        => {} 
+        => {}
         1.9.3p125 :009 > a[:no_exist_key]
-        => [] 
+        => []
 
     关于Hash.new
 
@@ -331,17 +345,25 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
         h.keys           #=> ["c", "d"]
 
 
-* `instance_of?` 不考虑继承链
+21. `instance_of?` 不考虑继承链
 
-  `is_a?` `kind_of?` 都会考虑继承，也包括继承链上的module 
+    `is_a?` `kind_of?` 都会考虑继承，也包括继承链上的module
 
-* 对象实例变量操作
+22. 对象实例变量操作
 
-  `Object#instance_variable_set(symbol, obj)`
+    `Object#instance_variable_set(symbol, obj)`
 
-  `Object#instance_variable_get(symbol) → obj`
+    `Object#instance_variable_get(symbol) → obj`
 
-  `Object#instance_variable_defined?(symbol) → true or false`
+    `Object#instance_variable_defined?(symbol) → true or false`
+
+23. super
+
+    super 调用当前类的祖先类中的同名方法
+
+    super不带括号表示调用父类的同名函数，并将本函数的所有参数传入父类的同名函数；
+
+    super()带括号则表示调用父类的同名函数，但是不传入任何参数；
 
 ### Ruby 2
 

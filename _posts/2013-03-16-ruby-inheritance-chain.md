@@ -22,6 +22,8 @@ Ruby在方法查找和常量查找都依赖继承链，直接上图：
           end
         end
 
+  `Object#singleton_class` 也是返回单件类：Returns the singleton class of obj. This method creates a new singleton class if obj does not have it.
+
 
 * 比较MyModule和MyClass，发现MyModule不能实例化对象，也没有继承的超类，简单的可以理解为，Module和Class的区别，Module是Class的超类，Class比Module多了3个实例方法：`new superclass allocate`  前两个方法就决定了MyModule无法实例化和无超类
 
