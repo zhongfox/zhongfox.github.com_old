@@ -38,3 +38,12 @@ title: Rails 杂记
 
   方法查找都是从singleton_class的ancestors的instance_method查找，其中object可以是任何ruby对象(类对象或者类的实例)，由衷赞叹ruby对类和对象设计的统一性
 
+* rails 对类访问的扩展：
+
+  * cattr_accessor
+
+  *  cattr_reader
+
+  *  cattr_writer
+
+  *  class_attribute
