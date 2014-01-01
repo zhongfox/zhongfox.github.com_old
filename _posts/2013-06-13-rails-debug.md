@@ -154,6 +154,8 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 5. `class_variables` 返回类拥有的类变量
 
+6. `instance_method(symbol) → unbound_method` 返回一个unbound 方法， 查找继承链
+
 
 **变量检视**
 

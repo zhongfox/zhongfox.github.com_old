@@ -365,6 +365,12 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
     super()带括号则表示调用父类的同名函数，但是不传入任何参数；
 
+24. Module#ancestors
+
+    对Module的实例（模块）来说，因为没有superclass方法，ancestors 只返回他include的module和自己
+
+    对Class的实例（类）来说，包括自身，include的module和继承的祖先类
+
 ### Ruby 2
 
 1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
