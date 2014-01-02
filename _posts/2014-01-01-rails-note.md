@@ -68,6 +68,8 @@ title: Rails 杂记
 
     如果不是用等号赋值的写方法，列如用`Subclass.setting << :foo` 这可能直接修改父类的类的实例变量
 
+    可以传入的控制实例方法的参数：`instance_reader: false` `instance_writer: false` `instance_accessor: false` `instance_predicate: false`
+
         def class_attribute(*attrs)
           options = attrs.extract_options!
           # double assignment is used to avoid "assigned but unused variable" warning
@@ -116,4 +118,20 @@ title: Rails 杂记
 
             attr_writer name if instance_writer #这里应该是定义类的实例的写方法
           end
-        end    
+        end
+
+* ActiveSupport::DescendantsTracker
+
+  类的后代跟踪模块，指定类 extend 该模块后，该类和其后代类就拥有了被跟踪(该类作为父类)的能力
+
+  实现：模块定义了实例方法`inherited` (extend后成为类的类方法)，并借助模块的Hash类变量（@@direct_descendants）进行记录
+
+  `descendants`  返回所有后代类
+
+  `direct_descendants` 返回直接后代类
+
+  与此同时ActiveSupport还对所有类增加了2个类似的方法(但是是遍历ObjectSpace，效率低)：
+  
+  `descendants` 返回所有后代类
+  
+  `subclasses` 返回直接后代类
