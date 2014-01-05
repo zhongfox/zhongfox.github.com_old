@@ -12,7 +12,7 @@ title: Rails 杂记
 
   preload：一定是使用独立sql查询
 
-  eager_load： 一定是使用 LEFT OUTER JOIN 
+  eager_load： 一定是使用 LEFT OUTER JOIN
 
   使用 LEFT OUTER JOIN 策略时，可能会有若干问题，如被关联对象的default_scope 里的order没法应用。
 
@@ -59,7 +59,7 @@ title: Rails 杂记
   * class_attribute
 
     给类添加读写方法和谓词方法，以及类的实例添加读写谓词方法。
-    
+
     内部通过给类定义单件方法(单键写方法每次调用，会重新定义单键读方法)，结合读写类的实例变量来实现
 
     因为是类的单件方法，所有方法是对子类可以继承的，但是子类也可以生成自己类的方法
@@ -131,7 +131,137 @@ title: Rails 杂记
   `direct_descendants` 返回直接后代类
 
   与此同时ActiveSupport还对所有类增加了2个类似的方法(但是是遍历ObjectSpace，效率低)：
-  
+
   `descendants` 返回所有后代类
-  
+
   `subclasses` 返回直接后代类
+
+* ActiveSupport::Callbacks
+
+  在类中`include ActiveSupport::Callbacks`后，该类会有callback的功能
+
+  * 类方法`define_callbacks(*callbacks)`
+
+    定义若干回调链标识
+
+    参数：
+
+    `terminator` 设置终止before filter 和event的条件，默认false，表示不启用
+
+    `skip_after_callbacks_if_terminated` 默认terminator不影响after回调，设置该参数true的话，使after也被终止
+
+    `scope ` 当 set_callback 中回调是一个对象时，改参数用于去该对象中调用回调方法
+
+    如`define_callbacks :save, scope: [:kind, :name]` kind表示before after around，name表示回调链标识
+
+  * 类方法 `set_callback(name, [kind], *filter_list, &block)`
+
+    为指定回调链添加回调方法
+
+    name是回调链标识，kind如果不传是before，filter_list可以是多个：a symbol naming an instance method; as a proc, lambda, or block; as a string to be instance evaluated; or as an object that responds to a certain method determined by the :scope argument to define_callback
+
+    如果同时有symbol和block，block的定义会提前
+
+    参数：
+
+    if：symbol实例方法名或者proc，返回true，回调才执行
+
+    unless: 类似上面
+
+    prepend：如果是true将会把该回调放到最前面
+
+  * 实例方法`run_callbacks(kind, &block)`
+
+    运行指定的回调链
+
+        require 'active_support'
+        class Account
+          include ActiveSupport::Callbacks
+
+          define_callbacks :save
+          set_callback :save, :before, :before1, :before2 do
+            puts 'before_block'
+          end
+
+          set_callback :save, :around, :test_around
+
+          set_callback :save, :after, :after1, :after2 do
+            puts 'after_block'
+          end
+
+          def event
+            run_callbacks :save do
+              puts 'save in main'
+            end
+          end
+
+          def before1
+            puts 'before1'
+          end
+
+          def before2
+            puts 'before2'
+          end
+
+          def test_around
+            puts 'before test around'
+            yield
+            puts 'after test around'
+          end
+
+          def after1
+            puts 'after1'
+          end
+
+          def after2
+            puts 'after2'
+          end
+
+        end
+
+        Account.new.event
+
+        before_block
+        before1
+        before2
+        before test around
+        save in main
+        after2
+        after1
+        after_block
+        after test around #我疑惑
+
+* `require 'active_support/core_ext/kernel/singleton_class'`
+
+  在Kernel中添加的实例方法叫内核方法，因为`Object.include Kernel` Object的子类的对象，都拥有内核方法
+
+  也就是说，所有的对象(类对象，模块对象，类的实例)都有内核方法，如：
+
+        module Kernel
+          def test
+            puts 'test'
+          end
+        end
+
+        class A
+
+        end
+
+        A.test #'test'
+
+        A.new.test #'test'
+
+  Rails 对Kernel的扩展，对类的实例增加了class_eval方法：
+
+        module Kernel
+          # class_eval on an object acts like singleton_class.class_eval.
+          def class_eval(*args, &block)
+            singleton_class.class_eval(*args, &block)
+          end 
+        end
+  但这不会覆盖类的类方法`Module#class_eval`, 从类对象的继承链来看
+
+  `Class.new.class.ancestors => [Class, Module, Object, Kernel, BasicObject]`
+
+  `Module#class_eval` 会优先于 `Kernel#class_eval`被调用
+
