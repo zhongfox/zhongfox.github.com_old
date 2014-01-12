@@ -16,7 +16,7 @@ Rails 3 在active record上提供了大量的update方法，但是方法名没�
 
 * `assign_attributes(new_attributes, options = {})`
 
-
+---
 
 ### Active Record 中的各种update
 
@@ -61,9 +61,23 @@ Rails 3 在active record上提供了大量的update方法，但是方法名没�
   * validate，callback被跳过
   * 只更新一个字段，所以updated_at/updated_on dirty字段都不更新
 
+* `increment(attribute, by = 1)`
+
+  更新没有保存到数据库
+
+        self[attribute] ||= 0
+        self[attribute] += by
+        self
+
+* `increment!(attribute, by = 1)`
+
+  该方法是**非原子性**的update
+
+        increment(attribute, by).update_attribute(attribute, self[attribute])
+
 **类方法**
 
-* `update_all(updates, conditions = nil, options = {})` 
+* `update_all(updates, conditions = nil, options = {})`
 
   组装单条sql执行update，所以validate，callback被跳过
 
@@ -71,7 +85,7 @@ Rails 3 在active record上提供了大量的update方法，但是方法名没�
 
   参数options中可以设置:limit, :order
 
-* `update(id, attributes)`
+* `update(id_or_ids, attributes)`
 
   根据id或者ids，一个一个的找到对象然后调用实例方法`update_attributes`进行更新
 
@@ -88,3 +102,17 @@ Rails 3 在active record上提供了大量的update方法，但是方法名没�
           object.update_attributes(attributes)
           object
         end
+
+* `update_counters(id_or_ids, update_hash)`
+
+  用于更新数字字段的**原子操作**方法(最后调用的是update_all)，直接组装sql更新
+
+* `increment_counter(counter_name, id)`
+
+  调用update_counters，对counter_name加一
+
+* `decrement_counter(counter_name, id)`
+
+  调用update_counters，对counter_name减一
+
+
