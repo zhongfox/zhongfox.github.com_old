@@ -2,7 +2,7 @@
 layout: post
 category : rails
 tags : [rails, update]
-title: Rails 杂记
+title: Active Record 中的各种update
 ---
 {% include JB/setup %}
 
