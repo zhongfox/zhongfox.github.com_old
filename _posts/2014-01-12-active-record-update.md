@@ -6,7 +6,7 @@ title: Active Record 中的各种update
 ---
 {% include JB/setup %}
 
-Rails 3 在active record上提供了大量的update方法，但是方法名没有完全做到见名知义，因此有必要总结一下，特别要注意的是，需要区分各个方法中，是否执行了validate和callback
+Rails 3 在active record上提供了大量的update方法，但是方法名没有完全做到见名知义，因此有必要总结一下，特别要注意的是，需要区分各个方法中，是否执行了validate和callback, 是否是原子性更新
 
 ### 预备知识
 
