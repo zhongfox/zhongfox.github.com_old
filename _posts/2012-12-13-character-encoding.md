@@ -281,6 +281,9 @@ ruby1.9中String相关的函数：
     #force_encoding(某种编码方式) 设置字符串编码方式，该方法没有进行字符转换，字符串底层字节没有变化，只是ruby对它的解释发生了变化
     #encode(某种编码方式) 返回与调用者含义相同的字符序列，但是编码方式不同，底层字节改变
 
+Rails 中：
+
+    #CGI::escape(message.encode('GBK')) 把message转为GBK
   
 ## 参考资料
 * 字节序大端小端 <http://hi.baidu.com/dpfei1603/item/6e16ffd1a6646ebd33db90e9>
