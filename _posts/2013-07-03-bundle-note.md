@@ -48,6 +48,8 @@ title: RVM Gem Bundle小记
 
      `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
 
+2. `gem uninstall gemname -v 版本号`
+
 2. 默认不安装文档：在用户主目录新建`.gemrc` 内容 ` gem: --no-ri --no-rdoc`
 
 3. 在rails console中列出当前项目使用的gem和路径
