@@ -56,6 +56,16 @@ title: RVM Gem Bundle小记
 
         Gem.loaded_specs.values.each { |g| puts g.full_gem_path };nil
 
+4. gem source
+
+   修改gem soure会修改~/.gemrc 文件
+
+   * -a, --add SOURCE_URI             Add source
+   * -l, --list                       List sources
+   * -r, --remove SOURCE_URI          Remove source
+   * -c, --clear-all                  Remove all sources (clear the cache)
+   * -u, --update                     Update source cache
+
 ### Bundle
 
 1. `bundle init` 在当前目录新建Gemfile
