@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h1>{{ page.title }} {% if page.tagline %} <small>{{ page.tagline }}</small>{% endif %}</h1>
+  {% if page.link %}
+    <br/>
+    <p> <b>链接: </b><a target="_blank" href="{{ page.link }}">{{page.link}}</a> </p>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="span9">
+    {{ content }}
+    <hr>
+  </div>
+  
+  <div class="span3">
+    <h4>添加于</h4>
+    <div class="date"><span>{{ page.date | date_to_long_string }}</span></div>
+
+  {% unless page.tags == empty %}
+    <h4>标签</h4>
+    <ul class="tag_box">
+    {% assign tags_list = page.tags %}
+    {% include JB/tags_list %}
+    </ul>
+  {% endunless %}  
+  </div>
+</div>

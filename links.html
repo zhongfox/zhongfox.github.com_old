@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 收藏链接
-tagline: 
+tagline: TODO 给link加上tag 分页
 header: links
 group: navigation
 ---
@@ -11,19 +11,15 @@ group: navigation
   <div class="span9">
     <div>
       {% for post in site.categories['link'] %}	
-        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
         <p>
-            {{ post.content | strip_html | truncatewords:25}}
+          <a target="_blank" href="{{ post.link }}"><strong>{{ post.title }}</strong> {{post.link}}</a><br/>
         </p>
-        <p>
-          <a href="{{ post.url }}"><strong>阅读更多...</strong></a><br/>
-        </p>
+
         <p>
           <strong>
             {{ post.date | date: "%B %e, %Y" }}
           </strong>
-            | {{ post.categories }}
-            | <a href="http://zhongfox.github.com{{ post.url }}/#uyan_frame" data-disqus-identifier="{{ post.url }}">comments</a>
+            | <a href="{{ post.url }}">my note</a>
         </p>
         {% if forloop.last %}
         {% else %}
