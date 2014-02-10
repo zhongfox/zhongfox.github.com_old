@@ -89,7 +89,7 @@ title: Coffee Script
 
    * 支持参数槽(splats 即ruby里的数目不定的参数数组), 下例中nums是真实的Array，而不是arguments对象
 
-        sum = (nums...) -> 
+        sum = (nums...) ->
           result = 0
           nums.forEach (n) -> result += n
           result
@@ -114,7 +114,7 @@ title: Coffee Script
 
 7. 对象字面量和数组定义
 
-   * 对象定义和使用大括号可以省略 
+   * 对象定义和使用大括号可以省略
 
      object2 = one: 1, two: 2 (数组不行)
 
@@ -122,7 +122,7 @@ title: Coffee Script
 
    * 对象定义和数组定义还可以通过换行省略分隔的逗号
 
-        object3 = 
+        object3 =
           one: 1
           two: 2
 
@@ -134,18 +134,18 @@ title: Coffee Script
 
 8. 流程控制
 
-  * 支持unless
+   * 支持unless
 
-  * if unless 的括号可以省略，还可以通过then写到单行`if 1 > 0 then "Ok" else "Y2K!"`
+   * if unless 的括号可以省略，还可以通过then写到单行`if 1 > 0 then "Ok" else "Y2K!"`
 
-  * 类似ruby的if unless后置：`alert "It's cold!" if heat < 5`
+   * 类似ruby的if unless后置：`alert "It's cold!" if heat < 5`
 
-  * 使用`not` 代替! 取反增强可读性 `if not true then "Panic"`
+   * 使用`not` 代替! 取反增强可读性 `if not true then "Panic"`
 
-  * is 等价于=== `if true is 1` 
+   * is 等价于=== `if true is 1`
 
-  * isnt 等价于 is not 等价于 !==  `if true isnt true`
+   * isnt 等价于 is not 等价于 !==  `if true isnt true`
 
-  * coffee会自动转化 == != 为 === !==
+   * coffee会自动转化 == != 为 === !==
 
 
