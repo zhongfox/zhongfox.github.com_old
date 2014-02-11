@@ -237,13 +237,13 @@ title: Coffee Script
 
 2. 类的实例属性
 
-  * 实例属性即在够构造器的prototype上的属性
+   * 实例属性即在够构造器的prototype上的属性
 
         class Animal
           price: 5
           sell: (customer) ->
 
-  * 胖箭头生成的实例方法里的this总是绑定当前的实例对象
+   * 胖箭头生成的实例方法里的this总是绑定当前的实例对象
 
         class Animal
           price: 5
@@ -252,7 +252,7 @@ title: Coffee Script
 
 3. 类的静态属性
 
-  类的静态属性即类的属性，在类定义处用this来实现
+   类的静态属性即类的属性，在类定义处用this来实现
 
         class Animal
           this.find = (name) ->
@@ -261,7 +261,7 @@ title: Coffee Script
 
    继承使用`extends` (oh no java) 
 
-  super用于调用被覆盖的父类的方法
+   super用于调用被覆盖的父类的方法
 
         class Animal
           constructor: (@name) ->
