@@ -148,4 +148,51 @@ title: Coffee Script
 
    * coffee会自动转化 == != 为 === !==
 
+9. 字符串插值法
+
+   * 支持ruby 里的#{变量名}，同样必须放到双引号里
+
+   * 多行字符串是允许的，不需要在每一行前添加+, 这个单双引号都支持
+
+10. 循环和列表解析
+
+    * for in 迭代
+
+        for name in ["Roger", "Roderick", "Brian"]
+          alert "Release #{name}"
+
+        for name, i in ["Roger the pickpocket", "Roderick the robber"] #附带index
+          alert "#{i} - Release #{name}"
+
+        release prisoner for prisoner in ["Roger", "Roderick", "Brian"] #后缀式for in 很像python
+
+        release prisoner for prisoner in prisoners when prisoner[0] is "R" #用when过滤
+
+        names = sam: seaborn, donna: moss
+        alert("#{first} #{last}") for first, last of names #迭代对象
+
+    * while 循环
+
+      while类似原生while, 但是如果把while结果赋值给变量，会有map的效果 (但是我感觉这是鸡肋啊，干嘛不直接用map，map更直观，不过对于没有map方法的倒是可以一试)
+
+                num = 6
+                minstrel = while num -= 1
+                  num + " Brave Sir Robin ran away"
+
+      题外话：原生的`Array.prototype.map()` `[1,2,3].map(function(x) { return x+ 1 })`
+
+
+11. 数组
+
+    coffee支持range来定义分离数组，几乎和ruby一模一样：
+
+        imAArray = [1..5]
+        firstTwo = ["one", "two", "three"][0..1] #使用slice
+
+        my = "my string"[0..2] ＃range分离还可以用于字符串
+
+    为了解决IE不支持indexOf，coffee提供了in，来判断array的包含关系
+
+        words = ["rattled", "roudy", "rebbles", "ranks"]
+        alert "Stop wagging me" if "ranks" in words 
 
