@@ -39,6 +39,8 @@ title: Coffee Script
 
 * 安装VIM插件 <https://github.com/kchmck/vim-coffee-script>
 
+---
+
 ### 使用
 
 1. 前端编译
@@ -54,6 +56,8 @@ title: Coffee Script
    要预处理文件: `coffee --compile my-script.coffee`
 
    如果没有指定--output参数，CoffeeScript会直接将编译后的代码写入一个同名的JavaScript文件中
+
+---
 
 ### 语法
 
@@ -195,4 +199,77 @@ title: Coffee Script
 
         words = ["rattled", "roudy", "rebbles", "ranks"]
         alert "Stop wagging me" if "ranks" in words 
+
+12. 别名和存在操作符
+
+    * @代表this `@saviour = true` == `this.saviour = true`
+
+    * ::代表prototype `User::first = 3` == `User.prototype.first = 3`
+
+    * 存在判断符`?`
+
+        praise if brian? # if (typeof brian !== "undefined" && brian !== null) { praise; }
+
+        velocity = southern ? 40 # 用于代替或： velocity = typeof southern !== "undefined" && southern !== null ? southern : 40;
+
+        blackKnight.getLegs()?.kick() # 类似ruby的try，但是只判断了null： var _ref; if ((_ref = blackKnight.getLegs()) != null) { _ref.kick(); }
+
+        blackKnight.getLegs().kick?() #可调用性判断
+
+---
+
+### 类
+
+1. 类定义
+
+        class Animal
+          constructor: (name) ->
+            @name = name
+
+        等价于：
+
+        class Animal
+          constructor: (@name) ->
+
+        实例化 
+        animal = new Animal("Parrot")
+        alert "Animal is a #{animal.name}"
+
+2. 类的实例属性
+
+  * 实例属性即在够构造器的prototype上的属性
+
+        class Animal
+          price: 5
+          sell: (customer) ->
+
+  * 胖箭头生成的实例方法里的this总是绑定当前的实例对象
+
+        class Animal
+          price: 5
+          sell: =>
+            alert "Give me #{@price} shillings!" # this.price 会是5
+
+3. 类的静态属性
+
+  类的静态属性即类的属性，在类定义处用this来实现
+
+        class Animal
+          this.find = (name) ->
+
+4. 继承
+
+   继承使用`extends` (oh no java) 
+
+  super用于调用被覆盖的父类的方法
+
+        class Animal
+          constructor: (@name) ->
+
+          alive: ->
+            false
+
+        class Parrot extends Animal
+          constructor: ->
+            super("Parrot")
 
