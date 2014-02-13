@@ -81,9 +81,9 @@ title: Coffee Script
 
    * 多行函数，锁进既语法（从python），一次缩进代表一层{}
 
-        func = ->
-          # An extra line
-          "bar"
+                func = ->
+                  # An extra line
+                  "bar"
 
 4. 函数参数
 
@@ -120,21 +120,21 @@ title: Coffee Script
 
    * 对象定义和使用大括号可以省略
 
-     object2 = one: 1, two: 2 (数组不行)
+                object2 = one: 1, two: 2 (数组不行)
 
-     User.create(name: "John Smith")
+                User.create(name: "John Smith")
 
    * 对象定义和数组定义还可以通过换行省略分隔的逗号
 
-        object3 =
-          one: 1
-          two: 2
+                object3 =
+                  one: 1
+                  two: 2
 
-        array2 = [
-          1
-          2
-          3
-        ]
+                array2 = [
+                  1
+                  2
+                  3
+                ]
 
 8. 流程控制
 
@@ -164,20 +164,20 @@ title: Coffee Script
 
       迭代数组
 
-        for name in ["Roger", "Roderick", "Brian"]
-          alert "Release #{name}"
+                for name in ["Roger", "Roderick", "Brian"]
+                  alert "Release #{name}"
 
-        for name, i in ["Roger the pickpocket", "Roderick the robber"] #附带index
-          alert "#{i} - Release #{name}"
+                for name, i in ["Roger the pickpocket", "Roderick the robber"] #附带index
+                  alert "#{i} - Release #{name}"
 
-        release prisoner for prisoner in ["Roger", "Roderick", "Brian"] #后缀式for in 很像python
+                release prisoner for prisoner in ["Roger", "Roderick", "Brian"] #后缀式for in 很像python
 
-        release prisoner for prisoner in prisoners when prisoner[0] is "R" #用when过滤
+                release prisoner for prisoner in prisoners when prisoner[0] is "R" #用when过滤
 
       迭代对象
 
-        names = sam: seaborn, donna: moss
-        alert("#{first} #{last}") for first, last of names #迭代对象
+                names = sam: seaborn, donna: moss
+                alert("#{first} #{last}") for first, last of names #迭代对象
 
     * while 循环
 
@@ -212,13 +212,13 @@ title: Coffee Script
 
     * 存在判断符`?`
 
-        praise if brian? # if (typeof brian !== "undefined" && brian !== null) { praise; }
+                praise if brian? # if (typeof brian !== "undefined" && brian !== null) { praise; }
 
-        velocity = southern ? 40 # 用于代替或： velocity = typeof southern !== "undefined" && southern !== null ? southern : 40;
+                velocity = southern ? 40 # 用于代替或： velocity = typeof southern !== "undefined" && southern !== null ? southern : 40;
 
-        blackKnight.getLegs()?.kick() # 类似ruby的try，但是只判断了null： var _ref; if ((_ref = blackKnight.getLegs()) != null) { _ref.kick(); }
+                blackKnight.getLegs()?.kick() # 类似ruby的try，但是只判断了null： var _ref; if ((_ref = blackKnight.getLegs()) != null) { _ref.kick(); }
 
-        blackKnight.getLegs().kick?() #可调用性判断
+                blackKnight.getLegs().kick?() #可调用性判断
 
 ---
 
@@ -243,23 +243,23 @@ title: Coffee Script
 
    * 实例属性即在够构造器的prototype上的属性
 
-        class Animal
-          price: 5          #类中的实例属性
-          sell: (customer) ->
+                class Animal
+                  price: 5          #类中的实例属性
+                  sell: (customer) ->
 
    * 胖箭头生成的实例方法里的this总是绑定当前的实例对象
 
-        class Animal
-          price: 5
-          sell: =>
-            alert "Give me #{@price} shillings!" # this.price 会是5
+                class Animal
+                  price: 5
+                  sell: =>
+                    alert "Give me #{@price} shillings!" # this.price 会是5
 
 3. 类的静态属性
 
    类的静态属性即类的属性，在类定义处用this来实现
 
-        class Animal
-          this.find = (name) ->
+                class Animal
+                  this.find = (name) ->
 
 4. 继承
 
