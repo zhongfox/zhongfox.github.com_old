@@ -288,4 +288,6 @@ ActiveRecord的数据库插入方法会忽略id的设置：
 
 * limit字句也可以用于update和delete
 
+* 在mysql 5.6.15 遇到 这个问题：`Mysql2::Error: BLOB/TEXT column ...  can't have a default value `
 
+  貌似是新版本不允许BLOB/TEXT有默认值,解决方法把`SET @@global.sql_mode='';` 好像是把严格模式关掉了，不明

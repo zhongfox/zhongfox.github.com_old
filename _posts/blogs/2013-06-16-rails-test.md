@@ -206,3 +206,30 @@ title: 使用Rspec进行Rails单元测试
         scenario == it
         given/given! == let/let!
 
+
+### 测试
+
+1. `bundle exec rake spec` 
+
+   <http://www.ultrasaurus.com/2011/05/what-exactly-does-rake-spec-do/>
+
+   Execute db:abort_if_pending_migrations 检查development数据库是否有pending的migrate
+
+   Execute db:test:prepare 先检查开发模式有无pending migrate, 如果有，则停止并且提示，如果没有，则加载schema.rb到测试库（估计就是 db:test:load ）
+
+   Execute db:test:purge 清空测试数据库
+
+   Execute db:test:load 从schema.rb加载数据结构重新构建测试库
+
+   Execute db:schema:load 貌似也是从从schema.rb加载，但是不知道和db:test:load的区别
+
+   Execute spec
+
+   另外还有几个测试相关的rake：
+
+
+   rake db:test:clone          复制当前模式(?)的数据结构到测试库
+
+   rake db:test:clone_structure 复制开发模式的数据库结构到测试库
+
+

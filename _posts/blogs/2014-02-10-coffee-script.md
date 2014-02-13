@@ -162,6 +162,8 @@ title: Coffee Script
 
     * for in 迭代
 
+      迭代数组
+
         for name in ["Roger", "Roderick", "Brian"]
           alert "Release #{name}"
 
@@ -171,6 +173,8 @@ title: Coffee Script
         release prisoner for prisoner in ["Roger", "Roderick", "Brian"] #后缀式for in 很像python
 
         release prisoner for prisoner in prisoners when prisoner[0] is "R" #用when过滤
+
+      迭代对象
 
         names = sam: seaborn, donna: moss
         alert("#{first} #{last}") for first, last of names #迭代对象
@@ -198,7 +202,7 @@ title: Coffee Script
     为了解决IE不支持indexOf，coffee提供了in，来判断array的包含关系
 
         words = ["rattled", "roudy", "rebbles", "ranks"]
-        alert "Stop wagging me" if "ranks" in words 
+        alert "Stop wagging me" if "ranks" in words
 
 12. 别名和存在操作符
 
@@ -224,14 +228,14 @@ title: Coffee Script
 
         class Animal
           constructor: (name) ->
-            @name = name
+            @name = name  #对象本身属性
 
         等价于：
 
         class Animal
           constructor: (@name) ->
 
-        实例化 
+        实例化
         animal = new Animal("Parrot")
         alert "Animal is a #{animal.name}"
 
@@ -240,7 +244,7 @@ title: Coffee Script
    * 实例属性即在够构造器的prototype上的属性
 
         class Animal
-          price: 5
+          price: 5          #类中的实例属性
           sell: (customer) ->
 
    * 胖箭头生成的实例方法里的this总是绑定当前的实例对象
@@ -259,7 +263,7 @@ title: Coffee Script
 
 4. 继承
 
-   继承使用`extends` (oh no java) 
+   继承使用`extends` (oh no java)
 
    super用于调用被覆盖的父类的方法
 
@@ -272,4 +276,82 @@ title: Coffee Script
         class Parrot extends Animal
           constructor: ->
             super("Parrot")
+
+          dead: ->
+            not @alive()
+
+   这段代码翻译和注释：
+
+        var Animal, Parrot;
+        var __hasProp = Object.prototype.hasOwnProperty,
+          __extends = function (child, parent) {
+            for (var key in parent) {
+              if (__hasProp.call(parent, key)) child[key] = parent[key]; #这里是把父类的'静态属性'复制给子类，比较土，不是像实例属性那样使用原型来继承。这是JavaScript原型架构的实现细节所致
+            }
+
+            function ctor() {
+              this.constructor = child; #这里是为了保证子类对象的constructor是指向子类构造器，使用的是对象本身属性
+            }
+            ctor.prototype = parent.prototype; #中间插入的一个构造器，它用类对象本身属性constructor 覆盖了类的实例属性constructor
+            child.prototype = new ctor;        #这里是JavaScript继承实现的根本，子类的prototype指向父类的一个对象（对象有类的prototype的所有属性）
+            child.__super__ = parent.prototype;#子类的__super__指向了父类的prototype
+            return child;
+          };
+        Animal = (function () {
+          function Animal(name) {
+            this.name = name;
+          }
+          Animal.prototype.alive = function () {
+            return false;
+          };
+          return Animal;
+        })();
+        Parrot = (function () {
+          __extends(Parrot, Animal);
+
+          function Parrot() {
+            Parrot.__super__.constructor.call(this, "Parrot");
+          }
+          Parrot.prototype.dead = function () {
+            return !this.alive();
+          };
+          return Parrot;
+        })();
+
+   * 类的静态属性的继承是简单的复制
+
+   * 子类的对象的constructor是指向子类本身
+
+   * 子类的`__super__`指向父类的prototype
+
+5. mixin
+
+   mixin由js直接提供
+
+        extend = (obj, mixin) ->
+          obj[name] = method for name, method of mixin
+          obj
+
+        include = (klass, mixin) ->
+          extend klass.prototype, mixin
+
+        # Usage
+        include Parrot, isDeceased: true
+
+6. 扩展类
+
+   TODO
+
+----
+
+### CoffeeScript惯用法（最佳实践）
+
+1. 用for in 代替原生的`Array.prototype.forEach()`
+
+   forEach每次要调用一次回调，for in会转换成原生的for循环，更快
+
+2. 
+
+
+
 
