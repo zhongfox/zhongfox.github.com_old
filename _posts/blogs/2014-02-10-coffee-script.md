@@ -350,7 +350,35 @@ title: Coffee Script
 
    forEach每次要调用一次回调，for in会转换成原生的for循环，更快
 
-2. 
+2. 用列表解析代替ES5 中的map
+
+   `[1,2,3].map(function(x) {return x+1})` map和forEach同样有性能问题
+
+   列表解析 `result = (item.name for item in array)`
+
+3. 用when结合列表解析代替ES5的filter
+
+   filter：`[1,2,3,4].filter(function (x) {return x>2})`
+
+   when: `result = (item for item in array when item.name is "test")` 括号不能少
+
+   这个看起来是不是很cool
+
+                passed = []
+                failed = []
+                (if score > 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
+
+4. 判断数组包含，使用in而不是有兼容性问题的indexOf，coffee自动处理兼容性问题
+
+   `included = "test" in array`
+
+   字符串包含关系只能用indexOf`included = "a long test string".indexOf("test") isnt -1`
+
+5. 用for of做对象属性迭代，但是coffee不会判断hasOwnProperty
+
+
+
+   
 
 
 
