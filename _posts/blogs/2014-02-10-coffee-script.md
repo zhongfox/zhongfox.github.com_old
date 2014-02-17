@@ -364,9 +364,9 @@ title: Coffee Script
 
    这个看起来是不是很cool
 
-                passed = []
-                failed = []
-                (if score > 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
+        passed = []
+        failed = []
+        (if score > 60 then passed else failed).push score for score in [49, 58, 76, 82, 88, 90]
 
 4. 判断数组包含，使用in而不是有兼容性问题的indexOf，coffee自动处理兼容性问题
 
@@ -376,10 +376,42 @@ title: Coffee Script
 
 5. 用for of做对象属性迭代，但是coffee不会判断hasOwnProperty
 
+6. 多个参数
+
+        fuc = (numbers...)->             #函数定义使用多个参数
+          alert(item) for item in numbers
+
+        n = [1, 2, 3]
+
+        fuc n...                         #数调用使用数组代替多个参数,转换成fuc.apply(null, n);
+
+7. 更好语义的别名
+
+  * or 代替 ||
+
+  * and 代替 &&
+
+  * is 代替 ===
+
+  * isnt 代替 !==
+
+  * 或等，JavaScript是没有原生的 ||=, coffee的实现
+
+    hash or= {} #hash || (hash = 4); hash被赋值的条件是 '' '0' 0 NaN undefined null
+
+    hash ?= {} #hash || if (hash == null) { hash = 4; } hash被赋值的条件是 undefined null (null == undefined 为 true)
 
 
-   
+8. 解构赋值
+
+  { a, b } = someObject # a = someObject.a, b = someObject.b; 我觉得其实这个没啥用
+
+9. 关键词do匿名函数直接运行
+
+   a = do -> dosomething()
+
+---
 
 
 
-
+  

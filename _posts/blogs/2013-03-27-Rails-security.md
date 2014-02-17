@@ -6,7 +6,7 @@ tags : [rails, rails guides, security]
 ---
 {% include JB/setup %}
 
-本文主要选译自[Ruby On Rails Security Guide](http://guides.ruby-china.org/security.html)
+本文主要选译自[Ruby On Rails Security Guide](http://guides.rubyonrails.org/security.html)
 
 ## 1 简介
 
