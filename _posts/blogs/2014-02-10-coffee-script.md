@@ -413,5 +413,56 @@ title: Coffee Script
 ---
 
 
+###Cake
 
-  
+TODO
+
+---
+
+###创建应用程序
+
+TODO
+
+---
+
+###coffee对JavaScript糟粕的处理
+
+1. coffee不支持with，with让代码简洁，但是性能和可读性受影响
+
+2. 为了解决全局变量的弊端，coffee把所有变量默认定义为局部变量，因此禁用了关键字var
+
+3. coffee 自动插入分号
+
+4. coffee自动给一些保留关键字加上引用，但是我觉得这些事情还是应该程序员自己去做，不要把程序员惯坏了
+
+5. 自动转换非严格比较（== !=）
+
+6. 声明式定义函数（不用var），函数定义会提前，这会有一些兼容性问题，coffee禁用了声明式（禁用了function关键字），只允许使用函数表达式
+
+7. JavaScript解析器对`5.toString(); `解析有问题，，数值对象的点表示法会被解释为一个浮点数，而不是属性的查找。coffee自动转换成了`5..toString(); `
+
+8. CoffeeScript已经对编译输出进行过lints检查，因此CoffeeScript产生的JavaScript已经是与JavaScript Lint兼容的代码了。
+
+---
+
+###coffee没有修正的js的“必要之恶”
+
+1. eval 见名之意
+
+2. typeof 鸡肋
+
+3. instanceof 还是鸡肋
+
+4. delete 只能删对象内部属性，对变量或者函数，最好还是直接赋值null
+
+5. parseInt 记得谣传基数
+
+6. 老版本浏览器对strict模式支持不力，在你的CoffeeScript程序中开启严格模式还是很有用的
+
+---
+
+### 参考资料
+
+* [The Little Book on CoffeeScript](http://arcturo.github.io/library/coffeescript/index.html)
+
+* 中文翻译 [CoffeeScript小书](http://read.douban.com/ebook/198648/)
