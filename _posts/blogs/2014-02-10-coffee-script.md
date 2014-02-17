@@ -455,7 +455,7 @@ TODO
 
 4. delete 只能删对象内部属性，对变量或者函数，最好还是直接赋值null
 
-5. parseInt 记得谣传基数
+5. parseInt 记得要传基数
 
 6. 老版本浏览器对strict模式支持不力，在你的CoffeeScript程序中开启严格模式还是很有用的
 
