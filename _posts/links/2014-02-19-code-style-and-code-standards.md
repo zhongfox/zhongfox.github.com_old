@@ -2,7 +2,7 @@
 layout: link
 category : link
 link: http://blog.jobbole.com/43644/
-title: 谷歌是如何做代码审查的
+title: 谈谈编码风格与编码规范
 ---
 
 * 我们要区分对待编码风格（code style）和编码规范（code standards）
