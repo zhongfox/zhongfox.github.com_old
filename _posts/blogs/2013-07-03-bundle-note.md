@@ -118,7 +118,63 @@ title: RVM Gem Bundle小记
 
 15. `bundle open [gemname]` 打开该gem所在的目录
 
+---
+
+### deployment 模式
+
+`--deployment` 会开启deployment模式，不要在开发机器开启该模式（it will cause in an error when the Gemfile is modified）
+
+该模式要求：
+
+* A Gemfile.lock is required
+* The Gemfile.lock must be up to date
+* Gems are installed to vendor/bundle not your default system location
+  
+  开发机器共享gems很方便，但是在生成环境，隔离各个项目的gems显得比较重要
+
+  该模式应该会修改config里的path值
+
+### bundle config
+
+* bundle 的config 的优先级：
+
+  1. 本项目 `app/.bundle/config`
+
+  2. 系统, 使用环境变量
+
+  3. 全局 `~/.bundle/config`
+
+* 展示
+
+  `bundle config` 展示当前所有配置(使用那个优先级和当前目录有关, --global 或者 --local无效)
+
+  `bundle config <name>` 展示name的配置
+
+* 设置
+
+  `bundle config <name> <value>`  等同于 `bundle config --global <name> <value>` 将配置 `~/.bundle/config`
+
+  `bundle config --local <name> <value>`  将配置`app/.bundle/config`
+  
+  存入配置文件的key将是`BUNDLE_NAME`
+
+* 删除
+
+  `bundle config --delete <name>` 适当加上 -global 或者 --local
+
+* config 值列表
+
+  * path (BUNDLE_PATH)
+  * frozen (BUNDLE_FROZEN)
+  * without (BUNDLE_WITHOUT)
+  * bin (BUNDLE_BIN)
+  * gemfile (BUNDLE_GEMFILE)
+
+
+
 
 ### 参考资料
 
 * Bundler <http://bundler.io/>
+
+* bundle-config <http://bundler.io/v1.3/man/bundle-config.1.html>
