@@ -6,8 +6,6 @@ title: Ruby 继承链
 ---
 {% include JB/setup %}
 
-
-
 Ruby在方法查找和常量查找都依赖继承链，直接上图：
 
 <img src="/assets/images/ruby_inheritance_chain.jpg" />
@@ -33,8 +31,8 @@ Ruby在方法查找和常量查找都依赖继承链，直接上图：
 
 * 最右边的单件类继承链，可以用来说明为什么类方法是可以继承的。
 
-* 对于类对象，eigenclass 的超类就是超类的 eigenclass; 对于非类对象，eigenclass的超类就是对象的类。
+* 对于类对象，eigenclass 的超类就是超类的 eigenclass; 对于非类对象, eigenclass的超类就是对象的类。
 
-* BasicObject 没有超类，但是#BasicObject有，就是Class！
+* BasicObject 没有超类, 但是#BasicObject有, 就是Class！
 
 
