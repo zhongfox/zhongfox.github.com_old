@@ -43,7 +43,7 @@ title: RVM Gem Bundle小记
    * `gem install gemname --remote` 从远程服务器
 
    * `gem install gemname --version "操作符 0.4.14"` 指定版本
-   
+
      操作符可以是`= != > < >= <= ~>`操作符默认将是`=`
 
      `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
@@ -76,7 +76,13 @@ title: RVM Gem Bundle小记
 
 1. `bundle init` 在当前目录新建Gemfile
 
-2. 在Gemfile中指定ruby版本: `ruby '1.9.3'` 
+2. 在Gemfile中指定ruby版本: `ruby '1.9.3'`
+
+3. 在Gemfile中使用require:
+
+   `gem 'whenever', :require => false` bundler 会安装此gem，但是不会自动加载，使用时需要手动加载`require "whenever"`。适用于项目里用得比较少的gem
+
+   `gem "whenever", :require=>"whenever_abc"` bundler会安装此gem，会自动加载. bundle会使用`require "whenever_abc"`。适用于gem名字和库名不一致的情况
 
 3. `gem 'thin',  '~>1.1'` 指定版本，操作符使用和gem install一致
 
@@ -129,7 +135,7 @@ title: RVM Gem Bundle小记
 * A Gemfile.lock is required
 * The Gemfile.lock must be up to date
 * Gems are installed to vendor/bundle not your default system location
-  
+
   开发机器共享gems很方便，但是在生成环境，隔离各个项目的gems显得比较重要
 
   该模式应该会修改config里的path值
@@ -155,7 +161,7 @@ title: RVM Gem Bundle小记
   `bundle config <name> <value>`  等同于 `bundle config --global <name> <value>` 将配置 `~/.bundle/config`
 
   `bundle config --local <name> <value>`  将配置`app/.bundle/config`
-  
+
   存入配置文件的key将是`BUNDLE_NAME`
 
 * 删除

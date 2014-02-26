@@ -284,6 +284,8 @@ ruby1.9中String相关的函数：
 Rails 中：
 
     #CGI::escape(message.encode('GBK')) 把message转为GBK
+
+    解码GBK编码后的参数 messgae.encode(Encoding::UTF_8, Encoding::GBK)
   
 ## 参考资料
 * 字节序大端小端 <http://hi.baidu.com/dpfei1603/item/6e16ffd1a6646ebd33db90e9>
