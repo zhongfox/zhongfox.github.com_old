@@ -345,9 +345,11 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
         h.keys           #=> ["c", "d"]
 
 
-21. `instance_of?` 不考虑继承链
+21. 对象类型判断
 
-    `is_a?` `kind_of?` 都会考虑继承，也包括继承链上的module
+    `o.instance_of? SomeClass` 不考虑继承链 等价于`o.class == String`
+
+    `o.is_a? SomeClass` 等价于 `o.kind_of? SomeClass` 等价于`SomeClass === o` 都会考虑继承，也包括继承链上的module
 
 22. 对象实例变量操作
 
@@ -370,6 +372,31 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
     对Module的实例（模块）来说，因为没有superclass方法，ancestors 只返回他include的module和自己
 
     对Class的实例（类）来说，包括自身，include的module和继承的祖先类
+
+25. 对象相等判断
+
+    * `equal?`  判断是否是同一个对象，等价于判断`a.object_id == b.object_id`， 最佳实践:用于不要重写`equal?`
+
+    * `==` Object类中它是equal?的同义词，大多数类重新实现此方法
+
+      * Hash 遍历键值对比较，键通过`eql?` 值通过`==`，如果全等，即为相等
+      * Array 遍历相同位置元素，通过`==`比较，如果全等，即为相等
+
+    * `eql?` Object类中它是equal?的同义词，大多数类重新实现此方法(为严格相等，不允许类型转换)
+
+    * `===` Object类中它是==的同义词, 条件性相等，大多数类重新实现此方法
+
+      * 范围匹配 `(1..10) === 5`
+      * 正则匹配 `/\d+/ === '123'`
+      * 类的实例判断 `String === 'ss'`
+      * Symbol 判断同内容的字符串 `:s === 's'`
+      * case 里隐式判断
+
+    * `=~` 只对String和正则的对象有用
+
+      * '123' =~ /\d+/ 返回字符串中第一匹配的index
+      * /\d+/ =~ '123' 同上
+
 
 ### Ruby 2
 
