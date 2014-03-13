@@ -244,12 +244,6 @@ title: Rails 命令行
 
     * `rake db:rollback [STEP=n]` 对最近的n次migrate执行down操作，不传递STEP的话n是1
 
-    * `rake db:schema:dump` 基于当前数据库, 以ruby的形式, 生成db/schema.rb文件
-
-    * `rake db:schema:load`  加载schema.rb 以格式化数据库
-
-    * `rake db:structure:dump` 基于当前数据库, 以sql的形式, 生成db/structure.sql. 可通过参数指定其他文件: DB_STRUCTURE=db/my_structure.sql
-
     * `rake db:schema:cache:clear`
 
     * `rake db:schema:cache:dump`
@@ -258,9 +252,43 @@ title: Rails 命令行
 
     * `rake db:setup` 基本上等于 db:reset + db:create + db:schema:load + db:seed
 
-    * `rake db:test:prepare` 将`db/schema.rb`加载到测试数据库，在这之前会检查`db/schema.rb`是否迁移更新到最新的，如果不是将会有提示
+  * **测试相关**
 
-    * `rake db:test:clone` 开发数据库结构会克隆到测试数据库。不过，这个任务不会复制数据库中的数据
+    * `rake db:schema:dump` 基于当前环境数据库, 以ruby的形式, 生成db/schema.rb文件, 另外每次migrate后也会自动调用该任务
+
+    * `rake db:schema:load`  加载schema.rb 以格式化当前环境数据库
+
+    * `rake db:structure:dump` 基于当前数据库, 以sql的形式, 生成db/structure.sql. 可通过参数指定其他文件: DB_STRUCTURE=db/my_structure.sql
+
+    * `rake db:test:load` 基本等同`rake db:schema:load` 只是会用schema.rb构建**测试库**
+
+                task :load => 'db:test:purge' do
+                  ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
+                  # ...
+                  db_namespace['schema:load'].invoke
+                end
+
+    * `rake db:test:clone` 等同于 `db:schema:dump` 加上 `db:test:load` , 不会复制数据库中的数据
+
+                task :clone => %w(db:schema:dump db:test:load)
+
+    * `rake db:test:clone_structure` 使用的是` {rails_env}_structure.sql ` 而不是schema.rb
+
+                task :clone_structure => [ 'db:structure:dump', 'db:test:purge' ] do
+                  # skipped some code, here's what happens for MySQL:
+                  ActiveRecord::Base.establish_connection(:test)
+                  # ...
+                  IO.readlines("#{Rails.root}/db/#{Rails.env}_structure.sql").join.split("\n\n").each do |table|
+                    ActiveRecord::Base.connection.execute(table)
+                  end
+                end
+
+   * `rake db:test:prepare` 检查开发模式有无pending migrate, 如果有，则停止并且提示，如果没有，则 `test:clone_structure` 或者 `test:load`
+
+                task :prepare => 'db:abort_if_pending_migrations' do
+                  # ...
+                  db_namespace[{ :sql  => 'test:clone_structure', :ruby => 'test:load' }[ActiveRecord::Base.schema_format]].invoke
+                end
 
 ----
 
