@@ -283,7 +283,7 @@ title: Rails 命令行
                   end
                 end
 
-   * `rake db:test:prepare` 检查开发模式有无pending migrate, 如果有，则停止并且提示，如果没有，则 `test:clone_structure` 或者 `test:load`
+    * `rake db:test:prepare` 检查开发模式有无pending migrate, 如果有，则停止并且提示，如果没有，则 `test:clone_structure` 或者 `test:load`
 
                 task :prepare => 'db:abort_if_pending_migrations' do
                   # ...
