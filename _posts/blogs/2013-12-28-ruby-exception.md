@@ -6,6 +6,37 @@ title: Ruby 异常
 ---
 {% include JB/setup %}
 
+```
+Exception
+ NoMemoryError
+ ScriptError
+   LoadError
+   NotImplementedError
+   SyntaxError
+ SignalException
+   Interrupt
+ StandardError
+   ArgumentError
+   IOError
+     EOFError
+   IndexError
+   LocalJumpError
+   NameError
+     NoMethodError
+   RangeError
+     FloatDomainError
+   RegexpError
+   RuntimeError
+   SecurityError
+   SystemCallError
+   SystemStackError
+   ThreadError
+   TypeError
+   ZeroDivisionError
+ SystemExit
+ fatal
+```
+
 * 所有异常都继承自类`Exception`
 
 * 异常对象的实例方法：
@@ -48,6 +79,13 @@ title: Ruby 异常
   * 多个rescue类型从句，应该把子类放在最前面，因为rescue从上往下匹配。
 
   * resuce 可以作为语句修饰符：`y = some_method_may_raise_exception resuce nil` 此种风格只能处理StandarError, 注意rescue优先级高于赋值运算（和if while 不同）
+
+  * resuce从句如果没有指定要处理的异常类，默认只会捕捉StandardError（及其子类）
+
+    最佳实践：
+
+    * 自定义异常类时，继承 StandardError 或任何其后代子类（越精确越好）。永远不要直接继承 Exception。
+    * 永远不要 rescue Exception。如果你想要大范围捕捉异常，直接使用空的 rescue 语句（或者使用 rescue => e 来访问错误对象）
 
 * 异常传播：代码块中的异常会传递给调用处
 
