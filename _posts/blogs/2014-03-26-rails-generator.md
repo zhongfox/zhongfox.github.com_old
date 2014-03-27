@@ -2,7 +2,7 @@
 layout: post
 categories: [blog, rails]
 tags : [rails, rails guides, generator]
-title: Rails associations
+title: Rails generator
 ---
 {% include JB/setup %}
 
