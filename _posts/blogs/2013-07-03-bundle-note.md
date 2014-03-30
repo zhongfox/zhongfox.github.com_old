@@ -101,6 +101,8 @@ title: RVM Gem Bundle小记
 
         gem 'nokogiri', :git => 'git://github.com/tenderlove/nokogiri.git', :branch => '1.4'
 
+   When you install a gem via :path or :git it will not be listed in gem list and will throw a LoadError if you try to require it directly in irb
+
 5. 从文件系统指定gem source
 
         gem 'extracted_library', :path => './vendor/extracted_library'
