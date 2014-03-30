@@ -74,11 +74,13 @@ title: RVM Gem Bundle小记
 
 6. 加载gem机制：
 
-   `require 'gem name'` 时会把 `gem_dir` 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
+   `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
 
 7. `gem fetch gemname`  只下载不安装
 
 8. `gem unpack gemname` 解包gem
+
+9. `gem spec gemname`  展示gem信息，gem可以是已安装的，亦可以是本地gem文件
 
 
 ### Bundle
