@@ -72,6 +72,15 @@ title: RVM Gem Bundle小记
         gem_root = spec.gem_dir
         gem_lib = gem_root + "/lib"
 
+6. 加载gem机制：
+
+   `require 'gem name'` 时会把 `gem_dir` 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
+
+7. `gem fetch gemname`  只下载不安装
+
+8. `gem unpack gemname` 解包gem
+
+
 ### Bundle
 
 1. `bundle init` 在当前目录新建Gemfile

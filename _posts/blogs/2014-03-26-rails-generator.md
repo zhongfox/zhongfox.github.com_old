@@ -36,6 +36,13 @@ title: Rails generator
 
   * `g.stylesheets false` 去掉样式
   * `g.test_framework  :test_unit, fixture: false` 测试去掉创建固件
+  * `g.fallbacks[:shoulda] = :test_unit` 如果使用shoulda时调用的generator 无法找到，就去找test_unit
+
+          g.test_framework  :shoulda, fixture: false
+          g.stylesheets     false
+
+          # Add a fallback!
+          g.fallbacks[:shoulda] = :test_unit
 
 * 在generator中调用其他generator`hook_for other_generator_name`
 
@@ -45,7 +52,22 @@ title: Rails generator
 
 ---
 
-### 方法
+### Generator API
+
+* gem
+* gem_group
+* add_source
+* gsub_file
+* application Adds a line to config/application.rb directly after the application class definition
+* git
+* vendor Places a file into vendor which contains the specified code
+* lib Places a file into lib which contains the specified code
+* rakefile Creates a Rake file in the lib/tasks directory of the application
+* initializer Creates an initializer in the config/initializers directory of the application
+* generate
+* rake
+* route
+* readme
 
 * `source_root` 指定generator的source目录，目录中放置和该generator相关的模板， 如`copy_file(source, to)`的source文件将相对于此目录
 
@@ -55,9 +77,41 @@ title: Rails generator
 
 * `plural_name` 复数 首字母小写
 
+---
 
+### Rails Application Templates
 
+* 模板可以用于新建rails项目：
 
+  * rails new blog -m ~/template.rb
+  * rails new blog -m http://example.com/template.rb
+
+* 模板也可以用于已有项目
+
+  * rake rails:template LOCATION=~/template.rb
+  * rake rails:template LOCATION=http://example.com/template.rb
+
+---
+
+### Template API
+
+* `gem(*args)` 把指定gem加人Gemfile，需要自己手动bundle
+* `gem_group(*names, &block)`
+* `add_source(source, options = {})` 在Gemfile里加人source url
+* `environment/application(data=nil, options={}, &block)` 在指定的environment 或者application文件加人一段代码
+
+        environment 'config.action_mailer.default_url_options = {host: 'http://yourwebsite.example.com'}, env: 'production'
+
+* `vendor/lib/file/initializer(filename, data = nil, &block)`  在相应目录下添加文件以及内容，其中`file`接收相对于` Rails.root`的相对路径
+* `rakefile(filename, data = nil, &block)` 在`rake/tasks`里创建文件和内容
+* `generate(what, *args)` 调用what生成器
+* `run(command)` 调用系统命令
+* `rake(command, options = {})` 执行rake
+* `route(routing_code)` 添加路由到route.rb
+* `inside(dir) { ... }` 以dir为当前目录来执行命令
+* `ask(question)` 返回用户对问题的输入，cool
+* `yes?(question) or no?(question)`
+* `git(:command)` 执行git命令
 
 ### 参考资料
 
