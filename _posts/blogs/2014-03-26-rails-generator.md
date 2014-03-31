@@ -54,6 +54,10 @@ title: Rails generator
 
 ### Generator API
 
+
+* [Thor's documentation](http://rdoc.info/github/erikhuda/thor/master/Thor/Actions.html)
+* `directory(source, *args, &block)` 从source directory 复制到 root directory
+* `template(source, *args, &block)` Gets an ERB template at the relative source, executes it and makes a copy at the relative destination. If the destination is not given it's assumed to be equal to the source removing .tt from the filename.
 * gem
 * gem_group
 * add_source
