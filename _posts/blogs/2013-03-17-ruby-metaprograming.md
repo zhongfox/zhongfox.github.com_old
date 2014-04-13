@@ -300,6 +300,22 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
       require不会载入已存在于$"中的文件，如果载入成功返回true，否则false
 
+    * require_relative
+
+      这个相对关系是相对于调用`require_relative`的文件，因此如果在irb(不在文件里)里调用会得到`LoadError: cannot infer basepath`
+
+      加载成功后返回true, 把文件放入$" 不会改变$"
+
+      重复加载返回false
+
+      文件不存在报错
+
+      ruby1.9.2 中因为安全的原因从$LOAD_PATH移除了当前目录，因此不能用require去加载当前目录文件
+
+      引入的require_relative 则是用来加载当前目录文件的方法
+
+    * require 和require_relative的区别在于引入类似`require 'mytest.rb'` 这种形式，对于`require './mytest.rb'` 都可以成功加载相对路径文件
+
     * load:
 
       load加载文件

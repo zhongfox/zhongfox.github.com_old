@@ -167,6 +167,8 @@ title: 《Working With Ruby Threads》读书笔记
 
   * `Benchmark.bm(label_width = 0) {|job| job.report(label) {code} }` 可以有多个job.report， label可选
 
+  * `Benchmark.bmbm(label_width)` 2次测试，第一次是演练，第二次是真实
+
 * 对应cpu密集的程序，MRI的多线程编程起不到优化作用，JRuby 和 Rubinius多线程编程有明显优化
 
 * 为什么JRuby 和 Rubinius不需要GIL？TODO 不想翻译了，自己去看

@@ -137,6 +137,21 @@ title: RVM Gem Bundle小记
 
 15. `bundle open [gemname]` 打开该gem所在的目录
 
+16. 在非rails项目中使用bundle：
+
+        require 'rubygems'
+        require 'bundler/setup'
+        # require your gems as usual, 没有自动加载gem，需要手动加载
+        require 'nokogiri'
+
+17. 加载bundle后需要加载gem：
+
+    按照分组加载: `Bundler.require(:default, :development)` 加载default和development
+
+    不在任何分组里地gem就是default
+
+    在rails项目里： `Bundler.require(:default, Rails.env)`
+
 ---
 
 ### deployment 模式
