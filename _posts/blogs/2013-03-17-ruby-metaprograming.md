@@ -413,6 +413,21 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
       * '123' =~ /\d+/ 返回字符串中第一匹配的index
       * /\d+/ =~ '123' 同上
 
+26. `Array` 和 `Hash` 居然还是Kernel中定义的方法：
+
+        #Returns arg as an Array. First tries to call arg.to_ary, then arg.to_a
+        Array(1..5)   #=> [1, 2, 3, 4, 5] 
+
+    这个方法有一个好处，参数可以是数组或者单个值，最后都会转换成数组
+
+        irb(main):048:0* Array(1)
+        => [1]
+        irb(main):049:0> Array([1])
+        => [1]
+        irb(main):050:0> Array([1,2])
+        => [1, 2]
+
+        Hash(a: 1) #=> {:a=>1}
 
 ### Ruby 2
 

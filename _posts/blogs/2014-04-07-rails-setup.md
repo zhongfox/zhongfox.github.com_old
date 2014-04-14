@@ -159,6 +159,20 @@ title: Rails 加载过程
           end
         end
 
+10. `...class Application < Rails::Application`
+
+        class << self
+          def inherited(base)
+            raise "You cannot have more than one Rails::Application" if Rails.application
+            super
+            Rails.application = base.instance
+            Rails.application.add_lib_to_load_path! #把项目lib加人load path 所以可以直接require lib中文件
+            ActiveSupport.run_load_hooks(:before_configuration, base.instance)
+          end
+        end
+
+
+
 ---
 
 ### 主要命令的启动
@@ -201,8 +215,15 @@ title: Rails 加载过程
 
 3. 关于Rails.application
 
+  * Rails.application 是项目::Application类的实例: `Rails.application == R4test::Application.instance` 为true
+
         Rails.application.class.ancestors
         => [R4test::Application, Rails::Railtie::Configurable, Rails::Application, Rails::Engine, Rails::Railtie, Rails::Initializable, Object, PP::ObjectMixin, ActiveSupport::Dependencies::Loadable, JSON::Ext::Generator::GeneratorMethods::Object, Kernel, BasicObject]
+
+
+  * Rails.application.config `@config ||= Application::Configuration.new(find_root_with_flag("config.ru", Dir.pwd))`
+
+  * `Rails.application.config.root` 指向项目目录
 
 ---
 
