@@ -222,6 +222,34 @@ Engine 只是一个指定了一些initializers的railtie
 
   还可以指定只执行一个engine的migration `rake db:migrate SCOPE=blorgh`
 
+#### Engine 也可以使用 Application的model
+
+engine可以和Application有关联关系，关联类在engine中可能有不同的叫法
+
+如在engine中`belongs_to :author, class_name: "User"`
+
+#### Engine 也可以使用 Application的Controller
+
+        class Blorgh::ApplicationController < ApplicationController #因为常量查找缘故，这里的ApplicationController将是主app的controller
+        end
+
+#### 配置engine
+
+* 初始化文件放在 `config/initializers/`
+
+* 本地化文件放在 `config/locales`
+
+#### view
+
+application查找view，会先从`app/views` 开始，如果找不到，会查找各个engine
+
+#### routes
+
+`<%= link_to "Blog posts", posts_path %>`  如果在engine和application里各种调用的话，会调用各自的路由
+
+`<%= link_to "Blog posts", blorgh.posts_path %>` 指定是engine的路由
+
+`<%= link_to "Home", main_app.root_path %>` 指定是主站的路由
 
 
 ### Engine 和 Plugin
