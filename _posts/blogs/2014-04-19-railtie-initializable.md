@@ -1,8 +1,8 @@
 ---
 layout: post
 categories: [blog, rails]
-tags : [railtie, initializable]
-title: ActiveSupport 中的 lazy load hooks
+tags : [initializable]
+title: rails 中的initializer实现
 ---
 {% include JB/setup %}
 
