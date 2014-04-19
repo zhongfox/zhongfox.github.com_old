@@ -177,9 +177,9 @@ title: Rails 加载过程
 
 11. `ActiveSupport.run_load_hooks(:before_configuration, base.instance)` 运行config.before_configuration回调
 
-   这个回调要事先注册，调用`config.before_configuration` 进行注册
+    这个回调要事先注册，调用`config.before_configuration` 进行注册
 
-   `Rails::Railtie::Configuration#before_configuration` 定义了这个方法：
+    `Rails::Railtie::Configuration#before_configuration` 定义了这个方法：
 
         def before_configuration(&block)
           ActiveSupport.on_load(:before_configuration, yield: true, &block)
@@ -206,8 +206,6 @@ title: Rails 加载过程
           initializer.run(*args) if initializer.belongs_to?(group)
         end
         @ran = true
-
-
 
 ---
 
