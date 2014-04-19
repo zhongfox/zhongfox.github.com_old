@@ -117,7 +117,7 @@ title: Rails 加载过程
 
    对于'generate', 'destroy', 'console', 'server' 都需要加载当前项目，所以都有`require APP_PATH`
 
-8. `require APP_PATH` 加载项目目录下的`config/application.rb`
+8. (rails g, rails d, rails c, rails s)`require APP_PATH` 加载项目目录下的`config/application.rb`
 
         require File.expand_path('../boot', __FILE__) #这里我得到的时false 因为之前加载过了
         require 'rails/all' #这里可以根据需要加载所需gem
@@ -139,6 +139,9 @@ title: Rails 加载过程
             # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
             # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
             # config.i18n.default_locale = :de
+
+
+           #可以注册回调 config.before_configuration {...}
           end
         end
 
@@ -172,10 +175,83 @@ title: Rails 加载过程
         end
 
 
+11. `ActiveSupport.run_load_hooks(:before_configuration, base.instance)` 运行config.before_configuration回调
+
+   这个回调要事先注册，调用`config.before_configuration` 进行注册
+
+   `Rails::Railtie::Configuration#before_configuration` 定义了这个方法：
+
+        def before_configuration(&block)
+          ActiveSupport.on_load(:before_configuration, yield: true, &block)
+        end
+
+
+12. （rails g, rials d, rails c）`Rails.application.require_environment!` 执行初始化initializers
+
+        environment = paths["config/environment"].existent.first
+        require environment if environment
+
+     实际上是加载rails项目中 ` config/environment.rb`
+
+        # Load the Rails application.
+        require File.expand_path('../application', __FILE__)
+
+        # Initialize the Rails application.
+        R4test::Application.initialize!
+
+13. `initialize!` 最后调用 `run_initializers`
+
+        return if instance_variable_defined?(:@ran)
+        initializers.tsort_each do |initializer|
+          initializer.run(*args) if initializer.belongs_to?(group)
+        end
+        @ran = true
+
+
 
 ---
 
 ### 主要命令的启动
+
+### 'rails s'
+
+        Dir.chdir(File.expand_path('../../', APP_PATH)) unless File.exists?(File.expand_path("config.ru"))
+
+        require 'rails/commands/server'
+        Rails::Server.new.tap do |server|
+          require APP_PATH                   # 步骤8
+          Dir.chdir(Rails.application.root)
+          server.start
+        end
+
+`server.start` 在 `railties-4.0.0/lib/rails/commands/server.rb`
+
+        def start
+          ..........
+            wrapped_app # touch the app so the logger is set up
+
+            console = ActiveSupport::Logger.new($stdout)
+            console.formatter = Rails.logger.formatter
+            console.level = Rails.logger.level
+
+            Rails.logger.extend(ActiveSupport::Logger.broadcast(console))
+
+          super
+          .............
+        end
+
+`wrapped_app` 由 `rack-1.5.2/lib/rack/server.rb` 提供
+
+        def wrapped_app
+          @wrapped_app ||= build_app app
+        end
+
+`app` 创于 `app, options = Rack::Builder.parse_file(self.options[:config], opt_parser)`
+
+`self.options[:config]` 是项目中` config.ru ` 内容
+
+        require ::File.expand_path('../config/environment',  __FILE__) #步骤12
+        run Rails.application
 
 ### 'generate' 'destroy'
 
