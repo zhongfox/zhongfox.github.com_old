@@ -10,12 +10,12 @@ tagline: 思考，笔记和分享
     <div>
       {% for post in site.categories['blog'] %}	
         <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <p>
+        <!--p>
             {{ post.content | strip_html | truncatewords:25}}
         </p>
         <p>
           <a href="{{ post.url }}"><strong>阅读更多...</strong></a><br/>
-        </p>
+        </p-->
         <p>
           <strong>
             {{ post.date | date: "%B %e, %Y" }}
