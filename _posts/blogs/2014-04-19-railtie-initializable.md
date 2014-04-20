@@ -10,7 +10,7 @@ title: rails 中的initializer实现
 
 `vi ~/.rvm/gems/ruby-2.0.0-p247/gems/railties-4.0.0/lib/rails/initializable.rb`
 
-Railtie 混入了该模块
+Rails::Railtie, Rails::Application::Bootstrap, Rails::Application::Finisher 混入了该模块
 
 
     require 'tsort'
@@ -117,6 +117,14 @@ Railtie 混入了该模块
 
         Rails.application.class.ancestors.map { |a| [a, (a.initializers.count rescue nil)]}
         => [[R4test::Application, 0], [Rails::Railtie::Configurable, nil], [Rails::Application, 0], [Rails::Engine, 10], [Rails::Railtie, 0], [Rails::Initializable, nil], [Object, nil], [PP::ObjectMixin, nil], [ActiveSupport::Dependencies::Loadable, nil], [JSON::Ext::Generator::GeneratorMethods::Object, nil], [Kernel, nil], [BasicObject, nil]]
+
+  Rails::Application实例方法复写了`initializers`
+
+        def initializers #:nodoc:
+          Bootstrap.initializers_for(self) +    # count 7
+          railties_initializers(super) +        # count 71
+          Finisher.initializers_for(self)       # count 11
+        end
 
 ---
 
@@ -247,11 +255,61 @@ Railtie 混入了该模块
         set_routes_reloader_hook
         set_clear_dependencies_hook
 
+* 为什么Engine中定义的initializer都会执行4次？
+
+        irb(main):074:0> ::Rails::Engine.subclasses
+        => [Coffee::Rails::Engine, Jquery::Rails::Engine, Turbolinks::Engine]
+        irb(main):075:0> Rails::Railtie.subclasses #14个
+        => [I18n::Railtie, ActiveSupport::Railtie, ActionDispatch::Railtie, ActiveModel::Railtie, ActionView::Railtie, ActionController::Railtie, ActiveRecord::Railtie, ActionMailer::Railtie, Rails::TestUnitRailtie, Sprockets::Railtie, Sass::Rails::Railtie, Jquery::Rails::Railtie, Jbuilder::Railtie, Rack::MiniProfilerRails::Railtie]
+
+  可以看到其实有3个Engine，加上application，总共4个Engine
+
+  在看application如何查找需要执行的initializers：
+
+        def initialize!(group=:default) #:nodoc:
+          raise "Application has been already initialized." if @initialized
+          run_initializers(group, self)
+          @initialized = true
+          self
+        end
+
+        def initializers #:nodoc:
+          Bootstrap.initializers_for(self) +
+          railties_initializers(super) +
+          Finisher.initializers_for(self)
+        end
+
+        def railties_initializers(current) #:nodoc:
+          initializers = []
+          ordered_railties.each do |r|  获取所有ordered_railties的initializers
+            if r == self
+              initializers += current
+            else
+              initializers += r.initializers
+            end
+          end
+          initializers
+        end
+
+  ordered_raities 存了所有Railtie（及其子类）的实例
+
+        Rails::application.send(:ordered_railties).map(&:class) #18个
+        [I18n::Railtie, ActiveSupport::Railtie, ActionDispatch::Railtie, ActiveModel::Railtie, ActionView::Railtie, ActionController::Railtie, ActiveRecord::Railtie, ActionMailer::Railtie, Rails::TestUnitRailtie, Sprockets::Railtie, Sass::Rails::Railtie, Jquery::Rails::Railtie, Jbuilder::Railtie, Rack::MiniProfilerRails::Railtie, Coffee::Rails::Engine, Jquery::Rails::Engine, Turbolinks::Engine, R4test::Application]
+
+
+**最终结论**
+
+当application实例运行`initialize!` 时，会查找所有Railtie实例的initializers并执行
+
+而Railtie实例的initializers存于自己的实例变量，这个实例变量（initializers_chain）的查找是通过变量实例的继承链上的类，把类上的所有initializer归于实例自己的initializers。
+
+类本身的initializer是存于类是实例变量，方便类的所有实例共享
+
 ___
 
 ### Engine 的initializer
 
-    # Add configured load paths to ruby load paths and remove duplicates.
+    # 把config.autoload_paths + config.eager_load_paths + config.autoload_once_paths + config.paths.load_paths放入$LOAD_PATH
     initializer :set_load_path, before: :bootstrap_hook do
       _all_load_paths.reverse_each do |path|
         $LOAD_PATH.unshift(path) if File.directory?(path)

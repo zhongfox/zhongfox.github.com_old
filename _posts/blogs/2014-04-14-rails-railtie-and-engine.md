@@ -34,10 +34,14 @@ Rails的主要组件 (Action Mailer, Action Controller, Action View and Active R
 
         ABSTRACT_RAILTIES = %w(Rails::Railtie Rails::Engine Rails::Application)
 
+        def subclasses
+          @subclasses ||= []
+        end
+
         def inherited(base)
           unless base.abstract_railtie?
             base.send(:include, Railtie::Configurable)
-            subclasses << base
+            subclasses << base            #把直接子类存入subclasses，注意间接子类不在其中，如Rails::Application
           end
         end
 
