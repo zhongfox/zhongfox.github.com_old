@@ -17,7 +17,7 @@ title: 关于 MRI ruby 性能优化的6个小技巧
 
 4. When possible, use destructive operations!
 
-  bang!( 改变自身)方法更高效，因为这不会要求复制自身。但是要注意bang!的返回值比较诡异，通常修改了就返回修改后的对象，否则返回nil
+   bang!( 改变自身)方法更高效，因为这不会要求复制自身。但是要注意bang!的返回值比较诡异，通常修改了就返回修改后的对象，否则返回nil
 
 5. Symbol.to_proc fan? Use blocks!
 
