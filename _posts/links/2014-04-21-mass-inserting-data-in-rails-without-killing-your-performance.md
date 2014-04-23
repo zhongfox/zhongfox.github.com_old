@@ -6,7 +6,7 @@ title: Rails大量数据insert优化
 ---
 
 
-优化策略：
+### 优化策略
 
 1. 单个事务
 
@@ -37,6 +37,8 @@ title: Rails大量数据insert优化
    * 需要自己确保数据有效性，并对过滤有害sql
 
 ---
+
+### 使用和性能比较
 
 1. ActiveRecord without transaction [无策略]
 
