@@ -10,9 +10,9 @@ title: Rails大量数据insert优化
 
 1. 单个事务
 
-  pros:
+   pros:
 
-  * 避免大量数据库事务
+   * 避免大量数据库事务
 
 2. 多次拼接sql：
 
@@ -42,7 +42,7 @@ title: Rails大量数据insert优化
 
         1000.times { Model.create(options) }
 
-  测试结果：base
+   测试结果：base
 
 2. ActiveRecord with transaction [策略1]
 
@@ -50,7 +50,7 @@ title: Rails大量数据insert优化
           1000.times { Model.create(options) }
         end
 
-  测试结果： 1.29x faster than base
+   测试结果： 1.29x faster than base
 
 3. Raw SQL without transaction [策略2]
 
@@ -58,7 +58,7 @@ title: Rails大量数据insert优化
           Foo.connection.execute "INSERT INTO foos (counter) values (#{i})"
         end
 
-  测试结果：5.07x faster than base
+   测试结果：5.07x faster than base
 
 4. Raw SQL with transaction [策略1 + 策略2]
 
@@ -68,7 +68,7 @@ title: Rails大量数据insert优化
           end
         end
 
-  测试结果：11.46x faster than base
+   测试结果：11.46x faster than base
 
 5. Single mass insert [策略3]
 
