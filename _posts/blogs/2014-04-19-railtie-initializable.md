@@ -355,6 +355,10 @@ ___
       end
     end
 
+    # 看看 Engine::Configuration  中path的代码：
+    #  paths.add "config/environments", glob: "#{Rails.env}.rb", Path对象的current是config/environments paths也是 config/environments（with）
+    # 所以paths["config/environments"] 会得到 config/environments/环境名.rb
+
     initializer :load_environment_config, before: :load_environment_hook, group: :all do
       paths["config/environments"].existent.each do |environment|
         require environment
@@ -373,6 +377,7 @@ ___
       end
     end
 
+    #加载config/initializers 中所有文件
     initializer :load_config_initializers do
       config.paths["config/initializers"].existent.sort.each do |initializer|
         load(initializer)
