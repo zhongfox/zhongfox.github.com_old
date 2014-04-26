@@ -147,6 +147,24 @@ title: rails 中的Configuration
 ### Engine 的各种path设置和来源：
 
 
+* `config.path` 的实例方法
+
+        def autoload_once
+          filter_by(:autoload_once?)
+        end
+
+        def eager_load
+          filter_by(:eager_load?)
+        end
+
+        def autoload_paths
+          filter_by(:autoload?)
+        end
+
+        def load_paths
+          filter_by(:load_path?)
+        end
+
 * `config.paths.load_paths`
 
         Engine::Configuration
@@ -172,12 +190,58 @@ title: rails 中的Configuration
 
 * `config.autoload_paths`
 
+  `Engine::Configuration` 中无配置
+
 * `config.eager_load_paths`
+
+        Engine::Configuration
+
+        paths.add "app",                 eager_load: true, glob: "*"
+        paths.add "app/controllers",     eager_load: true
+        paths.add "app/helpers",         eager_load: true
+        paths.add "app/models",          eager_load: true
+        paths.add "app/mailers",         eager_load: true
+
+        paths.add "app/controllers/concerns", eager_load: true
+        paths.add "app/models/concerns",      eager_load: true
+
+  Engine 中定义了实例方法
+
+        def eager_load!
+          config.eager_load_paths.each do |load_path|
+            matcher = /\A#{Regexp.escape(load_path)}\/(.*)\.rb\Z/
+            Dir.glob("#{load_path}/**/*.rb").sort.each do |file|
+              require_dependency file.sub(matcher, '\1')
+            end
+          end
+        end
+
+  同时也有类方法： `delegate :eager_load!, to: :instance`
+
+  调用处`Rails::Application::Finisher` 中的initializer
+
+        initializer :eager_load! do
+          if config.eager_load     # 这个是 Rails::Application::Configuration的实例方法，在
+            ActiveSupport.run_load_hooks(:before_eager_load, self)
+            config.eager_load_namespaces.each(&:eager_load!) # 对所有非虚拟的Engine调用类方法eager_load!
+          end
+        end
+
+  Engine 中：
+
+        def inherited(base)
+          unless base.abstract_railtie?
+            Rails::Railtie::Configuration.eager_load_namespaces << base
+
+  把所有非虚拟的Engine存入eager_load_namespaces
+
+  最后`config.eager_load`  这个是 `Rails::Application::Configuration`的实例方法，在项目的`config/environments/XXXX.rb`里进行了赋值：
+
+        /Users/zhonghua/code/work/r4test/config/environments/development.rb:11:10:  config.eager_load = false
+        /Users/zhonghua/code/work/r4test/config/environments/production.rb:11:10:  config.eager_load = true
 
 * `config.autoload_once_paths`
 
-
-
-
+  `Engine::Configuration` 中无配置
 
 

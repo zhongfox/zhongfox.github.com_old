@@ -323,8 +323,8 @@ ___
     # This needs to be an initializer, since it needs to run once
     # per engine and get the engine as a block parameter
     initializer :set_autoload_paths, before: :bootstrap_hook do
-      ActiveSupport::Dependencies.autoload_paths.unshift(*_all_autoload_paths)
-      ActiveSupport::Dependencies.autoload_once_paths.unshift(*_all_autoload_once_paths)
+      ActiveSupport::Dependencies.autoload_paths.unshift(*_all_autoload_paths)   #把除了load_path之外的其他三个加人这里
+      ActiveSupport::Dependencies.autoload_once_paths.unshift(*_all_autoload_once_paths) #把auto_once 加人这里
 
       # Freeze so future modifications will fail rather than do nothing mysteriously
       config.autoload_paths.freeze
@@ -389,8 +389,197 @@ ___
       # consistently executed after all the initializers above across all engines.
     end
 
+---
+
+### Application 的 initializers
+
+    def initializers #:nodoc:
+      Bootstrap.initializers_for(self) +
+      railties_initializers(super) +
+      Finisher.initializers_for(self)
+    end
 
 
+**TODO**
+
+    def initializers_for(binding)
+      Collection.new(initializers_chain.map { |i| i.bind(binding) })
+    end
+
+**Rails::Application::Bootstrap**
+
+    initializer :load_environment_hook, group: :all do end
+
+    initializer :load_active_support, group: :all do
+      require "active_support/all" unless config.active_support.bare
+    end
+
+    initializer :set_eager_load, group: :all do
+      if config.eager_load.nil?
+        warn <<  ....
+        config.eager_load = config.cache_classes #把eager_load设成和cache_classes一样，这是bool值
+      end
+    end
+
+    App中默认的配置：
+    config/environments/development.rb:8:  config.cache_classes = false
+    config/environments/production.rb:5:  config.cache_classes = true
+
+    # Initialize the logger early in the stack in case we need to log some deprecation.
+    initializer :initialize_logger, group: :all do
+      Rails.logger ||= config.logger || begin
+        path = config.paths["log"].first
+        unless File.exist? File.dirname path
+          FileUtils.mkdir_p File.dirname path
+        end
+
+        f = File.open path, 'a'
+        f.binmode
+        f.sync = config.autoflush_log # if true make sure every write flushes
+
+        logger = ActiveSupport::Logger.new f
+        logger.formatter = config.log_formatter
+        logger = ActiveSupport::TaggedLogging.new(logger)
+        logger.level = ActiveSupport::Logger.const_get(config.log_level.to_s.upcase)
+        logger
+      rescue StandardError
+        logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDERR))
+        logger.level = ActiveSupport::Logger::WARN
+        logger.warn(
+          "Rails Error: Unable to access log file. Please ensure that #{path} exists and is chmod 0666. " +
+          "The log level has been raised to WARN and the output directed to STDERR until the problem is fixed."
+        )
+        logger
+      end
+    end
+
+    # Initialize cache early in the stack so railties can make use of it.
+    initializer :initialize_cache, group: :all do
+      unless Rails.cache
+        Rails.cache = ActiveSupport::Cache.lookup_store(config.cache_store)
+
+        if Rails.cache.respond_to?(:middleware)
+          config.middleware.insert_before("Rack::Runtime", Rails.cache.middleware)
+        end
+      end
+    end
+
+    # Sets the dependency loading mechanism.
+    initializer :initialize_dependency_mechanism, group: :all do
+      ActiveSupport::Dependencies.mechanism = config.cache_classes ? :require : :load
+    end
+
+    initializer :bootstrap_hook, group: :all do |app|
+      ActiveSupport.run_load_hooks(:before_initialize, app)
+    end
+
+**Rails::Application::Finisher**
+
+    initializer :add_generator_templates do
+      config.generators.templates.unshift(*paths["lib/templates"].existent)
+    end
+
+    initializer :ensure_autoload_once_paths_as_subset do
+      extra = ActiveSupport::Dependencies.autoload_once_paths -
+              ActiveSupport::Dependencies.autoload_paths
+
+      unless extra.empty?
+        abort <<-end_error
+          autoload_once_paths must be a subset of the autoload_paths.
+          Extra items in autoload_once_paths: #{extra * ','}
+        end_error
+      end
+    end
+
+    initializer :add_builtin_route do |app|
+      if Rails.env.development?
+        app.routes.append do
+          get '/rails/info/properties' => "rails/info#properties"
+          get '/rails/info/routes'     => "rails/info#routes"
+          get '/rails/info'            => "rails/info#index"
+          get '/'                      => "rails/welcome#index"
+        end
+      end
+    end
+
+    initializer :build_middleware_stack do
+      build_middleware_stack
+    end
+
+    initializer :define_main_app_helper do |app|
+      app.routes.define_mounted_helper(:main_app)
+    end
+
+    initializer :add_to_prepare_blocks do
+      config.to_prepare_blocks.each do |block|
+        ActionDispatch::Reloader.to_prepare(&block)
+      end
+    end
+
+    # This needs to happen before eager load so it happens
+    # in exactly the same point regardless of config.cache_classes
+    initializer :run_prepare_callbacks do
+      ActionDispatch::Reloader.prepare!
+    end
+
+    initializer :eager_load! do
+      if config.eager_load
+        ActiveSupport.run_load_hooks(:before_eager_load, self)
+        config.eager_load_namespaces.each(&:eager_load!)
+      end
+    end
+
+    # All initialization is done, including eager loading in production
+    initializer :finisher_hook do
+      ActiveSupport.run_load_hooks(:after_initialize, self)
+    end
+
+    # Set routes reload after the finisher hook to ensure routes added in
+    # the hook are taken into account.
+    initializer :set_routes_reloader_hook do
+      reloader = routes_reloader
+      reloader.execute_if_updated
+      self.reloaders << reloader
+      ActionDispatch::Reloader.to_prepare do
+        # We configure #execute rather than #execute_if_updated because if
+        # autoloaded constants are cleared we need to reload routes also in
+        # case any was used there, as in
+        #
+        #   mount MailPreview => 'mail_view'
+        #
+        # This means routes are also reloaded if i18n is updated, which
+        # might not be necessary, but in order to be more precise we need
+        # some sort of reloaders dependency support, to be added.
+        reloader.execute
+      end
+    end
+
+    # Set clearing dependencies after the finisher hook to ensure paths
+    # added in the hook are taken into account.
+    initializer :set_clear_dependencies_hook, group: :all do
+      callback = lambda do
+        ActiveSupport::DescendantsTracker.clear
+        ActiveSupport::Dependencies.clear
+      end
+
+      if config.reload_classes_only_on_change
+        reloader = config.file_watcher.new(*watchable_args, &callback)
+        self.reloaders << reloader
+
+        # Prepend this callback to have autoloaded constants cleared before
+        # any other possible reloading, in case they need to autoload fresh
+        # constants.
+        ActionDispatch::Reloader.to_prepare(prepend: true) do
+          # In addition to changes detected by the file watcher, if routes
+          # or i18n have been updated we also need to clear constants,
+          # that's why we run #execute rather than #execute_if_updated, this
+          # callback has to clear autoloaded constants after any update.
+          reloader.execute
+        end
+      else
+        ActionDispatch::Reloader.to_cleanup(&callback)
+      end
+    end
 
 ### 参考资料
 
