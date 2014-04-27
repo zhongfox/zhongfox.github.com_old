@@ -43,7 +43,7 @@ Asset Pipeline 是一个**合并**、**最小化压缩** js和css的框架,同�
 | config.assets.debug                    | true        | false      | manifest文件中的资源引用分开生产html
 | config.assets.prefix                   | /assets     | /assets    | 编译后的资源文件位置前缀，相对/public
 | config.assets.initialize_on_precompile | true        | true       | false可以部分加载你的应用程序？？？
-| config.assets.precompile               | [Proc, /../]|[Proc, /../]| 预编译数组，可向其追加
+| config.assets.precompile               | [Proc, /../]|[Proc, /../]| 预编译数组，可向其追加(rails 3 放在config/environments/production.rb, rails 4 必须放在config/application.rb)
 | config.assets.manifest                 | nil         |nil         | 预编译时生成的 manifest.yml文件位置，默认是config.assets.prefix
 | config.assets.compile                  | true        |false       | 即时编译，每次编译后不放在config.assets.prefix,而放在rails的缓存系统上
 

@@ -214,7 +214,7 @@ title: Linux 笔记
 
     * 安装软件包
 
-      `yum install <package>` 
+      `yum install <package>`
 
       `rpm -ivh XXX.rpm` -i 安装 -v详细安装画面 -h 安装进度
 
@@ -224,13 +224,13 @@ title: Linux 笔记
 
       `yum update` 升级所有可升级的包
 
-      `yum update 包` 升级指定包 
+      `yum update 包` 升级指定包
 
     * 卸载
 
       `rpm -e 包` 卸载，注意可能会提示依赖
 
-      `yum remove 包` 卸载指定包 
+      `yum remove 包` 卸载指定包
 
   * yum 设置
 
@@ -246,7 +246,7 @@ title: Linux 笔记
 
   双向重定向：`tee -a file ` 把标准输出转存文件并且输出到屏幕，-a表示追加到文件，否则新建文件
 
-* 判断执行： 
+* 判断执行：
 
   * `cmd1;cmd2`  顺序执行 不考虑成功
 
@@ -266,7 +266,7 @@ title: Linux 笔记
 
   * `wc` 默认输出行，单词，字符，分别对应参数 -lwm
 
-  * `tr -ds` 
+  * `tr -ds`
 
     -d 删除指定字符 `cat dos.rb | tr -d '\r' > dos.rb ` 把其中dos回车去掉
 
@@ -282,8 +282,8 @@ title: Linux 笔记
 
   收邮件`mail` `N`表示未读邮件
 
-* jobs 
-  
+* jobs
+
   -l 可以展示pid
 
   `fg %jobid` 将该job转到前台，running
@@ -310,7 +310,7 @@ title: Linux 笔记
         id 空闲CPU百分比
         wa 等待输入输出的CPU时间百分比
         hi 硬件中断
-        si 软件中断 
+        si 软件中断
         st: 实时
 
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
@@ -328,7 +328,7 @@ title: Linux 笔记
   **stand alone 管理**
 
   `/etc/init.d/some_daemon` 不加参数会返回所有可用命令
-  
+
   如`Usage: /etc/init.d/mongod {start|stop|status|restart|reload|force-reload|condrestart}`
 
   辅助命令`service`实现以上功能：
@@ -358,3 +358,10 @@ title: Linux 笔记
   `ctrl + a e` 光标前置/后置
 
   `ctrl + 光标` 按照word移动，xsehll里无效
+
+* 安装`oh my zshell`
+
+  * `echo $SHELL` 查看当前使用的是什么shell
+  * `which zsh` 如果没有zsh, 需要先安装zsh
+  * `curl -L http://install.ohmyz.sh | sh`
+  * `chsh -s \`which zsh\`` 
