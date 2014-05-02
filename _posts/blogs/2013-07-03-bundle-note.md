@@ -24,15 +24,24 @@ title: RVM Gem Bundle小记
 
 8. 显示当前ruby的环境信息 `rvm info`
 
-9. 列出当前ruby的所有gemset`rvm gemset list`
+9. `rvm --create --ruby-version use ruby-2.0.0-p195` 在项目里创建`.ruby-version` 文件来管理ruby和gemset
+
+
+### gemset
+
+1. 列出当前ruby的所有gemset`rvm gemset list`
 
    列出所有ruby的所有gemset`rvm gemset list_all`
 
-10. `gem list` 显示当前gemset里的所有gem
+2. `gem list` 显示当前gemset里的所有gem
 
     `gem list [gemname]` 显示当前gemset里的指定gem
 
-11. `rvm --create --ruby-version use ruby-2.0.0-p195` 在项目里创建`.ruby-version` 文件来管理ruby和gemset
+3. 创建gemset `rvm gemset create zhe800`
+
+4. 使用gemset `rvm gemset use zhe800`
+
+5. 在gemset中安装gem  `gem install rails -v  3.2.13`
 
 ### Gem
 

@@ -28,6 +28,8 @@ title: Rails 命令行
 
     可以添加SCM 和数据库选项：`rails new . --git --database=postgresql`， 但必须先手动创建项目目录，并git init
 
+    选择指定rails版本`rails _3.2.13_ new . --git --database=mysql`
+
     SCM选项有什么好处？数据库选项会自动配置database.yml文件
 
   * rails console = rails c
