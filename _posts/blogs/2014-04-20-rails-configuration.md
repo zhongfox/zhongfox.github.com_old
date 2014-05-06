@@ -38,6 +38,52 @@ title: rails 中的Configuration
           @config ||= Railtie::Configuration.new
         end
 
+* `config.middleware`
+
+  定义：
+
+          def middleware
+            @middleware ||= Rails::Configuration::MiddlewareStackProxy.new
+          end
+
+  `Rails::Configuration::MiddlewareStackProxy`
+
+        class MiddlewareStackProxy
+          def initialize
+            @operations = []
+          end
+
+          #除了merge_into，其他方法都只是存了类似一个操作日志，有什么好处？缓存动作延迟执行吗？
+          def insert_before(*args, &block)
+            @operations << [__method__, args, block]
+          end
+
+          alias :insert :insert_before
+
+          def insert_after(*args, &block)
+            @operations << [__method__, args, block]
+          end
+
+          def swap(*args, &block)
+            @operations << [__method__, args, block]
+          end
+
+          def use(*args, &block)
+            @operations << [__method__, args, block]
+          end
+
+          def delete(*args, &block)
+            @operations << [__method__, args, block]
+          end
+
+          def merge_into(other) #:nodoc:
+            # 虽然other要求相应相同的方法，但是可以是不同的类型（鸭子类型），这里实际使用时传的时ActionDispatch::MiddlewareStack实例,真实的中间件实例
+            @operations.each do |operation, args, block|
+              other.send(operation, *args, &block)
+            end
+            other
+          end
+        end
 
 ---
 
