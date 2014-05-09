@@ -186,6 +186,8 @@ title: Rails 命令行
 
   * **rake about** 环境相关信息
 
+  * **rake -W** 查看rake源码位置，调试很有帮助
+
   * **rake notes** 搜索.builder .rb .erb .haml  .slim文件中以FIXME, OPTIMIZE， TODO开头的注释
 
     可以只搜索其中一种注释，如 `rake notes:fixme`
