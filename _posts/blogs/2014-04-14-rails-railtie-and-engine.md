@@ -260,6 +260,32 @@ application查找view，会先从`app/views` 开始，如果找不到，会查�
 
 Engines are also closely related to plugins. The two share a common lib directory structure, and are both generated using the rails plugin new generator. The difference is that an engine is considered a "full plugin" by Rails (as indicated by the --full option that's passed to the generator command). This guide will refer to them simply as "engines" throughout. An engine can be a plugin, and a plugin can be an engine
 
+### 其他
+
+1. 实例方法 app, 返回最底层的被装饰者
+
+        # Returns the underlying rack application for this engine.
+        def app
+          @app ||= begin
+            #这句话把config.middleware变成了Rails::Configuration::MiddlewareStackProxy 变成了ActionDispatch::MiddlewareStack
+            config.middleware = config.middleware.merge_into(default_middleware_stack)
+            config.middleware.build(endpoint) #ActionDispatch::Routing::RouteSet 对象, 和`rake middleware` 最后返回的`run R4test::Application.routes` 是同一个对象
+          end
+        end
+
+        # Returns the endpoint for this engine. If none is registered,
+        # defaults to an ActionDispatch::Routing::RouteSet.
+        def endpoint 
+          self.class.endpoint || routes
+        end
+
+        # Defines the routes for this engine. If a block is given to
+        # routes, it is appended to the engine.
+        def routes
+          @routes ||= ActionDispatch::Routing::RouteSet.new
+          @routes.append(&Proc.new) if block_given?
+          @routes
+        end
 
 ---
 

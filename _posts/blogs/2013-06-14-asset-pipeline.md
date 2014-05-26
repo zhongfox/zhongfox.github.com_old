@@ -198,6 +198,8 @@ app/assets/javascripts/application.js
 
     bundle exec rake assets:precompile
 
+**Rails 4 需要** `RAILS_ENV=production bundle exec rake assets:precompile`
+
 预编译对象：默认匹配器包括 application.js(包含在该文件中的js会被编译吗？), application.css 和所有非 JS/CSS 文件 (会自动包含所有的图像资源)，可对`config.assets.precompile`追加
 
 该rake还会生成manifest.yml文件，所有资源和它们各自的指纹识别列表. 以供 Rails helper 方法使用

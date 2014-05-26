@@ -299,6 +299,64 @@ title: Rails 加载过程
 
   * `Rails.application.config.root` 指向项目目录
 
+  * `default_middleware_stack` 定义了默认中间件：
+
+        def default_middleware_stack #:nodoc:
+          ActionDispatch::MiddlewareStack.new.tap do |middleware|
+            app = self
+
+            if rack_cache = load_rack_cache
+              require "action_dispatch/http/rack_cache"
+              middleware.use ::Rack::Cache, rack_cache
+            end
+
+            if config.force_ssl
+              middleware.use ::ActionDispatch::SSL, config.ssl_options
+            end
+
+            if config.action_dispatch.x_sendfile_header.present?
+              middleware.use ::Rack::Sendfile, config.action_dispatch.x_sendfile_header
+            end
+
+            if config.serve_static_assets
+              middleware.use ::ActionDispatch::Static, paths["public"].first, config.static_cache_control
+            end
+
+            middleware.use ::Rack::Lock unless allow_concurrency?
+            middleware.use ::Rack::Runtime
+            middleware.use ::Rack::MethodOverride
+            middleware.use ::ActionDispatch::RequestId
+
+            # Must come after Rack::MethodOverride to properly log overridden methods
+            middleware.use ::Rails::Rack::Logger, config.log_tags
+            middleware.use ::ActionDispatch::ShowExceptions, show_exceptions_app
+            middleware.use ::ActionDispatch::DebugExceptions, app
+            middleware.use ::ActionDispatch::RemoteIp, config.action_dispatch.ip_spoofing_check, config.action_dispatch.trusted_proxies
+
+            unless config.cache_classes
+              middleware.use ::ActionDispatch::Reloader, lambda { app.reload_dependencies? }
+            end
+
+            middleware.use ::ActionDispatch::Callbacks
+            middleware.use ::ActionDispatch::Cookies
+
+            if config.session_store
+              if config.force_ssl && !config.session_options.key?(:secure)
+                config.session_options[:secure] = true
+              end
+              middleware.use config.session_store, config.session_options
+              middleware.use ::ActionDispatch::Flash
+            end
+
+            middleware.use ::ActionDispatch::ParamsParser
+            middleware.use ::Rack::Head
+            middleware.use ::Rack::ConditionalGet
+            middleware.use ::Rack::ETag, "no-cache"
+          end
+        end
+
+    Engine中也有同名实例方法，但是是个空的`ActionDispatch::MiddlewareStack.new`
+
 ---
 
 ### 疑问
