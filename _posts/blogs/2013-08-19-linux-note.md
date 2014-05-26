@@ -188,6 +188,9 @@ title: Linux 笔记
 
     使用`apt-get` <http://wiki.ubuntu.org.cn/UbuntuHelp:AptGet/Howto/zh>
 
+    `sudo apt-get update` 在更新source list 要执行更新操作
+
+    ubuntu 的source 位置`/etc/apt/sources.list`
 
 
   * rpm/yum
@@ -362,6 +365,6 @@ title: Linux 笔记
 * 安装`oh my zshell`
 
   * `echo $SHELL` 查看当前使用的是什么shell
-  * `which zsh` 如果没有zsh, 需要先安装zsh
+  * `which zsh` 如果没有zsh, 需要先安装zsh `sudo apt-get install zsh`
   * `curl -L http://install.ohmyz.sh | sh`
   * `chsh -s \`which zsh\`` 

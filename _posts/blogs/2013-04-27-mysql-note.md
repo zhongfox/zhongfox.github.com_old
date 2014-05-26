@@ -6,6 +6,11 @@ title: Mysql 点滴
 ---
 {% include JB/setup %}
 
+### 安装
+
+ubuntu：`sudo apt-get install mysql-server mysql-client`
+
+
 
 ###参数
 
