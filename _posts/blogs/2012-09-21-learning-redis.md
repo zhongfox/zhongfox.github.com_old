@@ -13,11 +13,29 @@ tagline: 高性能的key-value数据存储服务器
 2. 支持类型： strings(字符串)、lists(链表)、sets(集合)、sorted sets(有序集合)、hashes(哈希)
 
 ## 获取和安装
-    wget http://redis.googlecode.com/files/redis-2.4.17.tar.gz
-    tar xzf redis-2.4.17.tar.gz
-    cd redis-2.4.17
+    wget http://download.redis.io/releases/redis-2.8.9.tar.gz
+    tar xzf redis-2.8.9.tar.gz
+    cd redis-2.8.9
     make
-    cp src/redis-server src/redis-cli /usr/bin
+    sudo make install
+  
+开机启动
+
+    wget https://github.com/ijonas/dotfiles/raw/master/etc/init.d/redis-server
+    wget https://github.com/ijonas/dotfiles/raw/master/etc/redis.conf
+    sudo mv redis-server /etc/init.d/redis-server
+    sudo chmod +x /etc/init.d/redis-server
+    sudo mv redis.conf /etc/redis.conf
+
+    sudo useradd redis 
+    sudo mkdir -p /var/lib/redis 
+    sudo mkdir -p /var/log/redis 
+    sudo chown redis.redis /var/lib/redis 
+    sudo chown redis.redis /var/log/redis
+
+    sudo update-rc.d redis-server defaults
+
+    sudo /etc/init.d/redis-server start
 
 ## Redis的特点
 1. __丰富的数据类型__
