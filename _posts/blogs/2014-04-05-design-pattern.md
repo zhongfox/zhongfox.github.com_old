@@ -48,6 +48,12 @@ title: 设计模式学习
 
 6. [类应该对扩展开放，对修改关闭](id:ruby_6)
 
+   在不修改现有代码的情况下（避免引入bug），就可以实现新的行为和需求（我知道这一定会发生的）
+
+   在选择应用开发-关闭原则时要小心：每个地方都这样用是一种浪费，也没有必要，还会导致代码变得复杂且难以理解
+
+   我们需要把注意力集中在设计中最有可能改变的地方
+
 ---
 
 ### State 状态模式
@@ -67,7 +73,7 @@ title: 设计模式学习
 
   * 创建State（抽象类或者接口）：对不同的状态使用一个子类代表
   * Context和State相互组合，Context持有一个State基类的引用，State也有Context的引用 [多用组合，少用继承](#rule_3)
-  * Context把所有和状态相关的行为委托到State基类引用（Context类中的行为统一委托给了State类，新加状态或者修改行为状态关系都抽象到了State类）[对修改关闭](#ruby_6) 
+  * Context把所有和状态相关的行为委托到State基类引用（Context类中的行为统一委托给了State类，新加状态或者修改行为状态关系都抽象到了State类）[对修改关闭](#ruby_6)
   * 具体的State子类来实现行为，并可以在行为中修改Context的引用的State
   * 移除了容易产生问题的if语句
 
@@ -93,4 +99,57 @@ title: 设计模式学习
   * Client基类中把相关方法都委托给算法簇基类类型实例变量 [针对接口编程，不是针对实现编程](#ruby_4)
   * Client子类实例化时可以指定想要的算法簇，并且在生命周期中可以随时改变算法簇
 
+---
 
+### Observer 观察者模式
+
+<img src="/assets/images/design_pattern/observer.jpg" />
+
+* 定义：定义了对象之间的一对多依赖，当一个对象（subject）改变状态时，它的所有依赖者（observer）都会收到通知并自动更新
+
+* 使用场景：
+
+* 不好的设计：状态改变和其依赖对象耦合在一起，当有新增/删除依赖对象时，要修改subject代码 没有做到[封装变化](#rule_2)
+
+* 使用Observer模式：
+
+  * 定义Subject接口（#registerObserver #removeObserver #notifyObservers）内部有存储observers的列表，新增observer时，subject代码不需要修改 [封装变化](#rule_2)
+  * 定义接口Observer（#update）update是observers接收消息的统一接口
+  * 具体subject扩展实现Subject接口，具体observer扩展实现Observer接口
+  * 当subject状态变化时，进行一对多的主动推送(#notifyObservers) [为交互对象之间的松耦合设计而努力](id:ruby_5)
+
+* 有2种不同的观察者模式：
+
+  * subject主动推送：当subject状态改变时，主动推送所有状态
+
+    observers们要有统一的数据接口（#update）
+
+  * observer拉取：当subject状态改变时，向observers推送空通知，observers再自行主动拉取想要的状态更新
+
+    observers要知道自己要拉取的具体数据
+
+---
+
+### Decorator 装饰者模式
+
+<img src="/assets/images/design_pattern/decorator.jpg" />
+
+* 定义：动态地将责任附加到对象（concrete component）上，若要扩展功能，Decorator提供了比继承更有弹性的替代方案
+
+* 使用场景：
+
+* 不好的设计：使用诸多子类进行继承，各个子类中独立实现复杂而且相关的功能
+
+* 使用Decorator
+
+  * 具体组件（ConcreteComponent）和Decorator拥有同一个父类 component
+
+    目的是ConcreteComponent和Decorator有同样的类型（装饰者也会成为被装饰者），而不是为了得到同样的行为
+
+    新行为来自装饰者和组件的组合
+
+  * decorators有共同的接口：decorator里组合了一个被装饰者，可以迭代地用多个装饰者包装一个对象
+  * 具体组件（ConcreteComponent）最为最原始被装饰者被包裹在最内层
+  * 装饰者可以在所委托的被装饰者的行为之前或者之后添加自己的行为
+  * 装饰者的使用是一个嵌套调用的过程
+  * 一旦经过装饰者，组件类型就会发生改变，所有装饰者模式不适用于那些依赖组件具体类型的场景

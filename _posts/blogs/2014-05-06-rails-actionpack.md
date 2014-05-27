@@ -104,7 +104,7 @@ title: rails 中的actionpack
 
    app 是`config.middleware`(ActionDispatch::MiddlewareStack对象), 也就是一层层地call下去
 
-3.接着对中间件依次call
+3. 接着对中间件依次call
 
         rake middleware
         use ActionDispatch::Static
@@ -130,3 +130,101 @@ title: rails 中的actionpack
         use Rack::ConditionalGet
         use Rack::ETag
         run R4test::Application.routes
+
+4. 主要中间件作用：
+
+  * ActionDispatch::Static
+
+    如果`config.serve_static_assets`是true，rails进行静态资源提供
+
+        def call(env)
+          case env['REQUEST_METHOD']
+          when 'GET', 'HEAD'
+            path = env['PATH_INFO'].chomp('/')
+            if match = @file_handler.match?(path)
+              env["PATH_INFO"] = match
+              return @file_handler.call(env)   #如果找到了，直接返回了，不会到下一个rack里去，所以不受下面的Rack::Lock影响
+            end
+          end
+
+          @app.call(env) #如果找不到，会到下一个rack里去
+        end
+
+  * Rack::Lock
+
+    通过mutex.lock 对后续rack调用加锁，这是rails4中默认的，可以通过`config.threadsafe!` 去掉这个rack，开启多线程模式（也要应用服务器支持多线程如puma是多线程，但是webrick不是）。但是要保证所有代码是线程安全的。
+
+        def call(env)
+          old, env[FLAG] = env[FLAG], false
+          @mutex.lock
+          response = @app.call(env)
+          body = BodyProxy.new(response[2]) { @mutex.unlock }
+          response[2] = body
+          response
+        ensure
+          @mutex.unlock unless body
+          env[FLAG] = old
+        end
+
+  * Rack::Runtime
+
+    添加一个header X-Runtime，用于记录响应时间
+
+        def call(env)
+          start_time = Time.now                  # 开始时间
+          status, headers, body = @app.call(env)
+          request_time = Time.now - start_time   # 结束时间
+
+          if !headers.has_key?(@header_name)
+            headers[@header_name] = "%0.6f" % request_time
+          end
+
+          [status, headers, body]
+        end
+
+  * Rack::MethodOverride
+
+    使用post传递过来的参数中的`_method` 覆盖env["REQUEST_METHOD"]
+
+        HTTP_METHODS = %w(GET HEAD PUT POST DELETE OPTIONS PATCH)
+
+        METHOD_OVERRIDE_PARAM_KEY = "_method".freeze
+        HTTP_METHOD_OVERRIDE_HEADER = "HTTP_X_HTTP_METHOD_OVERRIDE".freeze
+
+        def initialize(app)
+          @app = app
+        end
+
+        def call(env)
+          if env["REQUEST_METHOD"] == "POST"
+            method = method_override(env)
+            if HTTP_METHODS.include?(method)
+              env["rack.methodoverride.original_method"] = env["REQUEST_METHOD"]
+              env["REQUEST_METHOD"] = method
+            end
+          end
+
+          @app.call(env)
+        end
+
+        def method_override(env)
+          req = Request.new(env)
+            # POST方法获得请求中传递过来的数据， support both application/x-www-form-urlencoded and multipart/form-data
+            # form 表单的enctype 默认是前者，后者既可以发送文本数据，也支持二进制数据上载，使用多媒体传输协议
+          method = req.POST[METHOD_OVERRIDE_PARAM_KEY] || 
+            env[HTTP_METHOD_OVERRIDE_HEADER]
+          method.to_s.upcase
+        end
+
+  * ActionDispatch::RequestId
+
+    生成`env["action_dispatch.request_id"]`，之后可以通过`ActionDispatch::Request#uuid` 获得，并通过`X-Request-Id`header返回给client
+
+    生成规则：基于请求 X-Request-Id header 或者 随机uuid
+
+  * Rails::Rack::Logger
+
+  * ActionDispatch::ShowExceptions
+
+  * ActionDispatch::DebugExceptions
+

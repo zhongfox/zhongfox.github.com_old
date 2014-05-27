@@ -313,6 +313,9 @@ title: Linux 笔记
         si 软件中断
         st: 实时
 
+  * linux 按照cpu排序`P` 按照内存排序 `M`
+  * mac 按照cpu排序`ocup` 按照内存排序 `ovsize`
+
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
 
 * daemon/service
