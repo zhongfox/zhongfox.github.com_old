@@ -110,9 +110,17 @@ title: Linux 笔记
 
     `zcat` 用于查看gzip压缩后的文本文件
 
+    `gzip -v file`  压缩单文件到 file.gz
+
+    `gunzip -v file.gz` 解压到 file
+
   * `bzip2 -vdck` 默认是压缩，后缀`bz2`, -vdc同上，-k保留原文件
 
     `bzcat` 用于查看bzip2压缩后的文本文件
+
+    `bzip2 -v file`  压缩单文件到 file.bz
+
+    `bunzip2 -v file.bz` 解压到 file
 
 * 打包 tar
 
@@ -129,6 +137,14 @@ title: Linux 笔记
   `-p`打包时保留原文件属性
 
   `-C 目录` 解包是指定目录，默认在当前目录
+
+  `tar -cjf dir.tar.bz dir1 dir2`  用bzip2 打包压缩
+
+  `tar -xjf dir.tar.bz` 解包到dir目录(创建)
+
+  `tar -czf dir.tar.gz dir1 dir2`  用gzip 打包压缩
+
+  `tar -xzf dir.tar.gz` 解包到dir目录(创建)
 
 * shell
 
@@ -315,6 +331,9 @@ title: Linux 笔记
         hi 硬件中断
         si 软件中断
         st: 实时
+
+  * linux 按照cpu排序`P` 按照内存排序 `M`
+  * mac 按照cpu排序`ocup` 按照内存排序 `ovsize`
 
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
 
