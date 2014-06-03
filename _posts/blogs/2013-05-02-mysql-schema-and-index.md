@@ -35,7 +35,7 @@ title: Mysql 架构和索引
    * 字符串
 
      * varchar(字节数) 变长字符串
-       
+
        varchar内容开头用1到2个字节表示实际长度（长度超过255时需要2个字节），因此最大长度不能超过65535
 
        5.0之后的mysql对其读写都会保留末尾空格
@@ -98,7 +98,7 @@ title: Mysql 架构和索引
 
 * B-Tree索引：除了Archive引擎外都支持
 
-* Hash索引：Memory引擎， 
+* Hash索引：Memory引擎，
 
   可以在其它B-Tree索引上建立自己的Hash索引：增加一列被索引的列（作为Hash的key），该列允许一定得碰撞，需要一个hash函数（如CRC32）,不应该使用强加密函数（如SHA1 MD5等，碰撞低但是费空间，查找速度慢）
 
@@ -114,7 +114,7 @@ title: Mysql 架构和索引
 
 ### EXPLAIN
 
-1.  id 表示执行顺序，id从大到小，id相同从上往下 
+1.  id 表示执行顺序，id从大到小，id相同从上往下
 
 2.  select_type 查询类型
 
@@ -157,11 +157,11 @@ title: Mysql 架构和索引
 
     5. `ref`：非唯一性索引扫描，返回匹配某个单独值的所有行。常见于使用非唯一索引即唯一索引的非唯一前缀进行的查找
 
-    * (唯一或非唯一)组合索引的前一部分：select * from t where unique_or_not_unique_combined_index_1 = 'abc'
+       * (唯一或非唯一)组合索引的前一部分：select * from t where unique_or_not_unique_combined_index_1 = 'abc'
 
-    * 非唯一组合或单列索引的全部：select * from t where not_unique_combined_index_1 = 'abc' and not_unique_combined_index_2 = '123'
+       * 非唯一组合或单列索引的全部：select * from t where not_unique_combined_index_1 = 'abc' and not_unique_combined_index_2 = '123'
 
-    * 唯一索引的前缀匹配： 
+       * 唯一索引的前缀匹配：
 
     6. `ref_or_null`: 这种连接类型类似 ref，不同的是mysql会在检索的时候额外的搜索包含null值的记录
 
@@ -214,7 +214,7 @@ title: Mysql 架构和索引
     * Not exists 使用了早期终结
 
 #### MySQL执行计划的局限
- 
+
 * EXPLAIN不会告诉你关于触发器、存储过程的信息或用户自定义函数对查询的影响情况
 
 * EXPLAIN不考虑各种Cache
