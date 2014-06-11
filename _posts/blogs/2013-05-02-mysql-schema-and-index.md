@@ -177,9 +177,9 @@ title: Mysql 架构和索引
 
     9. `range`：索引范围扫描，对索引的扫描开始于某一点，返回匹配值域的行，常见于between, <, >, in, like 等的查询
 
-    10 `index`: Full Index Scan，index与ALL区别为index类型只遍历索引树
+    10. `index`: Full Index Scan，index与ALL区别为index类型只遍历索引树
 
-    11 `ALL`：Full Table Scan， MySQL将遍历全表以找到匹配的行
+    11. `ALL`：Full Table Scan， MySQL将遍历全表以找到匹配的行
 
 5. possible_keys 指出MySQL能使用哪个索引在表中找到行，查询涉及到的字段上若存在索引，则该索引将被列出，但不一定被查询使用
 
