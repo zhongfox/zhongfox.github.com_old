@@ -219,11 +219,16 @@ CHECKSUM
 CREATE_OPTIONS
 TABLE_COMMENT
 
+* 查询表注释：
+
+        SELECT table_comment FROM INFORMATION_SCHEMA.TABLES 
+        WHERE table_schema='my_cool_database' AND table_name='users';
+
 ####COLUMNS表
 
 提供了表中的列信息。详细表述了某张表的所有列以及每个列的信息。是`show columns from schemaname.tablename [like '某个字段']` `desc schemaname.tablename`的结果取之此表。
 
-`show full columns from 表名` 可以查看字段的字符编码
+`show full columns from 表名` 可以查看字段的字符编码, 以及字段的comments(COLUMN_COMMENT)
 
 TABLE_CATALOG
 TABLE_SCHEMA 所属数据库
