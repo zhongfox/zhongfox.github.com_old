@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server-side]
+categories: [blog, server]
 tags : [cache, share, redis]
 title: 使用Redis
 tagline: 高性能的key-value数据存储服务器
