@@ -90,6 +90,8 @@ title: Linux 笔记
 
     find app/ -name '*deal*' 按照文件名查找，目录包括子目录，文件名可以使用通配符
 
+    `find ./app/assets -type f | wc -l ` 查询文件个数,包括子目录
+
 * 磁盘
 
   * `df` 查看当前磁盘挂载情况 -a 所有文件系统包括/proc等用于内存的，-h 易读单位， -i 不用硬盘容量使用inode数

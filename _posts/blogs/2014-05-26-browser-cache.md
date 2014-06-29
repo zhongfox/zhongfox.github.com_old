@@ -28,6 +28,8 @@ title: 浏览器缓存
 
 这个好像只对使用`Last-Modified` 有效, 对使用`Etag`的方式不知道有没有办法
 
+如果`Cache-Contrl`和`max-age` 同时存在, `max-age`覆盖前者
+
 ---
 
 ### 如何请求页面
