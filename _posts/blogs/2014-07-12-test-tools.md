@@ -99,6 +99,18 @@ NetCat，在网络工具中有“瑞士军刀”美誉
 
 * 端口扫描 `nc -v -w 1 192.168.228.222 -z 1-1000`
 
+* 聊天：服务端 `nc -lp 1234`, 客户端` nc 192.168.100.123 1234`
+
+* 模拟HTTP Headers
+
+      $nc www.linuxfly.org 80
+      GET / HTTP/1.1
+      Host: ispconfig.org
+      Referrer: mypage.com
+      User-Agent: my-browser
+
+  最后有空行(http报文格式)
+
 ---
 
 ## 其他

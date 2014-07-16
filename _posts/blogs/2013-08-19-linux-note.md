@@ -303,6 +303,12 @@ title: Linux 笔记
 
   收邮件`mail` `N`表示未读邮件
 
+* 添加用户
+
+      sudo useradd -d /home/webuser -m webuser
+      sudo passwd webuser
+
+
 * jobs
 
   -l 可以展示pid
