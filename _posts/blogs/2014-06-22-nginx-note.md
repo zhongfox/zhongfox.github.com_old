@@ -28,11 +28,11 @@ title: nginx 笔记
 
   环境: http, server, location
 
-    error_page 404 @gotu;
-    error_page 502 503 /50x.html;
-    error_page 404 = @gotu;
-    error_page 404 =200 @gotu; #同时修改状态
-    error_page 404 =403 /someotherpage;
+      error_page 404 @gotu;
+      error_page 502 503 /50x.html;
+      error_page 404 = @gotu;
+      error_page 404 =200 @gotu; #同时修改状态
+      error_page 404 =403 /someotherpage;
 
 * internal
 

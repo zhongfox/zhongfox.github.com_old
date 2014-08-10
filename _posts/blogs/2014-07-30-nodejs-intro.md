@@ -103,7 +103,7 @@ Node异步IO基本要素:
 * IO线程池
 
 
-整个异步IOde流程:
+整个异步IO流程:
 
 <img src="/assets/images/nodejs_intro/async_io.png" />
 
