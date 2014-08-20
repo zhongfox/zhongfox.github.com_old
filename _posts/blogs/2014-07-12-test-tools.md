@@ -68,6 +68,9 @@ telnet server 配置 TODO
 * delete <key>
 * flush_all 清空所有键值, 只是将所有的items标记为expired，因此这时memcache依旧占用所有内存
 * quit 退出, 断开tcp
+  * memcached 默认没有添加日志文件, 可以在启动时添加参数: ` -vv >> /tmp/memcached.log 2>&1`
+  代表把-vv的输出重定向到/tmp/memcached.log 文件中
+  `2>&1`的意思是把错误日志也一起写入到该文件中
 
 ---
 

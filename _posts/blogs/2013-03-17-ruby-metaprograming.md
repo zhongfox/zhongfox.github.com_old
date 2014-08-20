@@ -414,7 +414,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 26. `Array` 和 `Hash` 居然还是Kernel中定义的方法：
 
         #Returns arg as an Array. First tries to call arg.to_ary, then arg.to_a
-        Array(1..5)   #=> [1, 2, 3, 4, 5] 
+        Array(1..5)   #=> [1, 2, 3, 4, 5]
 
     这个方法有一个好处，参数可以是数组或者单个值，最后都会转换成数组
 
@@ -426,6 +426,49 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
         => [1, 2]
 
         Hash(a: 1) #=> {:a=>1}
+
+27. 关于method的类
+
+  * Method类: 是绑定了调用对象的方法对象, 如`1.method(:to_s) => #<Method: Fixnum#to_s>`
+
+    可以直接调用(用call或者[]): `1.method(:to_s).call(参数)` `1.method(:+)[2]`
+
+    转换为UnboundMethod: `1.method(:to_s).unbind`
+
+  * UnboundMethod类: 没有绑定调用对象的方法对象, 如`Fixnum.instance_method(:to_s) => #<UnboundMethod: Fixnum#to_s>`
+
+    不可以直接调用
+
+    转换为Method类: `Fixnum.instance_method(:to_s).bind(1)`, 目标对象必须是同类对象
+
+28. binding
+
+  binding 代表了代码执行的上下文环境
+
+  * `Kernel#binding`可以获得当前的Binding对象
+
+  * `Proc#binding`可以获得代码块的闭包Binding对象
+
+      # 例1
+      def var_from_binding(&b)
+        eval('var', b.binding)
+      end
+      var = 123
+      var_from_binding() #123
+
+      # 例2
+      class A
+        def abc
+          binding
+        end
+
+        private
+        def xyz
+          'xyz'
+        end
+      end
+
+      eval "xyz",  A.new.abc # => "xyz"
 
 ### Ruby 2
 
