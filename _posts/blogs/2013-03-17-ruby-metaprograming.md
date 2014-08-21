@@ -449,26 +449,26 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
   * `Proc#binding`可以获得代码块的闭包Binding对象
 
-      # 例1
-      def var_from_binding(&b)
-        eval('var', b.binding)
-      end
-      var = 123
-      var_from_binding() #123
+        # 例1
+        def var_from_binding(&b)
+          eval('var', b.binding)
+        end
+        var = 123
+        var_from_binding() #123
 
-      # 例2
-      class A
-        def abc
-          binding
+        # 例2
+        class A
+          def abc
+            binding
+          end
+
+          private
+          def xyz
+            'xyz'
+          end
         end
 
-        private
-        def xyz
-          'xyz'
-        end
-      end
-
-      eval "xyz",  A.new.abc # => "xyz"
+        eval "xyz",  A.new.abc # => "xyz"
 
 ### Ruby 2
 
