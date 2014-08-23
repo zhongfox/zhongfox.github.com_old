@@ -1,8 +1,8 @@
 ---
 layout: post
-categories: [blog, javascript]
-tags : [nodejs]
-title: nodejs 简介
+categories: [blog, rails]
+tags : [capistrano]
+title: capistrano 3
 ---
 {% include JB/setup %}
 
