@@ -454,7 +454,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
           eval('var', b.binding)
         end
         var = 123
-        var_from_binding() #123
+        var_from_binding {} #123
 
         # 例2
         class A
