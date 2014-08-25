@@ -81,7 +81,7 @@ title: 利用nodejs events 解决雪崩现象
 
   `EventEmitter.listenerCount(emitter, event)` 获得指定emitter指定的event对应的事件回调个数
 
-  
+
 
 
 ---
@@ -98,10 +98,11 @@ title: 利用nodejs events 解决雪崩现象
 
 <img src="/assets/images/nodejs_events/node_xuebeng.png" />
 
-
 ---
 
-## 代码
+## 实现
+
+<img src="/assets/images/nodejs_events/ftech_flow.png" />
 
 rails 中提供了`Rails.cache.fetch` 方法
 
@@ -111,7 +112,65 @@ rails 中提供了`Rails.cache.fetch` 方法
 
 类似的, 在nodejs中实现fetch方法:
 
+    var cache= {
+      guarder: {
+        emitter: new events.EventEmitter(),
+        fetchedKeys: {}
+      },
+      produce: function(){
+        new Memcached(app.settings.memcache.host + ":" + app.settings.memcache.port);
+        ....
+      },
+      set: function(key, value, time, callback, oldConnection) {...
+      get: function(key, callback, oldConnection){...
 
+      fetch: function(key, time, callback, dataSource, useGuarder) {
+        var connection = this.produce();
+        var guarder = this.guarder;
+        var cacheHook = function(response) { //通过dataSource得到数据后的钩子
+          cache.set(key, response, time, function (err, result) { //把结果存入缓存 TODO 设置时的错误处理
+            if (typeof dataSource === 'function' && useGuarder) {
+              guarder.emitter.emit(key, response); //触发once排队的事件队列
+              guarder.fetchedKeys[key] = null; //解锁
+            }
+            connection.end();
+          }, connection);
+          callback(null, response); //执行回调
+        };
+        cache.get(key, function (err, data) {
+          if (err) {
+            callback(err, undefined);
+            connection.end();
+            return;
+          }
+          if (data !== false) { //缓存存在
+            callback(err, data);
+            connection.end();
+            return;
+          }
+          //以下处理缓存不存在情况
+          if (typeof dataSource !== 'function') { //dataSource允许是一个对象或者字符数字等
+            cacheHook(dataSource);
+            return;
+          }
+          if (!useGuarder) {
+            dataSource(cacheHook);
+            return;
+          }
+          if (!guarder.fetchedKeys[key]) {//没加锁表明是第一个请求, 去获取数据
+            guarder.fetchedKeys[key] = true; //加锁
+            dataSource(cacheHook);
+          }
+          else { //后续请求将放入once的队列里, 等待第一个请求完成后
+            guarder.emitter.once(key, function (response) {
+              callback(null, response);
+              connection.end();
+            });
+          }
+        }, connection);
+      },
+      ......
+    }
 
 
 ## 参考资料
