@@ -50,7 +50,7 @@ title: 利用nodejs events 解决雪崩现象
   利用once添加的事件队列, 将在事件触发后自动去除
 
       function callback3() { console.log('Im callback3'); }
-      emitter.on('event3', callback3);
+      emitter.once('event3', callback3);
       emitter._events
       => { event1: [Function],
         event2: [ [Function: callback1], [Function: callback2] ],
@@ -59,10 +59,7 @@ title: 利用nodejs events 解决雪崩现象
       emitter.emit('event3'); //Im callback3
       emitter._events
       => { event1: [Function],
-        event2: [ [Function: callback1], [Function: callback2] ],
-        event3: [Function: callback3] }
-
-
+        event2: [ [Function: callback1], [Function: callback2] ] }
 
 
 * 主要API:
@@ -80,9 +77,6 @@ title: 利用nodejs events 解决雪崩现象
   类方法:
 
   `EventEmitter.listenerCount(emitter, event)` 获得指定emitter指定的event对应的事件回调个数
-
-
-
 
 ---
 
