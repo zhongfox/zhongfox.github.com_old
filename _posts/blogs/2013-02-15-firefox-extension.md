@@ -70,11 +70,11 @@ Firefox及其扩展都是基于当前网络开发广泛使用的技术。其结�
       <!--homepageURL 扩展主页的URL。选填。 --> 
       <RDF:Description RDF:about="urn:mozilla:install-manifest"
                        em:id="zhongfox@gmail.com"
-                       em:name="tuan800 auto login"
+                       em:name="tuxx800 auto login"
                        em:version="1.0"
                        em:creator="zhongfox"
-                       em:description="auto login for tuan800 daigou"
-                       em:homepageURL="http://www.tuan800.com/">
+                       em:description="auto login for tuxx800 daigou"
+                       em:homepageURL="http://www.tuxx800.com/">
         <em:targetApplication RDF:resource="rdf:#$I8yfp"/>
       </RDF:Description>
     </RDF:RDF>

@@ -17,7 +17,7 @@ title: expressjs
         env: 'development',
         'subdomain offset': 2,
         view: [Function: View],
-        views: '/home/zhonghua/code/work/zhe800_node/views',
+        views: '/home/zhonghua/code/work/zxx800_node/views',
         'jsonp callback name': 'callback' }
 
 * 对app.settings 直接写, 可影响app.get

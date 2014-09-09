@@ -37,9 +37,9 @@ title: RVM Gem Bundle小记
 
     `gem list [gemname]` 显示当前gemset里的指定gem
 
-3. 创建gemset `rvm gemset create zhe800`
+3. 创建gemset `rvm gemset create zxx800`
 
-4. 使用gemset `rvm gemset use zhe800`
+4. 使用gemset `rvm gemset use zxx800`
 
 5. 在gemset中安装gem  `gem install rails -v  3.2.13`
 
