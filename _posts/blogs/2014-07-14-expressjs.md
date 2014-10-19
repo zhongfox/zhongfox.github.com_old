@@ -8,6 +8,7 @@ title: expressjs
 
 ---
 
+* `express --sessions  --ejs zhe800_node`
 * ejs view中只能引用`app.locals`的属性, 同样不能引用app
 * res.render(view, [locals], callback) app.render(view, [options], callback)
 * app.settings

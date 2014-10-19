@@ -2,7 +2,7 @@
 layout: post
 categories: [blog, javascript]
 title: Javascript 特性介绍
-tags : [函数, 闭包, 原型链, ruby, zhongfox]
+tags : [函数, 闭包, 原型链, ruby]
 ---
 {% include JB/setup %}
 
@@ -47,8 +47,9 @@ tags : [函数, 闭包, 原型链, ruby, zhongfox]
 
 ## 2. 闭包
 
-定义: 一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数）
-闭包的实现基础:
+**定义**: 一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数）
+
+**闭包的实现基础**:
 
 * 函数是一等对象(可以传递, 可以用变量引用)
 * 函数提供了作用域
@@ -63,7 +64,7 @@ tags : [函数, 闭包, 原型链, ruby, zhongfox]
         var bar = foo();
         bar(); //hello javascript
 
-类比ruby中的method和lambda
+**类比ruby中的method和lambda**
 
         m = 'hello '
         def foo
@@ -75,11 +76,42 @@ tags : [函数, 闭包, 原型链, ruby, zhongfox]
         bar = foo()
         bar.call # ruby
 
+**ruby 中的binding**
+
+  binding 代表了代码执行的上下文环境(类似javascript中的闭包)
+
+  * `Kernel#binding`可以获得当前的Binding对象
+
+  * `Proc#binding`可以获得代码块的闭包Binding对象
+
+        # 例1
+        def var_from_binding(&b)
+          eval('var', b.binding)
+        end
+        var = 123
+        var_from_binding {} #123
+
+        # 例2
+        class A
+          def abc
+            binding
+          end
+
+          private
+          def xyz
+            'xyz'
+          end
+        end
+
+        eval "xyz",  A.new.abc # => "xyz"
+
 总结:
 
 * ruby 中有且只有三个作用域门 `def` `class` `module` 开启了全新的作用域, `lambda` 开启了一个扁平作用域(flattening)
 
 * javascript中的function 开启的是扁平作用域
+
+* javascript 中的闭包类似ruby中的binding
 
 ---
 
@@ -111,6 +143,8 @@ tags : [函数, 闭包, 原型链, ruby, zhongfox]
     duck.eat();     //eat fish
 
 
+
+<img src="/assets/images/javascript_intro/prototype.png" />
 
 类比ruby代码(不是完全等价):
 
