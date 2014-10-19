@@ -66,7 +66,7 @@ tags : [函数, 闭包, 原型链, ruby]
 
 **类比ruby中的method和lambda**
 
-        m = 'hello '
+*       m = 'hello '
         def foo
             n = 'ruby';
             return -> { puts n }
@@ -105,7 +105,7 @@ tags : [函数, 闭包, 原型链, ruby]
 
         eval "xyz",  A.new.abc # => "xyz"
 
-总结:
+**总结**:
 
 * ruby 中有且只有三个作用域门 `def` `class` `module` 开启了全新的作用域, `lambda` 开启了一个扁平作用域(flattening)
 
@@ -146,7 +146,7 @@ tags : [函数, 闭包, 原型链, ruby]
 
 <img src="/assets/images/javascript_intro/prototype.png" />
 
-类比ruby代码(不是完全等价):
+**类比ruby代码(不是完全等价)**:
 
     class Animal
       attr_accessor :color
@@ -185,7 +185,7 @@ tags : [函数, 闭包, 原型链, ruby]
     duck.say     #Im a animal with color yellow
     duck.eat     #eat fish
 
-其他:
+**其他**:
 
 * javascript 中的每个function都有prototype属性
 * 对function 的实例, 对prototype中的属性有读权限, 但是不能写(如果写的话, 会修改/添加自身属性)
