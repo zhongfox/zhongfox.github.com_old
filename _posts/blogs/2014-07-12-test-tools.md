@@ -19,7 +19,8 @@ title: 常用测试和调试工具
 * -n 总的请求数
 * -c 次同时并发的请求数 总的请求数(n)=次数*一次并发数(c)
 * -t 执行多少秒的测试, -n自动设置为5000, 但是测试时可能超过这个数量
-* -C 添加cookie 
+* -C 添加cookie `-C "_t8s=myt8scookie;ppinf=myppinfcookie"`
+* -r Don't exit on socket receive errors
 
 #### 输出分析
 
@@ -33,9 +34,9 @@ title: 常用测试和调试工具
 * Write errors: 写入过程错误数(连接断开)
 * Total transferred: 总报文大小
 * HTML transferred:  总报文**正文**大小
-* Requests per second: 服务器每秒处理请求数量 ( Time taken for tests / 请求总数) 通常叫做RPS 或者 QPS
-* Time per request: 一组并发完成的时间(Time taken for tests / (请求总数/并发数))
-* Time per request: 单个请求完成的平均时间(Time taken for tests / 请求总数)
+* Requests per second: 服务器每秒处理请求数量 (成功的请求总数/Time taken for tests) 通常叫做RPS 或者 QPS
+* Time per request: 一组并发完成的时间(Time taken for tests / (成功的请求总数/并发数))
+* Time per request: 单个请求完成的平均时间(Time taken for tests / 成功的请求总数)
 * Transfer rate: 传输率, 受带宽影响(Total transferred/Time taken for tests)
 * Connection Times:连接耗时情况
 * Percentage of the requests served within a certain time: 请求响应分布, 是Time per request的实际分布
