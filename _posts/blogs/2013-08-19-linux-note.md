@@ -98,7 +98,10 @@ title: Linux 笔记
 
   * `dumpe2fs 设备文件名`
 
-  * `du -ahsS 目录文件`  默认只列出目录大小-a 列出目录和文件，-h易读单位，默认会递归遍历，-s列出目录总大小，不递归，-S递归时不计算子目录大小不计入父目录大小中。常用`du -hs 某一目录/*/`展示该目录下第一层子目录大小
+  * `du -ahsS 目录文件`  默认只列出目录大小-a 列出目录和文件，-h易读单位，默认会递归遍历，-s列出目录总大小，不递归，-S递归时不计算子目录大小不计入父目录大小中。
+    常用`du -hs 某一目录/*/`展示该目录下第一层子目录大小
+
+    `du -hs 目录名` 目录大小
 
   * 硬链接：共享inode和对应的block，不能跨越文件系统，不能链接目录：`ln 原文件 目标文件`
 
@@ -394,7 +397,7 @@ title: Linux 笔记
   * `echo $SHELL` 查看当前使用的是什么shell
   * `which zsh` 如果没有zsh, 需要先安装zsh `sudo apt-get install zsh`
   * `curl -L http://install.ohmyz.sh | sh`
-  * `chsh -s \`which zsh\`` 
+  * `chsh -s \`which zsh\``
 
 * kill
 
@@ -407,3 +410,11 @@ title: Linux 笔记
       22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
       26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO
       30) SIGPWR      31) SIGSYS
+
+* dirs
+
+  查看去过的目录历史, 但是重复的却只展示一个
+
+  `-v` 一行展示一个
+
+  zsh内置别名`d` 为 `dirs -v | head -10`
