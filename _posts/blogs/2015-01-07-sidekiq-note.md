@@ -144,11 +144,11 @@ title: Sidekiq笔记
 
 1. Make your jobs input small and simple
 
-  the arguments to your worker must be simple JSON datatypes (numbers, strings, boolean, array, hash)
+   the arguments to your worker must be simple JSON datatypes (numbers, strings, boolean, array, hash)
 
 2. Make your jobs idempotent(幂等) and transactional
 
-  因为可能retry, 所以需要幂等
+   因为可能retry, 所以需要幂等
 
 3. use a process supervisor like runit or upstart to manage Sidekiq (or any other server daemon) versus something like nohup or the -d flag
 
