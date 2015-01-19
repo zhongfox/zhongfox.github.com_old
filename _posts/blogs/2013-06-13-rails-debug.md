@@ -122,9 +122,11 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 **对于ruby对象**
 
-传递false给xxx_methods方法，将排除继承来的方法
+传递false给xxx_methods方法，将排除继承来的方法(只剩单键方法)
 
 1. `methods`
+
+   默认包含对象的单键方法和对应类的实例方法, 传false去掉后者(可以这样理解: 默认返回其对于单件类中的实例方法以及单件类继承来的实例方法, 传false去掉后者)
 
    快速得知对象上是不是有某些方法：`o.methods.include? :some_method`  或者 `o.methods.grep /some_method/`
 
