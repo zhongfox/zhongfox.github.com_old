@@ -13,7 +13,7 @@ Ruby 常量查找并不是简单的从继承链继承，总的来说，常量查
 
 2. 如果 #1 找不到，且 `Module.nesting.first` 是一个类，那么查找 `Module.nesting.first.ancestors`
 
-3. 如果 #1 和 #2 都找不到， 那么查找`Object.ancestors`
+3. 如果 #1 和 #2 都找不到， 那么查找`Object.ancestors` [Object, Kernel, BasicObject]
 
 虽然规则很简单明了，但是还是有很多需要说的：
 
@@ -63,9 +63,9 @@ Ruby 常量查找并不是简单的从继承链继承，总的来说，常量查
 
 3. 在顶层 Module.nesting 为空，顶层的常量定义和查找是在Object里
 
-4. class_eval, module_eval, instance_eval, define_method 不会改变Module.nesting， 也就不会改变常量查找
+4. `class_eval, module_eval, instance_eval, define_method` 不会改变Module.nesting， 也就不会改变常量查找
 
-5. 在本体类里查找常量，并不会查到这个原类的继承链，因为本体类的继承链是从Clss开始的：
+5. 在本体类里查找常量，并不会查到这个原类的继承链，因为本体类的继承链是从Class开始的：
 
         class A
           B = 10
@@ -74,13 +74,21 @@ Ruby 常量查找并不是简单的从继承链继承，总的来说，常量查
         class C < A
 
           class << C
-            puts ancestors # [Class, Module, Object, Kernel, BasicObject]
-            puts B         # uninitialized constant Class::B
+            puts Module.nesting # [#<Class>, C]
+            puts ancestors      # 1.9.3 [Class, Module, Object, Kernel, BasicObject]
+                                # 2.1.1 [#<Class:C> #<Class:A> #<Class:Object> #<Class:BasicObject> Class Module Object Kernel BasicObject]
+            puts B              # uninitialized constant Class::B
           end
         end
 
     这是一个很常见的错误，以为puts B 应该输出A::B
 
+---
+
+其他:
+
+* `Module#constants` 返回module的所有第一层级常量
+* `Module#constants` 返回所有顶级常量
 
 ## 参考资料
 [Everything you ever wanted to know about constant lookup in Ruby](http://cirw.in/blog/constant-lookup)

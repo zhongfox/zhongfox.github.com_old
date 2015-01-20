@@ -25,7 +25,15 @@ Ruby在方法查找和常量查找都依赖继承链，直接上图：
 
 * 比较MyModule和MyClass，发现MyModule不能实例化对象，也没有继承的超类，简单的可以理解为，Module和Class的区别，Module是Class的超类，Class比Module多了3个实例方法：`new superclass allocate`  前两个方法就决定了MyModule无法实例化和无超类
 
-* 普通类的 ancestors 会沿着 superclass 查找，但是所有单件类的 ancestors 都是 [MyClass, Object, Kernel, BasicObject]
+* 普通类的 ancestors 会沿着 superclass 查找，~~但是所有单件类的 ancestors 都是[Class, Module, Object, Kernel, BasicObject]~~
+
+  对类对象, 1.9.3 和2.1.1有区别:
+
+  * 1.9.3: 所有类的 `singleton_class.ancestors` 都是  [Class, Module, Object, Kernel, BasicObject] (不符合上图)
+  * 2.1.1:  所有类的 `singleton_class.ancestors`符合上图, 如`Myclass.singleton_class.ancestors`为`[#<Class:MyClass>, #<Class:Object>, #<Class:BasicObject>, Class, Module, Object, Kernel, BasicObject]`
+
+  * 两个版本的`MySubClass.singleton_class.superclass`都是一致的
+
 
 * 从图中虽然每个单件类都有superclass，但是单件类无法显式被继承。试图显式地去继承一个单件类，将会得到错误：can't make subclass of singleton class
 

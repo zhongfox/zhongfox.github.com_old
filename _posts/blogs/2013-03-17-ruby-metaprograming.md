@@ -190,6 +190,14 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
         B.ancestors #=>[B, Object, Kernel, BasicObject]
         B.singleton_class.ancestors #=> [A, Class, Module, Object, Kernel, BasicObject]
 
+11. ruby 2 还提供了类似`include`的`prepend`, 区别在于继承链中的位置:
+
+        module M3
+          prepend M1
+          include M2
+        end
+        M3.ancestors # => [M1, M3, M2]
+
 11. 使用`alias`来实现环绕命名
 
     alias是ruby的关键字而不是方法，所以使用是新旧方法名间无逗号： alias new_method_name old_method_name
@@ -323,6 +331,8 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
       必须要加扩展名
 
       load的作用：在development模式下，当你修改一段代码后，不用重启服务器，你的代码更改会被自动reload，这就是load的作用 而如果你使用require的话，多次require并不会起作用
+
+      You use load to execute code, and you use require to import libraries. load 和 require都使自己定义的常量残留下来, load提供了一个解决方案`load(file_name, true)` If you load a file this way, Ruby creates an anonymous module, uses that module as a Namespace to contain all the constants from motd.rb , and then destroys the module
 
     * autoload(module, filename): 已经不推荐使用
 
