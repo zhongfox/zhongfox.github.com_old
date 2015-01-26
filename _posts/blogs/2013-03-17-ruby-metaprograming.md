@@ -10,7 +10,9 @@ title: Ruby 元编程学习笔记
 
 as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记，还有很多是和ruby相关的一些知识和技巧。
 
-1.  send 是BasicObject的公用类方法, 但却不是它的单键方法，因为BasicObject已无超类，怀疑是BasicObject mixin 了什么模块？
+1.  send
+
+  ~~是BasicObject的公用类方法, 但却不是它的单键方法，因为BasicObject已无超类，怀疑是BasicObject mixin 了什么模块？~~ Kernel的公共实例方法, BasicObject.public_methods 能调用send是因为BasicObject是Class的实例, 也是Object的实例.
 
     `BasicObject.public_methods.grep(/^send/) => [:send]`
 
@@ -189,14 +191,6 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
         B.ancestors #=>[B, Object, Kernel, BasicObject]
         B.singleton_class.ancestors #=> [A, Class, Module, Object, Kernel, BasicObject]
-
-11. ruby 2 还提供了类似`include`的`prepend`, 区别在于继承链中的位置:
-
-        module M3
-          prepend M1
-          include M2
-        end
-        M3.ancestors # => [M1, M3, M2]
 
 11. 使用`alias`来实现环绕命名
 
@@ -480,6 +474,85 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
         eval "xyz",  A.new.abc # => "xyz"
 
-### Ruby 2
 
-1. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
+29. respond_to? will return false for protected methods in Ruby 2.0 <http://tenderlovemaking.com/2012/09/07/protected-methods-and-ruby-2-0.html>
+
+---
+
+### 再读元编程(第二版)
+
+1. ruby 2 还提供了类似`include`的`prepend`, 区别在于继承链中的位置:
+
+        module M3
+          prepend M1
+          include M2
+        end
+        M3.ancestors # => [M1, M3, M2]
+
+2. Kernel
+
+  class Object includes Kernel , so Kernel gets into every object’s ancestors chain.
+
+  Every line of Ruby is always executed inside an object(main)
+
+  So you can call the instance methods in Kernel from anywhere (比如print)
+
+3. Every line of Ruby code is executed inside an object
+
+4. Refinements TODO
+
+5. 复写`method_missing`
+
+  * `def method_missing(method, *args)`, 在此方法中`block_given?`可以得到原始方法是否有传代码块
+  * `def method_missing(message, *args, &block)` 需要调用block的话
+
+6. remember to override `respond_to_missing?`  every time you override `method_missing`
+
+7. 想防止方法干扰, 白板类
+
+  * 继承 BasicObject `BasicObject.instance_methods(false)  => [:==, :equal?, :!, :!=, :instance_eval, :instance_exec, :__send__, :__id__]`
+
+  * Object 没有新加实例方法, 全靠include Kernel `Object.instance_methods(false) => [] `
+
+  * 移除方法:
+
+    * `Module#undef_method` 移除包括继承链上的方法
+    * `Module#remove_method` 只移除接收者的方法, 不会影响继承链的方法
+
+8. `instance_eval` 代码块无参数, `instance_exec`有参数, 有些不常用的微妙区别
+
+---
+
+### 特殊方法来源汇总
+
+* `define_method`
+
+  `Module.private_instance_methods(false).grep(/define_method/) => [:define_method]`
+
+* `include`
+
+  `Module.private_instance_methods(false).grep /include/ => [:included, :include]`
+
+* `send`
+
+  `Kernel.public_instance_methods(false).grep /send/ => [:send, :public_send]`
+
+* `method_missing`
+
+  `BasicObject.private_instance_methods(false).grep /method_missing/ => [:method_missing]`
+
+* `respond_to?`
+
+  `Kernel.public_instance_methods(false).grep /respond_to\?/ => [:respond_to?]`
+
+* `const_missing`
+
+  `Module.public_instance_methods(false).grep /const_missing/ => [:const_missing]`
+
+* `undef_method`
+
+  `Module.private_instance_methods(false).grep /undef_method/`
+
+* `instance_eval`
+
+  `BasicObject.public_instance_methods(false).grep /eval/ => [:instance_eval]`
