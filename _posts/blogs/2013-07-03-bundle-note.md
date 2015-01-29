@@ -91,6 +91,24 @@ title: RVM Gem Bundle小记
 
 9. `gem spec gemname`  展示gem信息，gem可以是已安装的，亦可以是本地gem文件
 
+10. `gem environmen` 安装信息
+
+  `INSTALLATION DIRECTORY` gem将被装到哪里, 在此目录下的`gems`目录下
+
+
+11. gem 是如何加载的:
+
+  RubyGems 覆写了 Ruby 的 require 方法:
+
+      When you call <tt>require 'x'</tt>, this is what happens:
+      * If the file can be loaded from the existing Ruby loadpath, it
+        is.
+      * Otherwise, installed gems are searched for a file that matches.
+        If it's found in gem 'y', that gem is activated (added to the
+        loadpath).
+
+  `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
+
 
 ### Bundle
 
@@ -214,10 +232,10 @@ title: RVM Gem Bundle小记
   * gemfile (BUNDLE_GEMFILE)
 
 
-
-
 ### 参考资料
 
 * Bundler <http://bundler.io/>
 
 * bundle-config <http://bundler.io/v1.3/man/bundle-config.1.html>
+
+* Ruby Gems 是如何运作的？ <http://zhaowen.me/blog/2014/10/14/how-do-gems-work/>

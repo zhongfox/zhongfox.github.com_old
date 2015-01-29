@@ -57,6 +57,8 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
     可调用对象的一个使用是实现延迟执行，这个在rails的scope中经常用到（scope中的lambda的Time.now不会在class加载的时候固化）
 
+    方法中获得传入代码块转化的对象是Proc对象
+
     `Proc.new => proc`
 
     `proc {block} => proc`
@@ -259,9 +261,15 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 17. 关于代码块参数的定义，以及代码块的调用：
 
-    * 方法定义时没有代码块参数，方法中调用代码块只能用 yield
+    * block to a Proc
 
-    * 方法定义时用&b，如`def do_something(x, y, z, &b)` 调用时可以用`b.call(参数)` 或者 `yield(参数)`
+      方法定义时用&b，如`def do_something(x, y, z, &b)` 调用时可以用`b.call(参数)` 或者 `yield(参数)`
+
+    * Proc to a Block
+
+      获得一个Proc对象, 可以将其作为代码块传递给需要代码块的方法, 如: `b = -> {puts 'Im block object'}`,  方法调用时`do_something(x, y, z, &b)`
+
+    * 方法定义时没有代码块参数，方法中调用代码块只能用 yield
 
     * 方法定义时用b，如`def do_something(x, y, z, b)` 调用时可以用`b.call(参数)` 这其实是传递普通对象
 
@@ -304,7 +312,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
       这个相对关系是相对于调用`require_relative`的文件，因此如果在irb(不在文件里)里调用会得到`LoadError: cannot infer basepath`
 
-      加载成功后返回true, 把文件放入$" 不会改变$"
+      加载成功后返回true, 把文件放入$"
 
       重复加载返回false
 
