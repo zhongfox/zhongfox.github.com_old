@@ -89,12 +89,12 @@ title: RVM Gem Bundle小记
 
 10. `gem environmen` 安装信息
 
-   `INSTALLATION DIRECTORY` gem将被装到哪里, 在此目录下的`gems`目录下
+    `INSTALLATION DIRECTORY` gem将被装到哪里, 在此目录下的`gems`目录下
 
 
 11. gem 是如何加载的:
 
-   RubyGems 覆写了 Ruby 的 require 方法:
+    RubyGems 覆写了 Ruby 的 require 方法:
 
       When you call <tt>require 'x'</tt>, this is what happens:
       * If the file can be loaded from the existing Ruby loadpath, it
@@ -103,11 +103,11 @@ title: RVM Gem Bundle小记
         If it's found in gem 'y', that gem is activated (added to the
         loadpath).
 
-   `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
+    `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
 
-   加载gem机制：
+    加载gem机制：
 
-   `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
+    `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
 
 ### Bundle
 
