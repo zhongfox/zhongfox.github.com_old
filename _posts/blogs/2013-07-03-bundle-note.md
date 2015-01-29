@@ -53,19 +53,19 @@ title: RVM Gem Bundle小记
 
    * `gem install gemname --version "操作符 0.4.14"` 指定版本
 
-     操作符可以是`= != > < >= <= ~>`操作符默认将是`=`
+      操作符可以是`= != > < >= <= ~>`操作符默认将是`=`
 
-     `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
+      `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
 
 2. `gem uninstall gemname -v 版本号`
 
-2. 默认不安装文档：在用户主目录新建`.gemrc` 内容 ` gem: --no-ri --no-rdoc`
+3. 默认不安装文档：在用户主目录新建`.gemrc` 内容 ` gem: --no-ri --no-rdoc`
 
-3. 在rails console中列出当前项目使用的gem和路径
+4. 在rails console中列出当前项目使用的gem和路径
 
         Gem.loaded_specs.values.each { |g| puts g.full_gem_path };nil
 
-4. gem source
+5. gem source
 
    修改gem soure会修改~/.gemrc 文件
 
@@ -75,15 +75,11 @@ title: RVM Gem Bundle小记
    * -c, --clear-all                  Remove all sources (clear the cache)
    * -u, --update                     Update source cache
 
-5. 在irb中找到指定gem的路径
+6. 在irb中找到指定gem的路径
 
         spec = Gem::Specification.find_by_name("cucumber")
         gem_root = spec.gem_dir
         gem_lib = gem_root + "/lib"
-
-6. 加载gem机制：
-
-   `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
 
 7. `gem fetch gemname`  只下载不安装
 
@@ -93,12 +89,12 @@ title: RVM Gem Bundle小记
 
 10. `gem environmen` 安装信息
 
-  `INSTALLATION DIRECTORY` gem将被装到哪里, 在此目录下的`gems`目录下
+   `INSTALLATION DIRECTORY` gem将被装到哪里, 在此目录下的`gems`目录下
 
 
 11. gem 是如何加载的:
 
-  RubyGems 覆写了 Ruby 的 require 方法:
+   RubyGems 覆写了 Ruby 的 require 方法:
 
       When you call <tt>require 'x'</tt>, this is what happens:
       * If the file can be loaded from the existing Ruby loadpath, it
@@ -107,8 +103,11 @@ title: RVM Gem Bundle小记
         If it's found in gem 'y', that gem is activated (added to the
         loadpath).
 
-  `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
+   `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
 
+   加载gem机制：
+
+   `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
 
 ### Bundle
 
