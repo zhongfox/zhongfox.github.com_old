@@ -96,12 +96,12 @@ title: RVM Gem Bundle小记
 
     RubyGems 覆写了 Ruby 的 require 方法:
 
-      When you call <tt>require 'x'</tt>, this is what happens:
-      * If the file can be loaded from the existing Ruby loadpath, it
-        is.
-      * Otherwise, installed gems are searched for a file that matches.
-        If it's found in gem 'y', that gem is activated (added to the
-        loadpath).
+        When you call <tt>require 'x'</tt>, this is what happens:
+        * If the file can be loaded from the existing Ruby loadpath, it
+          is.
+        * Otherwise, installed gems are searched for a file that matches.
+          If it's found in gem 'y', that gem is activated (added to the
+          loadpath).
 
     `gem(gem_name, *requirements)` 用于激活(added to the loadpath)一个gem
 

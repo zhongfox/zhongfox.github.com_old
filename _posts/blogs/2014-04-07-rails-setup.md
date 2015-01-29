@@ -359,6 +359,59 @@ title: Rails 加载过程
 
 ---
 
+今天重新追踪了一下Rails 4.1.8 主要文件的加载过程:
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/bin/rails
+
+  `load Gem.bin_path('railties', 'rails', version)`
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/gems/railties-4.1.8/bin/rails
+
+  `require "rails/cli"`
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/gems/railties-4.1.8/lib/rails/cli.rb
+
+  `Rails::AppRailsLoader.exec_app_rails`
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/gems/railties-4.1.8/lib/rails/app_rails_loader.rb
+
+  `exec RUBY, exe, *ARGV`
+
+* 项目文件 bin/rails
+
+  `require_relative '../config/boot'`
+
+  `require 'rails/commands'`
+
+* 项目文件 config/boot
+
+  加载bundler `require 'bundler/setup'`
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/gems/railties-4.1.8/lib/rails/commands
+
+  `require 'rails/commands/commands_tasks'`
+
+  `Rails::CommandsTasks.new(ARGV).run_command!(command)`
+
+* /home/zhonghua/.rvm/gems/ruby-2.1.1@campus/gems/railties-4.1.8/lib/rails/commands/commands_tasks
+
+  `require APP_PATH` 项目下`config/application.rb`
+
+  `server.start` => 项目下 `config.ru`
+
+* config/application.rb
+
+* config,ru
+
+  `require ::File.expand_path('../config/environment',  __FILE__)`
+  `run Rails.application`
+
+* 项目下config/environment
+
+  `Rails.application.initialize!`
+
+---
+
 ### 疑问
 
 1. 诸如active_record等gem的源码里，为什么没有gem_spec 等文件
