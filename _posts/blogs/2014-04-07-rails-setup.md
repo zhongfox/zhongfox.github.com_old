@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, rails]
-tags : [file]
+tags : [rails, rails guides]
 title: Rails 加载过程
 ---
 {% include JB/setup %}
