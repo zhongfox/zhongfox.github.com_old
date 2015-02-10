@@ -169,32 +169,32 @@ Rails Concern 主要是实现2个目的：
 
 源码分析
 
-        1   module Concern
-        2     def self.extended(base) #:nodoc:
-        3       base.instance_variable_set("@_dependencies", [])
-        4     end
-        5
-        6     def append_features(base)
-        7       if base.instance_variable_defined?("@_dependencies")
-        8         base.instance_variable_get("@_dependencies") << self
-        9         return false
-       10       else
-       11         return false if base < self
-       12         @_dependencies.each { |dep| base.send(:include, dep) }
-       13         super
-       14         base.extend const_get("ClassMethods") if const_defined?("ClassMethods")
-       15         base.class_eval(&@_included_block) if instance_variable_defined?("@_included_block")
-       16       end
-       17     end
-       18
-       19     def included(base = nil, &block)
-       20       if base.nil?
-       21         @_included_block = block
-       22       else
-       23         super
-       24       end
-       25     end
-       26   end
+      1   module Concern
+      2     def self.extended(base) #:nodoc:
+      3       base.instance_variable_set("@_dependencies", [])
+      4     end
+      5
+      6     def append_features(base)
+      7       if base.instance_variable_defined?("@_dependencies")
+      8         base.instance_variable_get("@_dependencies") << self
+      9         return false
+     10       else
+     11         return false if base < self
+     12         @_dependencies.each { |dep| base.send(:include, dep) }
+     13         super
+     14         base.extend const_get("ClassMethods") if const_defined?("ClassMethods")
+     15         base.class_eval(&@_included_block) if instance_variable_defined?("@_included_block")
+     16       end
+     17     end
+     18
+     19     def included(base = nil, &block)
+     20       if base.nil?
+     21         @_included_block = block
+     22       else
+     23         super
+     24       end
+     25     end
+     26   end
 
 对应着上面Foo Bar Host 的例子中4个步骤：
 
