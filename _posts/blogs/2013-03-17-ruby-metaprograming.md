@@ -111,7 +111,7 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
     * `Method`
 
       已经有绑定对象, 可以调用call, 可以调用`Method#unbind` 转化为 UnboundMethod
-      
+
       如`object.method :my_method` 绑定对象就是object
 
     * `UnboundMethod`
@@ -562,6 +562,34 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
     # => [:my_singleton_method]
 
 12. When you redefine a method, you don’t really change the method. Instead, you define a new method and attach an existing name to that new method. You can still call the old version of the method as long as you have another name that’s still attached to it
+
+13. eval(statements, @binding, file, line)
+
+  在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
+
+  参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
+
+
+  eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
+
+  **最佳实践**
+
+  you should probably avoid Strings of Code whenever you have an alternative.
+
+14. Hooks
+
+  Class#inherited
+
+  Module#included
+
+  Module#extended
+
+  Module#prepended
+
+  实例方法hooks: Module#method\_added Module#method\_removed Module#method\_undefined
+
+  单件方法hooks: BasicObject#singleton\_method\_added , singleton\_method\_removed , and singleton\_method\_undefined
+
 
 ---
 
