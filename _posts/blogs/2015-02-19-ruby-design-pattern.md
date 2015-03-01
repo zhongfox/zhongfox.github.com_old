@@ -31,10 +31,10 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用模板方法变换算法
+## 第三章 使用模板方法变换算法
 
 
-<img src="/assets/images/ruby_design_pattern/template.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/template.png" />
 
 应用场景: 需要变换算法时. 将不变的在基类中(模板方法), 将变换封装到其下的各个子类中, 基类可以提供一些方法的默认实现(钩子方法), 子类可以根据自己需求选择使用默认实现或者覆盖
 
@@ -48,9 +48,9 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用策略模式替换算法
+## 第四章 使用策略模式替换算法
 
-<img src="/assets/images/ruby_design_pattern/strategy.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/strategy.png" />
 
 应用场景: 把算法提取出来放到独立的对象中
 
@@ -66,9 +66,9 @@ title: Ruby设计模式学习
 
 ---
 
-## 通过观察者保持协调
+## 第五章 通过观察者保持协调
 
-<img src="/assets/images/ruby_design_pattern/observer.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/observer.png" />
 
 * 主题类(Subject) 引发变更消息的类, 通用接口: `add_observer, delete_observer, notify_observers`
 * 观察器(Observer) 想获得变更消息的类
@@ -86,9 +86,9 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用组合模式将各部分组成整体
+## 第六章 使用组合模式将各部分组成整体
 
-<img src="/assets/images/ruby_design_pattern/composite.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/composite.png" />
 
 应用场景: 整体和部门有相似行为(支持相同的接口), 适用于需要一个对象继承链或者对象树
 
@@ -105,7 +105,7 @@ title: Ruby设计模式学习
 
 ---
 
-## 通过迭代器遍历集合
+## 第七章 通过迭代器遍历集合
 
 应用场景: 为外部世界提供访问一组聚合对象的途径, 外部世界无需掌握各个对象的聚合方式和排序方法
 
@@ -120,9 +120,9 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用命令模式完成任务
+## 第八章 使用命令模式完成任务
 
-<img src="/assets/images/ruby_design_pattern/command.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/command.png" />
 
 应用场景: 将要做什么事情(不变)和如何做这个事情(多变)分离, Client 持有Command对象, 要做什么事情时调用Command对象的通用接口(委托), Command可以在运行时更换
 
@@ -138,11 +138,11 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用适配器填补空隙
+## 第九章 使用适配器填补空隙
 
 属于系列模式(一个对象包含在另一个对象中)
 
-<img src="/assets/images/ruby_design_pattern/adapter.png" />
+<img width="65%" src="/assets/images/ruby_design_pattern/adapter.png" />
 
 * Client 对Target有一定了解(知道有哪些接口)
 * Target 代表Client期望的模式接口
@@ -154,7 +154,7 @@ title: Ruby设计模式学习
 
 ---
 
-## 通过代理来到对象面前
+## 第十章 通过代理来到对象面前
 
 
 
