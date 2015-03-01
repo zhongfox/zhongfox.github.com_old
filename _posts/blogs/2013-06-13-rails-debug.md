@@ -167,6 +167,17 @@ ruby元编程有很强大的内省机制，可以帮助我们检视对象：
 
 ----
 
+### 其他
+
+* `caller(start=1, length=nil) → array or nil`
+
+  返回调用栈, 格式为`file:line or file:line: in 'method'.`
+
+  默认start从1开始, 不返回初始调用, 可以设置从0开始
+
+
+----
+
 ### 参考资料
 
 * Debugging Rails Applications <http://guides.rubyonrails.org/debugging_rails_applications.html>

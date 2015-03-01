@@ -41,7 +41,7 @@ Ruby在方法查找和常量查找都依赖继承链，直接上图：
 
 * 对于类对象，eigenclass 的超类就是超类的 eigenclass; 对于非类对象, eigenclass的超类就是对象的类。
 
-  * 非类对象, 三角关系: `my_obj #my_obj MyClass`
+  * 非类对象(包括module), 三角关系: `my_obj #my_obj MyClass`
 
     `my_obj.singleton_class.instance_methods(false)` 能得到`my_obj`的单键方法(得不到MyClass中定义的实例方法), 可以说明对象的单键方法, 其实是对象单键类中定义的实例方法(因为对象是单件类的实例,所有可以调用其实例方法)
 

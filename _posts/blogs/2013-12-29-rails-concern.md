@@ -64,99 +64,137 @@ Rails Concern 主要是实现2个目的：
 
 2. 想解决模块间的依赖关系：
 
+   元编程第二版上的例子:
+
+      module SecondLevelModule
+        def self.included(base)
+          base.extend ClassMethods
+        end
+
+        def second_level_instance_method; 'ok'; end
+
+        module ClassMethods
+          def second_level_class_method; 'ok'; end
+        end
+      end
+
+      module FirstLevelModule
+        def self.included(base)
+          base.extend ClassMethods
+        end
+
+        def first_level_instance_method; 'ok'; end
+
+        module ClassMethods
+          def first_level_class_method; 'ok'; end
+        end
+
+        include SecondLevelModule
+      end
+
+      class BaseClass
+        include FirstLevelModule
+      end
+
+      BaseClass.new.first_level_instance_method # => "ok"
+      BaseClass.new.second_level_instance_method # => "ok" 继承链上的module, 实例方法自动继承
+
+      BaseClass.first_level_class_method # => "ok"
+      BaseClass.second_level_class_method # => NoMethodError 继承链上的module, 单件方法无法继承
+
    直接复制官网的例子(加上注释)：
 
-            module Foo
-              def self.included(base)
-                base.class_eval do
-                  def self.method_injected_by_foo
-                    ...
-                  end
+          module Foo
+            def self.included(base)
+              base.class_eval do
+                def self.method_injected_by_foo
+                  ...
                 end
               end
             end
-
-            module Bar
-              def self.included(base)
-                #关键是Bar对Host的扩展时，要求Host先扩展Foo，但是其实这个要求是Bar提出的，Host不应该知情
-                base.method_injected_by_foo
-              end
-            end
-
-            class Host
-              include Foo # We need to include this dependency for Bar
-              include Bar # Bar is the module that Host really needs
-            end
-
-           如果只是在Bar中扩展Foo是无法实现的，因为Foo中的base问题：
+          end
 
           module Bar
-            include Foo #Foo中base会是Bar，而不是期望的Host
             def self.included(base)
+              #关键是Bar对Host的扩展时，要求Host先扩展Foo，但是其实这个要求是Bar提出的，Host不应该知情
               base.method_injected_by_foo
             end
           end
 
           class Host
-            include Bar
+            include Foo # We need to include this dependency for Bar
+            include Bar # Bar is the module that Host really needs
           end
 
-          使用Concern解决
+         如果只是在Bar中扩展Foo是无法实现的，因为Foo中的base问题：
 
-          require 'active_support/concern'
+        module Bar
+          include Foo #Foo中base会是Bar，而不是期望的Host
+          def self.included(base)
+            base.method_injected_by_foo
+          end
+        end
 
-          module Foo
-            extend ActiveSupport::Concern    #步骤1
-            included do                      #步骤2
-              def self.method_injected_by_foo
-                ...
-              end
+        class Host
+          include Bar
+        end
+
+        使用Concern解决
+
+        require 'active_support/concern'
+
+        module Foo
+          extend ActiveSupport::Concern    #步骤1
+          included do                      #步骤2
+            def self.method_injected_by_foo
+              ...
             end
           end
+        end
 
-          module Bar
-            extend ActiveSupport::Concern    #步骤1
-            include Foo                      #步骤3
+        module Bar
+          extend ActiveSupport::Concern    #步骤1
+          include Foo                      #步骤3
 
-            included do                      #步骤2
-              self.method_injected_by_foo
-            end
+          included do                      #步骤2
+            self.method_injected_by_foo
           end
+        end
 
-          class Host
-            include Bar # works, Bar takes care now of its dependencies #步骤4
-          end
+        class Host
+          include Bar # works, Bar takes care now of its dependencies #步骤4
+        end
 
 ---
 
 源码分析
 
-          1   module Concern
-          2     def self.extended(base) #:nodoc:
-          3       base.instance_variable_set("@_dependencies", [])
-          4     end
-          5
-          6     def append_features(base)
-          7       if base.instance_variable_defined?("@_dependencies")
-          8         base.instance_variable_get("@_dependencies") << self
-          9         return false
-         10       else
-         11         return false if base < self
-         12         @_dependencies.each { |dep| base.send(:include, dep) }
-         13         super
-         14         base.extend const_get("ClassMethods") if const_defined?("ClassMethods")
-         15         base.class_eval(&@_included_block) if instance_variable_defined?("@_included_block")
-         16       end
-         17     end
-         18
-         19     def included(base = nil, &block)
-         20       if base.nil?
-         21         @_included_block = block
-         22       else
-         23         super
-         24       end
-         25     end
-         26   end
+      1   module Concern
+      2     def self.extended(base) #:nodoc:
+      3       base.instance_variable_set("@_dependencies", [])
+      4     end
+      5
+      6     def append_features(base)
+      7       if base.instance_variable_defined?("@_dependencies")
+      8         base.instance_variable_get("@_dependencies") << self
+      9         return false
+     10       else
+     11         return false if base < self
+     12         @_dependencies.each { |dep| base.send(:include, dep) }
+     13         super
+     14         base.extend const_get("ClassMethods") if const_defined?("ClassMethods")
+     15         base.class_eval(&@_included_block) if instance_variable_defined?("@_included_block")
+     16       end
+     17     end
+     18
+     19     def included(base = nil, &block)
+     20       if base.nil?
+     21         @_included_block = block
+     22       else
+     23         super
+     24       end
+     25     end
+     26   end
 
 对应着上面Foo Bar Host 的例子中4个步骤：
 

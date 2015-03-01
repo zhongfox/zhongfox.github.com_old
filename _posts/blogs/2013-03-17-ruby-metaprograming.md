@@ -106,6 +106,20 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
         } ());
 
+    **method 对象**
+
+    * `Method`
+
+      已经有绑定对象, 可以调用call, 可以调用`Method#unbind` 转化为 UnboundMethod
+
+      如`object.method :my_method` 绑定对象就是object
+
+    * `UnboundMethod`
+
+      没有绑定对象, 不可以call, 调用bind(对象)方法转化为Method
+
+      如`MyModule.instance_method(:my_method)`
+
 5. 寻找当前类，在代码任何地方，我们都需要留意当前的self是什么，但有的时候也需要留意当前class是什么，因为在使用关键字def定义方法时，是为某个class增加实例方法：
 
         class MyClass
@@ -457,6 +471,10 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
   binding 代表了代码执行的上下文环境
 
+  You can think of Binding objects as “purer” forms of closures than blocks because these objects contain a scope but don’t contain code
+
+  * 常量`TOPLEVEL_BINDING`代表顶层binding对象
+
   * `Kernel#binding`可以获得当前的Binding对象
 
   * `Proc#binding`可以获得代码块的闭包Binding对象
@@ -529,6 +547,50 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 8. `instance_eval` 代码块无参数, `instance_exec`有参数, 有些不常用的微妙区别
 
+9. a lambda is evaluated in the scope it’s defined in, while a Method is evaluated in the scope of its object
+
+10. 类宏`attr_*` 是 类 Module 提供的实例方法, 因此module也可以使用, 生成读写方法用于被其他class混入
+
+11. singleton_class
+
+   singleton classes have only a single instance (that’s where their name comes from), and they can’t be inherited.
+
+   More important, a singleton class is where an object’s Singleton Methods live:
+
+    def obj.my_singleton_method; end
+    singleton_class.instance_methods.grep(/my_/)
+    # => [:my_singleton_method]
+
+12. When you redefine a method, you don’t really change the method. Instead, you define a new method and attach an existing name to that new method. You can still call the old version of the method as long as you have another name that’s still attached to it
+
+13. eval(statements, @binding, file, line)
+
+  在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
+
+  参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
+
+
+  eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
+
+  **最佳实践**
+
+  you should probably avoid Strings of Code whenever you have an alternative.
+
+14. Hooks
+
+  Class#inherited
+
+  Module#included
+
+  Module#extended
+
+  Module#prepended
+
+  实例方法hooks: Module#method\_added Module#method\_removed Module#method\_undefined
+
+  单件方法hooks: BasicObject#singleton\_method\_added , singleton\_method\_removed , and singleton\_method\_undefined
+
+
 ---
 
 ### 特殊方法来源汇总
@@ -564,3 +626,11 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 * `instance_eval`
 
   `BasicObject.public_instance_methods(false).grep /eval/ => [:instance_eval]`
+
+* `class_eval`
+
+   `Module.instance_methods(false).grep /eval/ => [:module_eval, :class_eval]`
+
+* Object#define_singleton_method
+
+* Kernel#eval
