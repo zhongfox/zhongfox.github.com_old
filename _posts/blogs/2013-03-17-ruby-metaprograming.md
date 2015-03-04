@@ -517,11 +517,11 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 2. Kernel
 
-  class Object includes Kernel , so Kernel gets into every object’s ancestors chain.
+    class Object includes Kernel , so Kernel gets into every object’s ancestors chain.
 
-  Every line of Ruby is always executed inside an object(main)
+    Every line of Ruby is always executed inside an object(main)
 
-  So you can call the instance methods in Kernel from anywhere (比如print)
+    So you can call the instance methods in Kernel from anywhere (比如print)
 
 3. Every line of Ruby code is executed inside an object
 
@@ -529,21 +529,21 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 5. 复写`method_missing`
 
-  * `def method_missing(method, *args)`, 在此方法中`block_given?`可以得到原始方法是否有传代码块
-  * `def method_missing(message, *args, &block)` 需要调用block的话
+   * `def method_missing(method, *args)`, 在此方法中`block_given?`可以得到原始方法是否有传代码块
+   * `def method_missing(message, *args, &block)` 需要调用block的话
 
 6. remember to override `respond_to_missing?`  every time you override `method_missing`
 
 7. 想防止方法干扰, 白板类
 
-  * 继承 BasicObject `BasicObject.instance_methods(false)  => [:==, :equal?, :!, :!=, :instance_eval, :instance_exec, :__send__, :__id__]`
+   * 继承 BasicObject `BasicObject.instance_methods(false)  => [:==, :equal?, :!, :!=, :instance_eval, :instance_exec, :__send__, :__id__]`
 
-  * Object 没有新加实例方法, 全靠include Kernel `Object.instance_methods(false) => [] `
+   * Object 没有新加实例方法, 全靠include Kernel `Object.instance_methods(false) => [] `
 
-  * 移除方法:
+   * 移除方法:
 
-    * `Module#undef_method` 移除包括继承链上的方法
-    * `Module#remove_method` 只移除接收者的方法, 不会影响继承链的方法
+     * `Module#undef_method` 移除包括继承链上的方法
+     * `Module#remove_method` 只移除接收者的方法, 不会影响继承链的方法
 
 8. `instance_eval` 代码块无参数, `instance_exec`有参数, 有些不常用的微妙区别
 
@@ -553,42 +553,42 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 11. singleton_class
 
-   singleton classes have only a single instance (that’s where their name comes from), and they can’t be inherited.
+    singleton classes have only a single instance (that’s where their name comes from), and they can’t be inherited.
 
-   More important, a singleton class is where an object’s Singleton Methods live:
+    More important, a singleton class is where an object’s Singleton Methods live:
 
-    def obj.my_singleton_method; end
-    singleton_class.instance_methods.grep(/my_/)
-    # => [:my_singleton_method]
+        def obj.my_singleton_method; end
+        singleton_class.instance_methods.grep(/my_/)
+        # => [:my_singleton_method]
 
 12. When you redefine a method, you don’t really change the method. Instead, you define a new method and attach an existing name to that new method. You can still call the old version of the method as long as you have another name that’s still attached to it
 
 13. eval(statements, @binding, file, line)
 
-  在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
+   在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
 
-  参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
+   参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
 
 
-  eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
+   eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
 
-  **最佳实践**
+   **最佳实践**
 
-  you should probably avoid Strings of Code whenever you have an alternative.
+   you should probably avoid Strings of Code whenever you have an alternative.
 
 14. Hooks
 
-  Class#inherited
+    Class#inherited
 
-  Module#included
+    Module#included
 
-  Module#extended
+    Module#extended
 
-  Module#prepended
+    Module#prepended
 
-  实例方法hooks: Module#method\_added Module#method\_removed Module#method\_undefined
+    实例方法hooks: Module#method\_added Module#method\_removed Module#method\_undefined
 
-  单件方法hooks: BasicObject#singleton\_method\_added , singleton\_method\_removed , and singleton\_method\_undefined
+    单件方法hooks: BasicObject#singleton\_method\_added , singleton\_method\_removed , and singleton\_method\_undefined
 
 
 ---

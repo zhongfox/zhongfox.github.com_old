@@ -118,7 +118,6 @@ title: Rails 常见配置
 
 * `config.beginning_of_week`
 
-*
 
 ---
 
@@ -136,7 +135,7 @@ title: Rails 常见配置
 
 ---
 
-### 其他
+### 其他配置
 
 * `config.encoding`
 
@@ -152,4 +151,39 @@ title: Rails 常见配置
 
 * `config.active_record.record_timestamps` 控制是否自动维护字段` created_at/created_on updated_at/updated_on.`
 
+
+
+----
+
+### Initialization events
+
+存在5个初始化事件:
+
+1. `before_configuration` 当项目常量继承Rails::Application时, 会触发执行(此时config已存在)
+
+2. `before_initialize` 在initialization过程之前执行
+
+
+
+
+
+3. `to_prepare` 在所有initializers执行完之后, 在eager loading 和 middleware构建之前, 更重要的是, development模式下会在每次请求前执行一次, 在在production下只会在启动时执行一次
+
+4. `before_eager_load` 在eager loading发生之前执行(production)
+
+5. `after_initialize` 在initializers执行完之后
+
+---
+
+### initializer
+
+`Rails::Railtie#initializer` 用于注册initializer, 
+
+Initializers TODO
+
+----
+
+### 其他
+
+* 可以在`config`对象上添加自定义配置, 之后在代码中`Rails.configuration` 可以获得, 可以有嵌套层级
 
