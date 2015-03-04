@@ -565,16 +565,16 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 13. eval(statements, @binding, file, line)
 
-   在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
+    在irb里可以嵌套开启另一个irb, 还可以指定binding对象, 如`irb a_object` 新的irb会话是在`a_object`里的(类似instance_eval) irb的实现代码就死eval
 
-   参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
+    参数file, line用于: 当出eval的代码执行现异常时, 报错的stack中打印文件和行数
 
 
-   eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
+    eval always requires a string, `instance_eval` and `class_eval` can take either a String of Code or a block
 
-   **最佳实践**
+    **最佳实践**
 
-   you should probably avoid Strings of Code whenever you have an alternative.
+    you should probably avoid Strings of Code whenever you have an alternative.
 
 14. Hooks
 
