@@ -517,11 +517,11 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 
 2. Kernel
 
-    class Object includes Kernel , so Kernel gets into every object’s ancestors chain.
+   class Object includes Kernel , so Kernel gets into every object’s ancestors chain.
 
-    Every line of Ruby is always executed inside an object(main)
+   Every line of Ruby is always executed inside an object(main)
 
-    So you can call the instance methods in Kernel from anywhere (比如print)
+   So you can call the instance methods in Kernel from anywhere (比如print)
 
 3. Every line of Ruby code is executed inside an object
 
