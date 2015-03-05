@@ -156,10 +156,57 @@ title: Ruby设计模式学习
 
 ## 第十章 通过代理来到对象面前
 
+代理管理对主题的访问, 系列模式
 
+应用场景:
 
+* 保护代理: 控制对象访问, 方便将控制逻辑和核心逻辑分离, 也可以切换控制逻辑
+* 远程代理: 提供和位置无关的对象访问途径, 将非核心和核心逻辑分离. RPC系统工作原理
+* 虚拟代理: 延迟对象创建, 真正使用到时才进行创建真实对象
 
+<img width="65%" src="/assets/images/ruby_design_pattern/proxy.png" />
 
+* 代理对象(ServiceProxy)存在被代理对象(RealService, 也叫主题)的引用, 并且二者有同样的接口
+* ruby中解决`代理苦差事`(即代理要实现主题所有的相同接口): 采用method_missing + 消息发送(send)
+
+---
+
+## 第十一章 使用装饰者改善对象
+
+将功能叠加到基本对象上, 系列模式, 用于可累加的有通用接口的附加功能的动态组合
+
+<img width="65%" src="/assets/images/ruby_design_pattern/decorator.png" />
+
+* 对于多种功能组合的实现选择:
+  * 采用继承: 要求我们在设计时就考虑所有的组合可能
+  * 采用组合: 可以在运行时建立需要的组合功能
+
+* Component: 压缩模块和装饰者的共同父类, 定义了通用接口
+* ConcreteComponent(压缩模块): 实现了基本模块功能的对象, 是装饰链的起点
+* Decorator: 装饰者, 包含一个Component的引用, 在递归调用通用接口时, 可以进行自定义预处理
+* 压缩模块和装饰者的比较:
+  * 压缩模板实现了基本功能, 装饰者实现了扩展功能
+  * 都可以作为被装饰者
+* 减少Component中的模板方法: ActiveRecord中提供了delegate (TODO)
+* ruby中一种装饰方法的实现: 在对象的单件类中采用alias重写需要附加功能的方法; 另一种是对对象extend需要的扩展方法
+* `alias_method_chain old_method, new_funcion` 目的是将原方法增加新的装饰功能, 实现:
+  * 用户要创建`old_method_with_new_function`方法, 实现组合新功能, 新功能如果要使用旧功能采用`old_method_without_new_function`
+  * 将`old_method`改名为`old_method_without_new_function`
+  * 将`old_method_with_new_function` 改为 `old_method`
+
+---
+
+## 使用单例确保只有一个
+
+* 通用的实现方式是将初始化方法声明为private, 将单例存储与类变量中
+* ruby 提供的singleton模块可以方便实现单例模式, 包括: 创建类变量, 初始化单例, 类方法instance, 将new 设为私有
+* 单例模式细分为:
+  * 勤单例: 类加载时创建单例
+  * 惰单例: 类方法instance 初次调用时创建单例
+* 其他单例实现:
+  * 全局变量
+  * class作为单例
+  * module作为单例
 
 
 
