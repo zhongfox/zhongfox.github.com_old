@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, java]
+categories: [blog, ruby]
 tags : [design pattern, ruby, rails]
 title: Ruby设计模式学习
 ---
@@ -196,7 +196,7 @@ title: Ruby设计模式学习
 
 ---
 
-## 使用单例确保只有一个
+## 第十二章 使用单例确保只有一个
 
 * 通用的实现方式是将初始化方法声明为private, 将单例存储与类变量中
 * ruby 提供的singleton模块可以方便实现单例模式, 包括: 创建类变量, 初始化单例, 类方法instance, 将new 设为私有
