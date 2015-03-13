@@ -634,3 +634,5 @@ as time goes by ... 本笔记已经不局限于元编程，除了元编程笔记
 * Object#define_singleton_method
 
 * Kernel#eval
+
+* `private` `Kernel.private_methods(false).grep /private/   => [:private]`
