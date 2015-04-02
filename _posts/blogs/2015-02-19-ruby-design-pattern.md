@@ -208,6 +208,47 @@ title: Ruby设计模式学习
   * class作为单例
   * module作为单例
 
+---
+
+## 第十三章 使用工厂模式挑选正确的类
+
+应用场景: **把使用哪个类的决定**放到子类中, 通常用于**几个不同并相互关联的类进行选择**的场景
+
+<img width="65%" src="/assets/images/ruby_design_pattern/factory.png" />
+
+* 父类Creator(不变逻辑)和子类ConcreteCreator(变化逻辑), 类似模板方法模式(模板方法是创造product的factory_method方法)
+* ConcreteCreator和 Product子类是紧耦合
+* 参数化工厂方法用于实现一个工厂要生产多种类产品的情况
+* 参数化工厂创建产品的自由在Client, 不能确保多个产品共存冲突问题, 抽象工厂可以解决此问题
+
+<img width="65%" src="/assets/images/ruby_design_pattern/abstract_factory.png" />
+
+* 抽象工厂用于创建共存对象场景, 整个抽象工厂就是一个策略簇, 各个抽象工厂子类实现了对象创建与组合的策略
+
+* 工厂模式: 模板方法在创建对象上的应用
+* 抽象工厂: 策略方法在创建对象上的应用
+
+---
+
+## 第十四章 通过生成器简化对象创建
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
