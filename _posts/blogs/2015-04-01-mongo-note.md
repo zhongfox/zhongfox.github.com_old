@@ -84,7 +84,9 @@ title: mongo 笔记
 
   invisible to client applications, 不会接收到读,因此主要用于reporting and backups
 
-  cannot become primary, 可以配置投票
+  cannot become primary
+
+  可以配置投票
 
   db.isMaster() method does not display hidden members
 
