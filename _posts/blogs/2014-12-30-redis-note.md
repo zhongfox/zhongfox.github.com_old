@@ -97,3 +97,50 @@ title: Redis笔记
 
 * 只读模式由 redis.conf 文件中的 slave-read-only 选项控制， 也可以通过 CONFIG SET 命令来开启或关闭这个模式
 
+
+---
+
+## Key
+
+* 设置/取消过期时间
+
+  * `EXPIRE key seconds`
+  * `PEXPIRE key milliseconds`
+  * `EXPIREAT key timestamp`
+  * `PEXPIREAT key milliseconds-timestamp`
+
+  逆操作`PERSIST key`
+
+  生存时间可以通过使用 DEL 命令来删除整个 key 来移除，或者被 SET 和 GETSET 命令覆写(overwrite)，这意味着，如果一个命令只是修改(alter)一个带生存时间的 key 的值而不是用一个新的 key 值来代替(replace)它的话，那么生存时间不会被改变
+
+  如果使用 RENAME 对一个 key 进行改名，那么改名后的 key 的生存时间和改名前一样
+
+* 获得过期时间
+
+  * TTL key
+  * PTTL key
+
+* KEYS pattern
+
+  支持 `? [] *`
+
+---
+
+
+<table id='redis_table' class='table'>
+  <thead>
+   <th style="width: 20px"></th>
+   <th>String</th>
+   <th>Hash</th>
+   <th>List</th>
+   <th>Set</th>
+   <th>Zet</th>
+  </thead>
+  <tbody>
+  </tbody>
+<table>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/redis_tooltip.css">
+<script src='/assets/javascripts/jquery-2.1.3.min.js' type='text/javascript'></script>
+<script src='/assets/javascripts/bootstrap.min.js' type='text/javascript'></script>
+<script src='/assets/javascripts/redis_cmd.js' type='text/javascript'></script>
