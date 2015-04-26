@@ -2,8 +2,10 @@
 layout: link
 category : link
 link: http://www.cnblogs.com/wilber2013/p/4185643.html
-title: 从谷歌搜索更多
+title: Git Step by Step
 ---
+
+   <img src="/assets/images/git_cmd.jpg" />
 
 [Git Step by Step (1)：Git 简介](http://blog.jobbole.com/84644/)
 [Git Step by Step (2)：本地Repo](http://blog.jobbole.com/84646/)
