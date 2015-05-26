@@ -57,6 +57,8 @@ title: RVM Gem Bundle小记
 
       `~>` 将允许版本号的最后一位数字增长，而其他位数不增长
 
+   * gem install my-gem --source http://ruby.taobao.org/
+
 2. `gem uninstall gemname -v 版本号`
 
 3. 默认不安装文档：在用户主目录新建`.gemrc` 内容 ` gem: --no-ri --no-rdoc`
@@ -108,6 +110,8 @@ title: RVM Gem Bundle小记
     加载gem机制：
 
     `require 'gem name'` 时会把 `gem_dir/lib`(.gemspec的`require_paths`决定) 加人`$LOAD_PATH`, 然后执行`gem_dir/lib/gem_name.rb`
+
+12. `gem which gemname` Find the location of a library file you can require
 
 ### Bundle
 
