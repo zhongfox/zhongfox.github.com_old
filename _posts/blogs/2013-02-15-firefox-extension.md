@@ -222,6 +222,11 @@ overlay标签里的首层元素，如果带有id，那么这些元素是挂载�
 * Remote XUL Manager 用于加载远程（以及本地）的XUL， 这个功能是在firefox4以后被去除的，可以编辑白名单，本地调试必备
 
 
+---
+
+* Ubuntu 扩展位置: `/home/zhonghua/.mozilla/firefox/vhzziv5n.default/extensions`
+* Mac 扩展位置: `/home/zhonghua/.mozilla/firefox/vhzziv5n.default/extensions`
+
 ----
 
 ## 参考资料
