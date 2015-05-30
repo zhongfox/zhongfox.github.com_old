@@ -149,6 +149,12 @@ TODO
 
 ## 5. OBJECTS AND CLASSES
 
+### RObject
+
+**Every Ruby object is the combination of a class pointer and an array of instance variables.**
+
+所有ruby对象都是: 包含一个指向其class的指针, 以及一个存储实例变量的数组的集合
+
 <img width="25%" src="/assets/images/ruby_under_a_microscope/r_object.png" />
 
 * Ruby always refers to any value with a VALUE pointer
@@ -158,7 +164,8 @@ TODO
 * klass: 所属类的指针
 * numiv: 实例变量个数
 * ivptr: 实例变量数组的指针
-* Every Ruby object is the com- bination of a class pointer and an array of instance variables.
+* `iv_index_tbl`: 指向Rclass中的存储实例变量的映射关系, 是一个hash table, 用于解释ivptr内容
+
 
 ---
 
@@ -177,10 +184,89 @@ TODO
 
 * 简单值(integer, symbol, nil, true, false)没有对象结构, 直接存于VALUE
   * These VALUEs are not pointers at all; they’re values themselves
-  * 无klass指针, 在flag中表明klass标志位
+  * 无klass指针, 在flag中复制出标明klass标志位
 
+---
 
+<img width="80%" src="/assets/images/ruby_under_a_microscope/generic_iv_tbl.png" />
 
+* 对不使用RObject结构的对象, 实例变量都存在hash `generic_iv_tbl`中
+
+---
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/ivptr.png" />
+
+* ivptr 在ruby1.8里是hash, 存储实例变量的名称内容, 1.9 以及上改为了数组, 单纯存储实例变量值
+* ruby1.9及以上, ivptr 第一次分配7个, 当添加第8个时, ruby再分配3个, 这能说明为什么添加实例变量耗时的变化
+
+---
+
+### RClass
+
+**A Ruby class is a Ruby object that also contains method definitions, attribute names, a superclass pointer, and a constants table**
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/r_class.png" />
+
+* `klass pointer` 指向Class, 用于查找具体的类的(实例)方法, 如`new`
+* `flags`
+* `m_tbl` 类定义的实例方法hash, key是方法名或者id, 值是指向方法定义的pointer, 指向处包括已经编译好的方法YARV指令
+* `iv_index_tbl` 类的实例的实例变量映射hash, key 为实例变量名称, 值为在RObject中ivptr的索引
+
+**rb\_classext\_struct**
+
+* `super pointer` 指向父类, 用于查找继承链上的方法, 读写类变量
+* `iv_tbl` 存储类的实例变量, 以及类变量, 通过前缀`@` `@@`来区别
+* `const_tbl` 存储常量
+* `origin` 实现`Module#prepend feature`
+* `refined_class` 实现refinements
+* `allocator` 为新实例分配内存
+---
+
+**类变量**
+
+* 类变量读写都是沿着super向上查找, 而不会向下查找
+
+      class A
+        def self.a
+          @@x
+        end
+
+      end
+
+      class B < A
+        @@x = 5
+
+        def self.b
+          @@x
+        end
+      end
+
+      class C < B
+        def self.c
+          @@x
+        end
+      end
+
+      puts B.b #=> 5
+      puts C.c #=> 5
+      puts A.b #undefined method `b' for A:Class
+
+---
+
+**类方法**
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/metaclass.png" />
+
+* 每个普通类创建的同时, ruby会同时创建对应的单件类, 普通类的类方法是存于单件类(metaclass)中的`m_tbl`
+
+      > ObjectSpace.count_objects[:T_CLASS] v => 859
+         > class Mathematician; end
+          => nil
+      > ObjectSpace.count_objects[:T_CLASS] w => 861
+
+---
+
+## 6. METHOD LOOKUP AND CONSTANT LOOKUP
 
 
 ## 参考资料
