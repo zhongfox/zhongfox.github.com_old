@@ -372,6 +372,25 @@ TODO
 
 ### Constant Lookup
 
+#### Lexical Scope
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/lexical_scope.png" />
+
+* Ruby在创建RClass的同时, 也创建了对应的词法范围
+* 词法范围存在于YARV指令中
+* `nd_next` 指向上级词法范围
+* `nd_clss` 指向当前类/模块
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/constant_lookup.png" />
+
+* 先沿着词法范围向上查找(即Module.nesting)
+* (如果Module.nesting.first是class的话)然后沿着当前类的super向上查找
+
+---
+
+## 7. THE HASH TABLE: THE WORKHORSE OF RUBY INTERNALS
+
+
 ## 参考资料
 
 * <http://patshaughnessy.net/ruby-under-a-microscope>
