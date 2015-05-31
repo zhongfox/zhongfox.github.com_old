@@ -268,6 +268,109 @@ TODO
 
 ## 6. METHOD LOOKUP AND CONSTANT LOOKUP
 
+### Module
+
+**A Ruby module is a Ruby object that also contains method definitions, a superclass pointer, and a constants table**
+
+* Module 和 Class的区别
+  * Module实例 不能调用new
+  * Module实例没有superclass
+  * Module实例可以被include, Class实例不行
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/r_class_for_module.png" />
+
+* 和Rclass相比
+  * 去掉了`iv_index_tbl`, 没有实例, 因此不需要实例变量映射表
+  * 不需要`refined_class` `allocator`
+  * Module 保留了`super`, 但是外部不能调用.
+
+---
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/include_a_module_in_class.png" />
+
+* 被`include`的Module会被复制一份, (猜测应该和super相关, 因为Module的super要被改变, 但是Module可以被多个target include)
+  被复制的Module 的`m_tbl`指向原来Module的方法表, 因此方法后续可以动态添加
+
+* `inlucde` 改变了super的指向
+* Ruby implements module inclusion using class inheritance. Essentially, there is no difference between including a module and specifying a superclass
+* 可以通过多个include实现类似多重继承的功能, 但是内部ruby还是维护的单链super继承
+* ruby 方法查找逻辑: terate through the superclass linked list until it finds the class or module that contains the target method
+
+---
+
+### The Global Method Cache
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/g_m_cache.png" />
+
+* 出于时间效率考虑, ruby会缓存调用过的方法查找结果, 类似一个hash, key为调用对象的`class#method`, 值为`defined_class#method`
+
+### The Inline Method Cache
+
+* ruby 也会把方法查找结果缓存于YARV指令中
+
+      # ruby代码
+      10.times do... end
+
+      # 原始YARV
+      putobject 10
+      send          <callinfo!mid:times, argc:0,
+                    block:block in <compiled>>
+      # 缓存结果
+      putobject 10
+      send        ￼￼Integer#times
+      ￼
+* 以下动作会造成方法缓存的清除:
+  * create or remove (undefine) a method
+  * include a module into a class
+  * refinements
+  * 其他可能的元编程技术
+
+* clearing the cache happens quite frequently in Ruby. The global and inline method caches might remain valid for only a short time
+
+---
+
+### Module#prepend 实现
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/prepend_module_in_class.png" />
+
+* 首先ruby把prepend按照include实现, 将被prepend的Module插到target的super
+* 然后ruby复制target, 作为origin插到prepend的super, target的origin指针指向复制的origin
+* 最后ruby把所有target定义的方法, 移动到origin中去
+
+---
+
+### Classes Don’t See Submodules Included Later
+
+    module A
+      def a
+        puts 'a'
+      end
+    end
+
+    class B
+      include A
+    end
+
+    B.new.a  # 'a'
+
+    module C
+      def c
+        puts 'c'
+      end
+    end
+
+    module A
+      include C
+    end
+
+    B.new.a  # 'a'
+    B.new.c  # undefined method `c' for #<B:0x000001019285b8>
+
+  include 的机制是复制Module, 被复制的Module和原始的Module的super后续可以被改变(inlcude其他Module), 从而变得互不相同. 
+
+---
+
+### Constant Lookup
 
 ## 参考资料
 
