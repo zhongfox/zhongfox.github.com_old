@@ -90,7 +90,7 @@ tagline: What seems complex from a distance is often quite simple when you look 
   * `NODE_CALL` 代表方法调用
   * `NODE_ITER`: literal string
   * `NODE_DVAR`: block parameter
-  * `NODE_LIT`: 
+  * `NODE_LIT`:
 
 * `NODE_FCALL` `NODE_CALL` 都会被编译为以下YARV指令:
 
@@ -220,6 +220,7 @@ TODO
 * `origin` 实现`Module#prepend feature`
 * `refined_class` 实现refinements
 * `allocator` 为新实例分配内存
+
 ---
 
 **类变量**
@@ -331,7 +332,7 @@ TODO
 
 ### Module#prepend 实现
 
-<img width="80%" src="/assets/images/ruby_under_a_microscope/prepend_module_in_class.png" />
+<img width="50%" src="/assets/images/ruby_under_a_microscope/prepend_module_in_class.png" />
 
 * 首先ruby把prepend按照include实现, 将被prepend的Module插到target的super
 * 然后ruby复制target, 作为origin插到prepend的super, target的origin指针指向复制的origin
@@ -366,7 +367,7 @@ TODO
     B.new.a  # 'a'
     B.new.c  # undefined method `c' for #<B:0x000001019285b8>
 
-  include 的机制是复制Module, 被复制的Module和原始的Module的super后续可以被改变(inlcude其他Module), 从而变得互不相同. 
+  include 的机制是复制Module, 被复制的Module和原始的Module的super后续可以被改变(inlcude其他Module), 从而变得互不相同.
 
 ---
 
@@ -374,14 +375,14 @@ TODO
 
 #### Lexical Scope
 
-<img width="80%" src="/assets/images/ruby_under_a_microscope/lexical_scope.png" />
+<img width="60%" src="/assets/images/ruby_under_a_microscope/lexical_scope.png" />
 
 * Ruby在创建RClass的同时, 也创建了对应的词法范围
 * 词法范围存在于YARV指令中
 * `nd_next` 指向上级词法范围
 * `nd_clss` 指向当前类/模块
 
-<img width="80%" src="/assets/images/ruby_under_a_microscope/constant_lookup.png" />
+<img width="50%" src="/assets/images/ruby_under_a_microscope/constant_lookup.png" />
 
 * 先沿着词法范围向上查找(即Module.nesting)
 * (如果Module.nesting.first是class的话)然后沿着当前类的super向上查找
@@ -389,6 +390,71 @@ TODO
 ---
 
 ## 7. THE HASH TABLE: THE WORKHORSE OF RUBY INTERNALS
+
+The speed and flexibility of hash tables allow Ruby to use them in many ways
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/rhash.png" />
+
+* `type`
+* `num_bins` bin 大小
+* `num_entries` 存储键值对个数
+* `bins` bin指针, 1.9及其以下, 会为新hash创建11个空bin
+* hash读写时bin查找算法: `internal_hash_function(key) % num_bins`
+
+  Ruby’s hash values are basically ran- dom integers for any given input data
+
+  even similar values have very different hash values
+
+* bins 中各个元素是存储的`st_table_entry`链表, 链表中存储的是key的hash值相同的键值对, 对于hash相同的key, 查找需要遍历链表
+
+
+  对于同一个bin链表中key的比较, 对于 integers or symbols, which are typically used as hash keys, this is a simple numerical comparison.
+
+  其他对象, ruby使用`eql?`来判断key是否相等
+
+* Ruby can find and return a value from a hash containing over 1 million elements just as fast as it can return one from a small hash
+
+### Hash 冲突
+
+* 多个hash值相同的键值对存于同一个bin的链表里, 称为Hash冲突
+* 当hash密度超过5, ruby将会添加更多的bins, 然后Rehash
+
+* ruby 1.8
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/ruby_1_8_hash.png" />
+
+* ruby 2.0
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/ruby_2_0_hash.png" />
+
+* ruby rehash 阈值都是素数, 能更平均的分散key: 8 + 3, 16 + 3, 32 + 5, 64 + 3, 128 + 3, 256 + 27, 512 + 9 ....
+* 源码片段:
+
+      #define ST_DEFAULT_MAX_DENSITY 5 出发rehash的密度阈值
+
+      #ruby 1.8, 当num_entries是67时, num_bins 是11时, 触发rehash, num_bins将增长为19
+      if (table->num_entries/(table->num_bins) > ST_DEFAULT_MAX_DENSITY) { rehash(table);
+
+      #ruby 1.9, 2.0,当num_entries是57时, num_bins是11, 即触发rehash (??应该是56啊, 书上问啥说是57??)
+      if ((table)->num_entries > ST_DEFAULT_MAX_DENSITY * (table)->num_bins) { rehash(table);
+
+### Hash 值计算
+
+* 调用Object#hash, 可以在子类中覆盖
+* Object#hash 使用RValue的内存地址, 传入C函数, 获得一个随机值.
+* 特定的, 对于strings and arrays, ruby会遍历他们的元素, 计算一个累积的hash值, 用以保证对不同对象, 相同内容的string或者array,得到相同的hash值
+* 特定的, 对于Integers and symbols, ruby直接把其值传入C hash函数
+* ruby 1.9, 2.0 C hash函数采用MurmurHash, 初始化时需要一个随机seed, 因此同一ruby进程的同一对象hash值始终相同, 但是不同进程的对象hash值将会变化
+
+### ruby 2.0 packed hash
+
+<img width="60%" src="/assets/images/ruby_under_a_microscope/packed_hash.png" />
+
+* ruby 2.0 对于hash键值对小于等于6个的, 不使用bin, 直接将键值对存于entries, 查找是遍历查找
+
+  Ruby iterates through the array and calls the eql? method on each key value if the values are objects. For simple values, such as integers or symbols, Ruby just uses a numerical comparison
+
+* 键值对大于6后, ruby 2.0会使用之前的bin方式, 这也说明ruby 2.0 为什么第七个插入较慢.
 
 
 ## 参考资料
