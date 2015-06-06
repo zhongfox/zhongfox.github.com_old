@@ -157,7 +157,7 @@ TODO
 
 <img width="25%" src="/assets/images/ruby_under_a_microscope/r_object.png" />
 
-* Ruby always refers to any value with a VALUE pointer
+* Ruby always refers to any value with a VALUE pointer, VALUE 是一个指针类型
 
   对象inspect结果如`#<Mathematician:0x007fbd738608c0>` 16进制数组表示VALUE指针地址, 每个对象不相同
 
@@ -456,6 +456,96 @@ The speed and flexibility of hash tables allow Ruby to use them in many ways
 
 * 键值对大于6后, ruby 2.0会使用之前的bin方式, 这也说明ruby 2.0 为什么第七个插入较慢.
 
+---
+
+### 12. GARBAGE COLLECTION IN MRI, JRUBY, AND RUBINIUS
+
+* MRI: mark-and-sweep GC 标记清除
+* JRuby and Rubinius: copying GC 复制
+* MRI 2.1: generational GC 分代
+
+---
+
+#### 标记清除
+
+**GC 的作用**
+
+* 为新对象分配内存
+* 标识哪些对象不再使用
+* 回收不再使用的对象内存
+
+**free list**
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/first_memory_block_token.png" />
+
+* MRI 维护多条`free list`, 每条大概16k (24 lists of 407 objects each)
+* 每个内存块存储一个RVALUE, 总共可以存储大概10000个RVALUE, MRI 逐条遍历free list, 直到所有list用完
+* RVALUE 内部使用union使之能包括所有MRI对象的数据结构, 如 RArray, RString, RRegexp等 
+
+  In other words, each square could be any kind of Ruby object or an instance of a custom Ruby class (via RObject).
+
+  The contents of each object, such as the characters in a string, are often stored in a separate memory location.
+
+**Marking**
+
+<img width="30%" src="/assets/images/ruby_under_a_microscope/mri_gc_marking.png" />
+
+free list如果满了, GC将导致用户程序停止, 进行标记清除, 如果没有垃圾对象可以清除重用, ruby 将向系统申请新的内存, 如果无内存可用, 将抛出异常out-of-memory
+
+**Bitmap Marking**
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/mri_gc_bitmap_marking.png" />
+
+(ruby 1.9 之后)free bitmap 独立于对象结构内存之外存储, 原因是避免GC影响进程复制时的`copy-on-write`优化
+
+**Sweep**
+
+<img width="80%" src="/assets/images/ruby_under_a_microscope/mri_gc_sweeping.png" />
+
+**RVALUE**
+
+<img width="40%" src="/assets/images/ruby_under_a_microscope/rvalue.png" />
+
+**Lazy Sweeping**
+
+从ruby1.9.3起, ruby只清除一定量的垃圾对象到free list, (标记还是全量), 使得程序因为GC而造成的单次停顿变短, GC 之后会分期完成清除, 所有总的清除消耗不变
+
+**标记清除的缺点**
+
+* 程序因为GC运行而停顿
+* 时间性能: 标记需要遍历所有对象, 清除需要遍历所有垃圾对象
+* 所有对象内存大小需要一致(RVALUE)
+
+---
+
+    ObjectSpace.count_objects
+     => {:TOTAL=>92114,     # 所有free list 总大小
+       :FREE=>431,          # 空闲空间大小, 包括被标记为垃圾对象的空间, 不管是否清除
+                            # 每创建一个RObject, 还要创建6个其他对象, 因此占用7个free
+       :T_OBJECT=>5809,     # 当前存活的RObject 和垃圾对象个数
+       :T_CLASS=>884, 
+       :T_MODULE=>31,
+       :T_FLOAT=>4,
+       :T_STRING=>58905, 
+       :T_REGEXP=>185,
+       :T_ARRAY=>14668, 
+       :T_HASH=>435, 
+       :T_STRUCT=>2,
+       :T_BIGNUM=>2, 
+       :T_FILE=>10, 
+       :T_DATA=>1553,
+       :T_MATCH=>707,
+       :T_COMPLEX=>1,
+       :T_NODE=>8450,
+       :T_ICLASS=>37
+     }
+
+* 当遇到ruby2 lazy sweep时, FREE大量增长(全量标记), `T_OBJECT` 清除一个, (新对象)马上占用一个
+* `GC.start` 可以出发全量sweep, FREE大量增长, `T_OBJECT`大量下降
+
+
+
+---
 
 ## 参考资料
 
