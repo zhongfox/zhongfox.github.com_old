@@ -1,2 +1,2 @@
 
-Welcome my blog: <http://zhongfox.github.io>
+Welcome to my blog: <http://zhongfox.github.io>
