@@ -458,7 +458,7 @@ The speed and flexibility of hash tables allow Ruby to use them in many ways
 
 ---
 
-### 12. GARBAGE COLLECTION IN MRI, JRUBY, AND RUBINIUS
+## 12. GARBAGE COLLECTION IN MRI, JRUBY, AND RUBINIUS
 
 * MRI: mark-and-sweep GC 标记清除
 * JRuby and Rubinius: copying GC 复制
@@ -480,7 +480,7 @@ The speed and flexibility of hash tables allow Ruby to use them in many ways
 
 * MRI 维护多条`free list`, 每条大概16k (24 lists of 407 objects each)
 * 每个内存块存储一个RVALUE, 总共可以存储大概10000个RVALUE, MRI 逐条遍历free list, 直到所有list用完
-* RVALUE 内部使用union使之能包括所有MRI对象的数据结构, 如 RArray, RString, RRegexp等 
+* RVALUE 内部使用union使之能包括所有MRI对象的数据结构, 如 RArray, RString, RRegexp等
 
   In other words, each square could be any kind of Ruby object or an instance of a custom Ruby class (via RObject).
 
@@ -523,16 +523,16 @@ free list如果满了, GC将导致用户程序停止, 进行标记清除, 如果
        :FREE=>431,          # 空闲空间大小, 包括被标记为垃圾对象的空间, 不管是否清除
                             # 每创建一个RObject, 还要创建6个其他对象, 因此占用7个free
        :T_OBJECT=>5809,     # 当前存活的RObject 和垃圾对象个数
-       :T_CLASS=>884, 
+       :T_CLASS=>884,
        :T_MODULE=>31,
        :T_FLOAT=>4,
-       :T_STRING=>58905, 
+       :T_STRING=>58905,
        :T_REGEXP=>185,
-       :T_ARRAY=>14668, 
-       :T_HASH=>435, 
+       :T_ARRAY=>14668,
+       :T_HASH=>435,
        :T_STRUCT=>2,
-       :T_BIGNUM=>2, 
-       :T_FILE=>10, 
+       :T_BIGNUM=>2,
+       :T_FILE=>10,
        :T_DATA=>1553,
        :T_MATCH=>707,
        :T_COMPLEX=>1,
@@ -542,6 +542,119 @@ free list如果满了, GC将导致用户程序停止, 进行标记清除, 如果
 
 * 当遇到ruby2 lazy sweep时, FREE大量增长(全量标记), `T_OBJECT` 清除一个, (新对象)马上占用一个
 * `GC.start` 可以出发全量sweep, FREE大量增长, `T_OBJECT`大量下降
+
+* `GC::Profiler.enable` 开启GC报告
+* `GC::Profiler.report` 展示GC报告
+
+  * `Invoke time` GC 启动时间点, 从ruby脚本执行开始算
+  * `Use size` GC结束后, 存活对象占用的堆内存
+  * `Total size` GC结束后, 存活对象和free list占用的堆内存
+  * `Total object` 存活对象和free list中的所有对象个数
+  * `GC Time` 本次GC耗时
+
+* 随着存活对象增加, ruby会倍增`Total size`, 因为GC是在free list满了触发的, 因此下次GC的启动间隔将会指数增长
+
+  也就是随着存活对象的增加, `Invoke time` 时间间隔, `Use size`, `Total size` `Total object` `GC Time` 都将成倍增长
+
+  the time required to perform a garbage collection increases lin- early as a function of the total heap size
+
+---
+
+### Garbage Collection in JRuby and Rubinius
+
+* JRuby/Rubinius GC 特点
+
+  * 不使用free list, 使用 copying garbage collection
+  * generational garbage collection
+  * concurrent garbage collection
+
+* Mruby 2.1 增加了 generational 和 concurrent GC 特性
+
+### Copying Garbage Collection
+
+* Bump Allocation
+
+  <img width="60%" src="/assets/images/ruby_under_a_microscope/gc_bump_allocation.png" />
+
+  * 在连续的大内存区块进行对象内存分配
+  * 有一个指向下次分配起始地址的指针
+  * 对象占用内存大小可以不一致
+
+  优势:
+  * 简单
+  * 快
+  * 内存局部化(对缓存友好)
+  * 对象只分配相应的大小
+
+* The Semi-Space Algorithm
+
+  <img width="60%" src="/assets/images/ruby_under_a_microscope/gc_semi_space_algorithm.png" />
+
+  * 维护`From-Space` 和 `To-Space`
+  * 当`From-Space`满了, GC开始
+  * 遍历`From-Space`, 标记存活对象
+  * 复制`From-Space` 中的存活对象到`To-Space`, 并连续存储
+  * `From-Space` 和 `To-Space` 角色反转
+
+  优势: 内存友好
+
+  劣势: 有时效率低(存活对象多次分配内存), 实现复杂(内部需要更新对象引用地址)
+
+* The Eden Heap
+
+  * 除了`From-Space` 和 `To-Space`, 增加`Eden heap`
+  * 每次GC, 把`From-Space` `Eden heap`中的存活对象复制到`To-Space`, 然后From和To反转
+  * 每次GC后, `Eden heap` 都是空的, 老对象都在`From-Space`
+  * 每次创建新对象, 都放到`Eden heap`
+
+### Generational Garbage Collection
+
+<img width="60%" src="/assets/images/ruby_under_a_microscope/gc_promote_old_objects.png" />
+
+* 分类:
+
+  * mature
+  * young
+
+
+* 理论: weak generational hypothesis
+
+  新对象存活期较短, 老对象存活期较长
+
+* 分代依据: 存活对象经历的GC次数
+
+* 对象晋升:
+
+  当young对象GC次数超过 `new object lifetime` 后, 将晋升为mature对象
+
+* 不同的分类将有不同的GC机制
+
+  * young: **minor collection**
+
+    The Semi-Space Algorithm
+
+    young对象存活率低, 当Eden Heap满了, 需要GC时, Eden Heap复制的内容较少
+
+  * mature: **major collection**
+
+    mature 对内存满了后, 会触发GC, 因为mature对象较少, mature的GC频率较少
+
+* JVM运行用户设置 young, mature堆内存大小, 同时还维护了第三个分类`permanent`
+* Rubinius同样维护了第三个分类, 存放存活周期非常长的对象, 使用标准的标记清除
+
+* MRI Ruby 2.1 引入和JRuby/Rubinius类似的分代GC
+
+* mature 引用 young 问题
+
+  背景: 因为minor GC 只标记young对象, 不遍历mature对象
+
+  问题: mature 引用 young对象如何标记为存活?
+
+  <img width="60%" src="/assets/images/ruby_under_a_microscope/generational_gc_problem.png" />
+
+  Mruby 解决方案: **Write Barriers**
+
+  跟踪mature 引用 young对象, 对于此种mature对象, 作为minor GC的一个root就行标记
 
 
 
