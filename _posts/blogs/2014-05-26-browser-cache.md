@@ -34,6 +34,8 @@ title: 浏览器缓存
 
 ### 如何请求页面
 
+windows:
+
    * Ctrl + F5:
 
      强制刷新: `Last-Modified & Expires`无效
@@ -46,3 +48,12 @@ title: 浏览器缓存
 
      `Last-Modified & Expires`有效
 
+Mac:
+
+  * command + shift + R:
+
+    强制刷新, 会发送 `Cache-Control:no-cache`
+
+  * command + R:
+
+    一般刷新
