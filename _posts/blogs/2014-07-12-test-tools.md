@@ -117,6 +117,69 @@ NetCat，在网络工具中有“瑞士军刀”美誉
 
 ---
 
+## netstat
+
+* Active Internet connections(有源TCP连接)
+
+  * Proto 协议
+  * Recv-Q 接收队列
+  * Send-Q 发送队列
+  * Local Address 本地地址
+  * Foreign Address 远端地址
+  * (state) 状态(TODO)
+
+* Active UNIX domain sockets(有源Unix域套接口, 只能用于本机通信)
+
+### 参数
+
+* -a (all) 显示所有状态，包括LISTEN(默认不显示LISTEN)
+* -t (tcp)仅显示tcp相关选项
+* -u (udp)仅显示udp相关选项
+* -x socket
+* -n 拒绝显示别名，能显示数字的全部转化成数字 (加上会快很多)
+
+### 实例
+
+* 查看端口tcp连接:
+
+  `netstat -nat | grep 9530`
+
+  `netstat -nat | grep 9530 |  wc -l`
+
+---
+
+## lsof（list open files)
+
+### 输出
+
+* COMMAND 进程的名称
+* PID
+* USER
+* FD 文件描述符
+  * cwd: 程序的当前工作目录, 应用程序启动的目录
+  * txt: 类型的文件是程序代码，如应用程序二进制文件本身或共享库
+  * 数字+标识: 如`10u` R 只读, w 只写, u 读写
+* TYPE
+  * REG: 普通文件 
+  * DIR: 目录
+  * CHR: 字符设备
+  * BLK: 块设备
+  * UNIX:
+  * FIFO:
+  * IPv4:
+* DEVICE: 指定磁盘的名称
+* SIZE: 文件的大小
+* NODE: 索引节点
+* NAME: 打开文件的确切名称
+
+### 使用实例
+
+* lsof -i 用以显示符合条件的进程情况
+
+  -i[46] [protocol][@hostname|hostaddr][:service|port]
+
+---
+
 ## 其他
 
 * wget

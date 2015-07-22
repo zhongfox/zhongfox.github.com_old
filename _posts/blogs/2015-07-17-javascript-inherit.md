@@ -64,5 +64,6 @@ title: javascript 继承
 ## 参考资料
 
 * <http://blog.oyanglul.us/javascript/understand-prototype.html>
+* <http://blog.rainy.im/2015/07/20/prototype-chain-in-js/>
 * <http://yijiebuyi.com/blog/ea4b2a30f73596a08ce85211626b68e5.html>
 * <http://my.oschina.net/antianlu/blog/262595>

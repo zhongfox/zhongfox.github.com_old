@@ -141,15 +141,15 @@ title: Linux 笔记
 
   `-p`打包时保留原文件属性
 
-  `-C 目录` 解包是指定目录，默认在当前目录
+  `-C 目录` 解包是指定目录(目录需要存在, 不会自动创建)，默认在当前目录
 
   `tar -cjf dir.tar.bz dir1 dir2`  用bzip2 打包压缩
 
-  `tar -xjf dir.tar.bz` 解包到dir目录(创建)
+  `tar -xjf dir.tar.bz` 解包到当前目录, 压缩文件保留
 
   `tar -czf dir.tar.gz dir1 dir2`  用gzip 打包压缩
 
-  `tar -xzf dir.tar.gz` 解包到dir目录(创建)
+  `tar -xzf dir.tar.gz` 解包到当前目录, 压缩文件保留
 
 * shell
 
@@ -345,6 +345,20 @@ title: Linux 笔记
 
   * linux 按照cpu排序`P` 按照内存排序 `M`
   * mac 按照cpu排序`ocup` 按照内存排序 `ovsize`
+
+  进程信息:
+
+  * VIRT：virtual memory usage 虚拟内存
+
+    包括RES+SWAP ?
+
+  * RES：resident memory usage 常驻内存
+
+    包括 SHR
+
+    %MEM 以此排序
+
+  * SHR：shared memory 共享内存
 
 * pstree -u 同时列出进程所属账号 -p 同时列出pid
 
