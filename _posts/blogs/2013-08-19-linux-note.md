@@ -78,7 +78,7 @@ title: Linux 笔记
 
 * 查找
 
-  * `which -a 命令` 在$PATH中查找命令，包括别名，但是找不到bash内置命令如cd, -a 列出$PATH中说有的，而不是第一个
+  * `which -a 命令` 在$PATH中查找命令，包括别名，但是找不到bash内置命令如cd, -a 列出$PATH中所有的，而不是第一个
 
   * `type -a 命令` shell内置命令，查找别名，$PATH和shell内置
 
