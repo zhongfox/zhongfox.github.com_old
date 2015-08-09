@@ -224,8 +224,8 @@ overlay标签里的首层元素，如果带有id，那么这些元素是挂载�
 
 ---
 
-* Ubuntu 扩展位置: `/home/zhonghua/.mozilla/firefox/vhzziv5n.default/extensions`
-* Mac 扩展位置: `/home/zhonghua/.mozilla/firefox/vhzziv5n.default/extensions`
+* Ubuntu 扩展位置: `~/.mozilla/firefox/vhzziv5n.default/extensions`
+* Mac 扩展位置: `~/Library/Application Support/Firefox/Profiles/iwn5v7ri.default/extensions`
 
 ----
 
