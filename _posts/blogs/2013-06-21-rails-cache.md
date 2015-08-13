@@ -17,7 +17,7 @@ title: Rails 缓存
 
 页面缓存始终是用文件系统，原理：
 
-0. 在ctroller中 `caches_page :index`
+0. 在controller中 `caches_page :index`
 
 1. 在第一次访问该action时，在after filter中，生成一个静态页面，忽略参数
 
