@@ -30,3 +30,11 @@ title: git 检测并删除大文件
 * Purging a file or directory from history
 
   `git filter-branch --prune-empty --index-filter 'git rm -rf --cached --ignore-unmatch MY-BIG-DIRECTORY-OR-FILE' --tag-name-filter cat -- --all`
+
+* 最后还要推送:
+
+  `git push origin --tags --force`
+
+  `git push origin --all --force`
+
+* 想知道是这个文件是哪个commit: `git log --all -p -- doc/all.rar`
