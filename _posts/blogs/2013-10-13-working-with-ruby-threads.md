@@ -8,6 +8,8 @@ title: 《Working With Ruby Threads》读书笔记
 
 ### Chapter 0 Introduction
 
+* just adding more CPU cores doesn't necessarily make all your code run faster. Your code must be architected to take advantage of multiple CPU cores using some concurrency mechanism. If you're not doing this, you might as well be running on ten-year-old hardware
+
 * `||=` 在ruby中是非线程安全的
 
 * 进程可以实现并发，为什么还要线程呢？
