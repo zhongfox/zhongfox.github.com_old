@@ -128,6 +128,12 @@ LC和thread对比:
 
   EventMachine 可以轻松的用ruby 编写高可伸缩性的网络服务
 
+* 高效的 IO 是 eventmachine 的全部意义所在
+
+  一定要理解这一点。当你使用 eventmachine 进行网络 IO 编程时，你要么直接使用 eventmachine，要么是通过 eventmachine 钩子扩展的某种 lib (在 github 上你会找到很多的这种例子，很好识别，因为他们大多以em- 开头命名)
+
+  如果你选择不当就会阻塞 reactor，就是在 IO 操作结束前，eventmachine 将不会触发任何事件
+
 ### 使用
 
 
@@ -208,5 +214,6 @@ LC和thread对比:
 
 * <http://www.zhihu.com/question/19732473>
 * <http://www.2cto.com/kf/201504/395318.html>
+* <https://github.com/eventmachine/eventmachine/wiki/>
 * <http://blog.chinaunix.net/uid-298861-id-3251139.html>
 * <https://www.igvita.com/2008/05/27/ruby-eventmachine-the-speed-demon/>
