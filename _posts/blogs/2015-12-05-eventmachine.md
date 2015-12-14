@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, ruby]
-tags : [eventmachine, ruby, io, actor]
+tags : [eventmachine, ruby, io, reactor]
 title: EventMachine
 ---
 {% include JB/setup %}
