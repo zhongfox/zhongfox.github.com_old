@@ -2,7 +2,7 @@
 layout: post
 categories: [blog, server]
 tags : [cache, redis]
-title: Kafka
+title: Codis
 ---
 {% include JB/setup %}
 
