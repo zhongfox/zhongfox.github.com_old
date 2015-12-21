@@ -116,7 +116,7 @@ title: 学习KOA 之前需要知道的
 
 * co 函数库其实就是将两种自动执行器（Thunk 函数和 Promise 对象），包装成一个库。
 
-  使用 co 的前提条件是，Generator 函数的 yield 命令后面，只能是 Thunk 函数或 Promise 对象
+  使用 co 的前提条件是，Generator 函数的 yield 命令后面，只能是 Thunk 函数或 Promise 对象, 其他的会导致报错
 
 * Co v4 版本之前返回thunk, v4以后返回promise, 未来可能不支持thunk
 
@@ -131,7 +131,7 @@ title: 学习KOA 之前需要知道的
 
 * API
 
-  * `co(fn*).then( val => )`
+  * `co(fn*).then( val => )` co()返回一个promise, `then(val)`中的val是`fn*`中的return值
   * `var fn = co.wrap(fn*)` 把generator转换为Promise
 
 
