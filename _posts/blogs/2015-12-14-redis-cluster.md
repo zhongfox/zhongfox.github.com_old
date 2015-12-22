@@ -13,8 +13,8 @@ title: RedisCluster
 
 * 高性能和线性可扩展性: 最多可达1000个node, 无代理, 异步复制
 * Acceptable degree of write safety: 存在极少的写丢失情况
-* 高可用: 
-  
+* 高可用:
+
   * 多数master存活+其他master有存活的slave
   * replicas migration: slave 借用
 
@@ -142,6 +142,24 @@ slot 分配相关命令: `CLUSTER ADDSLOTS|DELSLOTS|SETSLOT`, 与此同时, 节�
 * 客户端可以通过`CLUSTER SLOTS `获得slot映射
 * 但该命令不保证覆盖了所有的slots, 比如出现配置有误的情况, 此时, 如果出现了用户端访问这些没有分配的slot, client应该返回错误
 
+### 多键操作
+
+借助`hash tags`, 可以实现多建操作
+
+不过如果在重新分片过程中, 原本属于一个solt的key分布于源节点和目的节点, 导致多键操作不可用, 此时集群会返回错误`TRYAGAIN`, 此时客户端可以在一段时间后重试, 或者上报错误
+
+### 使用slave扩展集群读能力
+
+默认slave提供读, 可以通过`READONLY`命令开启slave可读, 不过客户端要能接受读取陈旧数据的结果(脏读)
+
+开启READONLY后, 以下情况slave会返回跳转
+
+1. slot不是slave对应的master负责
+2. 集群重新配置过程中, 如重新分片
+
+此情况下, client应该更新solt映射配置
+
+命令`READWRITE`可以取消slave可读
 
 
 ---
@@ -153,6 +171,157 @@ slot 分配相关命令: `CLUSTER ADDSLOTS|DELSLOTS|SETSLOT`, 与此同时, 节�
 
   不过， 如果客户端可以将键和节点之间的映射信息保存起来， 可以有效地减少可能出现的转向次数， 籍此提升命令执行的效率
 
+---
+
+## 容错
+
+### 心跳检测和流言消息
+
+心跳检测包:
+1. 发送 ping, 返回pong
+2. 节点也可以自主发送pong包, 用于配置广播, 而不用有回复包
+
+
+节点每秒会随机ping一部分其他节点
+
+不过, 节点会保证在`NODE_TIMEOUT/2`时间内对指定节点发送ping, 同时node也会在`NODE_TIMEOUT`结束前重连指定节点.
+
+所以, 如果`NODE_TIMEOUT`太小, 而集群较大, 心跳消息将会很多
+
+### 心跳包内容
+
+#### 心跳包组成:
+
+* header
+* 流言
+
+#### 心跳包header内容:
+
+* Node id
+* currentEpoch 和 configEpoch
+* 标志位: 主从标识, 以及其他标识位
+* hash solts位图
+* 发送node的base 端口(提供给client连接的端口)
+* 集群状态, 是发送节点的观点
+* 父节点id (如果是slave的话)
+
+#### 心跳包流言内容:
+
+包含发送者已知的其他node中的一部分 (数量和集群规模有关)
+
+node信息:
+
+* node id
+* ip, port
+* node 标识位
+
+此部分作用是进行失效检测, 以及节点发现
+
+### 失效检测
+
+失效检测用于识别, 对于**大部分master**来说, 不可达的master或者slave, 失效检测后, 将会进行slave提升. 如果slave提升失败(比如没有多余slave), 集群将设置错误标识, 并停止处理客户端请求.
+
+每个节点都对其他节点记录了一些表征存活状态的标志位:
+
+* PFAIL:
+
+  可能失败, 还没有确认的失败状态
+
+  集群中任一节点都可以标记其他任一节点的PFAIL
+
+  `NODE_TIMEOUT`内没有收到对应的pong
+
+* FAIL:
+
+  在一定时间内, 已经被大多数master确认的失败
+
+#### PFAIL升级为FAIL流程:
+
+* A 标记 B 为PFAIL
+* A 通过流言收集B的状态
+* 当在`NODE_TIMEOUT * FAIL_REPORT_VALIDITY_MULT`内, A收集到大多数master对B的标记都是PFAIL或者FAIL
+* A标记B为FAIL
+* A发送FAIL消息给其他可达的节点
+* FAIL消息会强制接收到消息的节点, 对B标记FAIL
+
+FAIL标记去除条件:
+
+* FAIL slave 变为可达, FAIL标记会去除, 因为之前没有发送过故障转移
+* FAIL master 但是没有负责任何slot的节点, 变为可达, FAIL标记会去除
+* FAIL master 但是没有备用的slave提升, 此时FAIL master会去掉FAIL标记而重用
+
+TODO
+
+----
+
+## 配置处理,传播和失效转移
+
+**纪元**: 版本递增的事件, 当不同节点提供了有冲突的信息时, 纪元用于确定哪个版本是最新的
+
+### 当前纪元
+
+* 当(主从)节点创建时, currentEpoch为0
+* 节点接收到的流言中, header中的currentEpoc如果大于自己的, 自己的将被更新
+* 因此集群逐步会有相同的currentEpoc
+* currentEpoc用于当集群状态变化时, 节点间达成一致(即slave提升)
+* 本质上说，epoch 是一个集群里的逻辑时钟
+
+### 配置纪元
+
+configEpoch 用于在不同节点提出不同的配置信息的时候（这种情况或许会在分区之后发生）解决冲突
+
+**主节点**
+
+* 每一个主节点总是通过发送 ping 包和 pong 包向别人宣传它的 configEpoch 和一份表示它负责的哈希槽的位图
+* 当(任何?)一个新节点被创建的时候，主节点中的 configEpoch 设为零
+
+**从节点**
+
+* 从节点也会在 ping 包和 pong 包中向别人宣传它的 configEpoch 域, 此值是同步其master的configEpoch
+* 当一个节点重启，它的 configEpoch 值被设为所有已知节点中最大的那个 configEpoch 值
+
+### 丛节点的选举和提升
+
+#### slave 发起选举的条件:
+
+* 对应的主节点处于 FAIL 状态
+* 这个主节点负责的哈希槽数目不为零
+* 从节点和主节点之间的重复连接（replication link）断线不超过一段给定的时间
+
+
+#### slave 发起选举有一定延迟:
+
+`DELAY = fixed_delay + (data_age - NODE_TIMEOUT) / 10 + 0到2000毫秒之间的随机数`
+
+* `fixed_delay`: 确保等到 FAIL 状态在集群内广播
+* `data_age - NODE_TIMEOUT`: 让从节点有时间去获得新鲜数据 ???
+* 随机延时: 减少多个从节点在同一时间发起选举的可能性，因为若同时多个从节点发起选举或许会导致没有任何节点赢得选举
+
+#### slave提升过程:
+
+申请者从:
+
+* 提高它的 currentEpoch 计数
+* 向主节点们请求投票`FAILOVER_AUTH_REQUEST`
+* 然后等待回复（最多等 `NODE_TIMEOUT` 这么长时间）
+
+投票者主:
+
+* 判断该从节点的主节点是否被标记为 FAIL
+* 主节点保留上次投票的纪元lastVoteEpoch, 如果请求中 currentEpoch 小于 lastVoteEpoch, 拒接投票
+* 主节点投票 `FAILOVER_AUTH_ACK`，会带上从请求中的`currentEpoch`, 并且在 `NODE_TIMEOUT` * 2 这段时间内不能再给同个主节点的其他从节点投票
+
+#### 成功流程:
+
+* 从节点收到了大多数主节点的回应，那么它就赢得了选举
+* 该从设置 configEpoch 为 currentEpoch（选举开始时生成的）
+* 该从用 ping 和 pong 数据包向其他节点宣布自己已经是主节点，并提供它负责的哈希槽
+* 其他节点会检测到有一个新的主节点（带着更大的configEpoch）在负责处理之前一个旧的主节点负责的哈希槽，然后就升级自己的配置信息
+* 旧主节点的从节点，或者是经过故障转移后重新加入集群的该旧主节点，不仅会升级配置信息，还会配置新主节点的备份。
+
+#### 失败流程:
+
+* 如果无法在 `NODE_TIMEOUT` 时间内访问到大多数主节点，那么当前选举会被中断并在 `NODE_TIMEOUT` * 4 这段时间后由另一个从节点尝试发起选举
 
 ---
 
@@ -186,6 +355,13 @@ slot 分配相关命令: `CLUSTER ADDSLOTS|DELSLOTS|SETSLOT`, 与此同时, 节�
 
   指定节点迁入
 
+* READONLY
+
+  开启slave可读
+
+* READWRITE
+
+  取消slave可读
 
 ---
 
@@ -193,3 +369,4 @@ slot 分配相关命令: `CLUSTER ADDSLOTS|DELSLOTS|SETSLOT`, 与此同时, 节�
 
 * <http://redis.io/topics/cluster-spec>
 * <http://redisdoc.com/topic/cluster-spec.html>
+* <http://www.redis.cn/topics/cluster-spec.html>
