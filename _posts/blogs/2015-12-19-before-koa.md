@@ -49,6 +49,16 @@ title: 学习KOA 之前需要知道的
 
   * promise.catch(onRejected) 是`promise.then(undefined, onRejected)`的别名
 
+    如果Promise状态已经变成resolved，再抛出错误是无效的
+
+    Promise对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。也就是说，错误总是会被下一个catch语句捕获
+
+    跟传统的try/catch代码块不同的是，如果没有使用catch方法指定错误处理的回调函数，Promise对象抛出的错误不会传递到外层代码，即不会有任何反应
+
+    Node.js有一个unhandledRejection事件，专门监听未捕获的reject错误
+
+    catch方法返回的还是一个Promise对象，因此后面还可以接着调用then方法
+
 * Promise类方法
 
   * Promise.resolve(value)
@@ -61,7 +71,11 @@ title: 学习KOA 之前需要知道的
             resolve(value);
         });
 
-    Promise.resolve 方法另一个作用就是将 thenable 对象转换为promise对象 TODO
+    Promise.resolve 方法另一个作用就是将 thenable 对象转换为promise对象, 如`var jsPromise = Promise.resolve($.ajax('/whatever.json'));`
+
+    Promise.resolve方法允许调用时不带参数
+
+    如果Promise.resolve方法的参数是一个Promise实例，则会被原封不动地返回
 
   * Promise.reject(error)
 
@@ -123,7 +137,8 @@ title: 学习KOA 之前需要知道的
 
   **then中如何传递下一个then**
 
-  * then总是返回一个(新的?)promise
+  * then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。因此可以采用链式写法，即then方法后面再调用另一个then方法
+  * 采用链式的then，可以指定一组按照次序调用的回调函数。这时，前一个回调函数，有可能返回的还是一个Promise对象（即有异步操作），这时后一个回调函数，就会等待该Promise对象的状态发生变化，才会被调用
   * then 中的return会传递出去, 但是如果return的是一个promise, promise的结果会传递出去
 
 ---
@@ -148,7 +163,7 @@ title: 学习KOA 之前需要知道的
 
   * promises
   * thunks (functions)
-  * array (并发处理) 
+  * array (并发处理)
   * objects (并发处理)
   * generators (delegation)
   * generator functions (delegation)
