@@ -96,11 +96,35 @@ title: 学习KOA 之前需要知道的
 <img src="/assets/images/koa/chain_ok.png" width="40%"/>
 <img src="/assets/images/koa/chain_fail.png" width="40%"/>
 
-* promise chain 中如何传递参数
+* promise 链中如何传递参数
 
-  每个resolve的return值, 不仅只局限于字符串或者数值类型，也可以是对象或者promise对象等复杂类型
 
-  return的值会由 Promise.resolve(return的返回值) 进行相应的包装处理, 传递给下一个then的resolve
+  **promise 如何传递给then**
+
+  reject函数的参数通常是Error对象的实例，表示抛出的错误；resolve函数的参数除了正常的值以外，还可能是另一个Promise实例，表示异步操作的结果有可能是一个值，也有可能是另一个异步操作
+
+  如果调用resolve函数和reject函数时带有参数，那么它们的参数会被传递给回调函数:
+
+  * `resolve(普通值)`: 普通值传递给then
+  * `resolve(another_promise)`: `another_promise`将影响原始promise的状态.
+  * 传递给then的值是resolve的参数, 而不是原始promise里的return
+
+
+        var p1 = new Promise(function(resolve, reject){
+          // ...
+        });
+
+        var p2 = new Promise(function(resolve, reject){
+          // ...
+          resolve(p1);
+        })
+
+  p1的状态就会传递给p2，也就是说，p1的状态决定了p2的状态。如果p1的状态是Pending，那么p2的回调函数就会等待p1的状态改变；如果p1的状态已经是Resolved或者Rejected，那么p2的回调函数将会立刻执行
+
+  **then中如何传递下一个then**
+
+  * then总是返回一个(新的?)promise
+  * then 中的return会传递出去, 但是如果return的是一个promise, promise的结果会传递出去
 
 ---
 
@@ -141,7 +165,8 @@ title: 学习KOA 之前需要知道的
 
 * [nodejs异步控制「co、async、Q 、『es6原生promise』、then.js、bluebird」有何优缺点？最爱哪个？哪个简单？](https://www.zhihu.com/question/25413141)
 * [JavaScript Promise迷你书](http://liubin.github.io/promises-book/)
-* <http://nya.io/Node-js/promise-in-nodejs-get-rid-of-callback-hell/>
+* [ECMAScript 6 入门 Promise对象](http://es6.ruanyifeng.com/#docs/promise)
+* [在Node.js中使用promise摆脱回调金字塔](http://nya.io/Node-js/promise-in-nodejs-get-rid-of-callback-hell/)
 * [Thunk 函数的含义和用法](http://www.ruanyifeng.com/blog/2015/05/thunk.html)
 * [Generator 函数的含义与用法](http://www.ruanyifeng.com/blog/2015/04/generator.html)
 * [co 函数库的含义和用法](http://www.ruanyifeng.com/blog/2015/05/co.html)
