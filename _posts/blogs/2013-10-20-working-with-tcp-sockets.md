@@ -107,6 +107,7 @@ Berkeley套接字API是一种编程API，运作在实际的协议实现之上。
 
 * 关闭连接
 
+
   `connection.close`
 
   Socket是双向通信，可以只关闭其中一个通道
@@ -119,11 +120,55 @@ Berkeley套接字API是一种编程API，运作在实际的协议实现之上。
 
   **连接副本** 可以使用Socket#dup创建文件描述符的副本。这实际上是在操作系统层面上利用dup(2)复制了底层的文件描述符,或者Process.fork的新进程也会出现文件描述符的副本
 
-  close_write和close_read方法在底层都利用了shutdown(2)。同close(2)明显不同的是：即便是存在着连接的副本，shutdown(2)也可以完全关闭该连接的某一部分。
+  `close_write`和`close_read`方法在底层都利用了shutdown(2)。同close(2)明显不同的是：即便是存在着连接的副本，shutdown(2)也可以完全关闭该连接的某一部分。
 
   close不会关闭连接副本
 
   shutdown只是关闭了通信，Socket的资源并没有回收，所以每个Socket还必须close以结束生命周期
+
+
+* 为什么要关闭:
+
+  每个连接都是一个文件, 进程打开文件有限制; 虽然GC会清理不用的连接
+
+        Process. getrlimit(:NOFILE)
+        [
+            [0] 4864, #软限制(用 户配置的设置)
+            [1] 9223372036854775807 #硬限制(系统限制)
+        ]
+
+  将限制设置到最大值,可以使用`Process.setrlimit (Process.getrlimit(:NOFILE)[1])`
+
+        require 'socket'
+        sockets = [];
+        loop do
+          socket =  Socket.new(Socket::AF_INET, Socket::SOCK_STREAM)
+          sockets<<socket
+          puts socket.fileno
+        end
+
+        9
+        10
+        ...
+        4861
+        4862
+        4863
+        Errno::EMFILE: Too many open files - socket(2)
+
+  系统命令`ulimit -a` 也可以查看此限制:
+
+       % ulimit -a
+      -t: cpu time (seconds)              unlimited
+      -f: file size (blocks)              unlimited
+      -d: data seg size (kbytes)          unlimited
+      -s: stack size (kbytes)             8192
+      -c: core file size (blocks)         0
+      -v: address space (kbytes)          unlimited
+      -l: locked-in-memory size (kbytes)  unlimited
+      -u: processes                       709
+      -n: file descriptors                4864  (文件描述符打开数量)
+
+  此限制的对象是一个用户
 
 * ruby包装器
 
@@ -363,7 +408,7 @@ TCP/IP数据被编码为分组，分组是有边界的
   和Ruby的write方法不同的是，后者可能会多次调用write(2)写入所有请求的数据。(write会引发阻塞是吗？)
 
   系统调用write(2)会可能引发阻塞，如果底层的write(2)仍处于阻塞，那你会得到一个Errno::EAGAIN异常
-  
+
 
         begin
           loop do
@@ -376,6 +421,8 @@ TCP/IP数据被编码为分组，分组是有边界的
           IO.select(nil, [client])    #对系统write引发的异常，等待可写，然后再写
           retry
         end
+
+  write(2) 可能阻塞的原因: TCP的拥塞控制, 接收端未确认或者接收端无能力处理更多数据
 
 * `accept_nonblock ` 非拥塞式接收
 
@@ -397,6 +444,8 @@ TCP/IP数据被编码为分组，分组是有边界的
 ---
 
 ### 第12章 连接复用
+
+* `loop+read_nonblock` 多个socket造成大量系统调用, 浪费大量处理周期, 使用select可以避免
 
 * `IO.select(for_reading, for_writing, for_writing)`
 
@@ -425,9 +474,9 @@ TCP/IP数据被编码为分组，分组是有边界的
 
   1. **EOF** 监视的可读Socket接收到EOD，该套接字将作为数组一部分返回，在对其进行读取时，取决于当时所使用的read(2)的版本，可能会得到一个EOFError或nil。
 
-  2. **accept** 
+  2. **accept**
 
-  3. **connect** 
+  3. **connect**
 
             begin
               #发起到google.com端口80的非阻塞式连接。
@@ -450,7 +499,7 @@ TCP/IP数据被编码为分组，分组是有边界的
   IO.select 监视的连接数越多，性能就越差，而且select(2)系统调用受到FD_SETSIZE的限制, 多数系统是1024
 
   poll(2)系统调用与select(2)略有不同，不过这点不同也仅限于表面而已
- 
+
   。Linux的epoll(2)以及BSD的kqueue(2)系统调用比select(2)和poll(2)效果更好、功能更先进。
 
 ---
@@ -506,7 +555,7 @@ TODO
 
   不传flag，行为和write一致，flag为`Socket::MSG_OOB`表示紧急数据
 
-* `connection.recv` 
+* `connection.recv`
 
   服务器必须明确接受紧急数据，否则服务器不会注意到紧急数据
 
@@ -535,6 +584,19 @@ TODO
 ### 第20章 串行化
 
 ....
+
+---
+
+### 错误码汇总
+
+* `Errno::EADDRINUSE` 绑定到已经占用的端口, 或者绑定到处于`TIME_WAIT`状态且没有开启`SO_REUSE_ADDR`的套接字
+* `Errno::EADDRNOTAVAIL` 绑定到未知接口, 如server绑定到的ip地址不是本机ip
+* `Errno::ECONNREFUSED` 侦听队列已满
+* `Errno::ETIMEOUT` client在connect服务器阶段超时, 可能是server不存在或者网络延迟大
+* `EOFError` 当接收到EOF时, read仅仅是返回,而readpartial则会产生一个EOFError异常
+* `Errno::EAGAIN` 文件被标记用于非阻塞式IO,无数据可读, `read_nonblock`调用仍然会立即返回。 事实上,它产生了一个Errno::EAGAIN异常
+
+  其他可能的还有`write_nonblock` `accept_nonblock`
 
 ----
 
