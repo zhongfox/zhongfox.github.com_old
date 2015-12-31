@@ -6,6 +6,11 @@ title: 《Working with TCP Sockets》读书笔记
 ---
 {% include JB/setup %}
 
+
+<img src="/assets/images/tcp/tcp.png" />
+
+---
+
 ### 前言
 
 Berkeley套接字API是一种编程API，运作在实际的协议实现之上。它关注的是连接两个端点（endpoint）共享数据，而非处理分组和序列号。
@@ -609,6 +614,7 @@ TODO
 * `Errno::ETIMEOUT` client在connect服务器阶段超时, 可能是server不存在或者网络延迟大
 * `EOFError` 当接收到EOF时, read仅仅是返回,而readpartial则会产生一个EOFError异常
 * `Errno::EAGAIN` 文件被标记用于非阻塞式IO,无数据可读, `read_nonblock`调用仍然会立即返回。 事实上,它产生了一个Errno::EAGAIN异常
+* `Errno::EINVAL` `connection.recv(1, Socket::MSG_OOB)`没有紧急数据可读取
 
   其他可能的还有`write_nonblock` `accept_nonblock`
 
