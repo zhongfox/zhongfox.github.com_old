@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, linux]
-tags : [linux, tcp, ruby, sockets]
+tags : [linux, tcp, ruby, socket]
 title: 《Working with TCP Sockets》读书笔记
 ---
 {% include JB/setup %}
@@ -500,11 +500,15 @@ TCP/IP数据被编码为分组，分组是有边界的
 
   poll(2)系统调用与select(2)略有不同，不过这点不同也仅限于表面而已
 
-  。Linux的epoll(2)以及BSD的kqueue(2)系统调用比select(2)和poll(2)效果更好、功能更先进。
+  Linux的epoll(2)以及BSD的kqueue(2)系统调用比select(2)和poll(2)效果更好、功能更先进。
+
+  IO.select来自Ruby的核心代码库。它是在Ruby中进行复用的唯一手段, 某些gem包可以使用系统中性能最好的可用方法
 
 ---
 
 ### 第13章 Nagle算法
+
+如果你使用的是HTTP协议,它的请求/响应至少够组成一个TCP分组, 因此Nagle算法除了会延缓最后一个分组发送之外,一般不会造成什么影响
 
 每个Ruby Web服务器都禁用了该选项:
 
@@ -513,6 +517,9 @@ TCP/IP数据被编码为分组，分组是有边界的
 ---
 
 ### 第14章 消息划分
+
+多条消息重用连接的想法同我们所熟悉的HTTP keep-alive特性背后的理念是一样的
+
 
 消息划分常见的方式：
 
@@ -525,6 +532,13 @@ TCP/IP数据被编码为分组，分组是有边界的
 ---
 
 ### 第15章 超 时
+
+* ruby timeout 库提供的超时机制, 是采用多线程, timeout计时器是一个新线程, 代码块中的代码放到当前线程中执行
+
+  外记:
+
+  `Timeout::timeout`: Note that this is both a method of module Timeout, so you can include Timeout into your classes so they have a timeout method, as well as a module method, so you can call it directly as ::timeout
+
 
 * 通过IO.select 超时，可以处理读取超时，接受超时，连接超时
 
