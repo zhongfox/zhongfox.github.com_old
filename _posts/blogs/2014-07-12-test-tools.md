@@ -17,10 +17,17 @@ title: 常用测试和调试工具
 #### 参数
 
 * -n 总的请求数
-* -c 次同时并发的请求数 总的请求数(n)=次数*一次并发数(c)
+* -c 次同时并发的请求数 `总的请求数(n)=次数*一次并发数(c)`
 * -t 执行多少秒的测试, -n自动设置为5000, 但是测试时可能超过这个数量
 * -C 添加cookie `-C "_t8s=myt8scookie;ppinf=myppinfcookie"`
 * -r Don't exit on socket receive errors
+* post
+
+  需要吧-d 后面的json数据放在一个文件里，比如建立一个文件`post_data.txt`，放入：
+
+    {"abc":"csds","appId": "sds"}
+
+  然后用-p参数解析并发送这个json数据：`ab -n 100 -c 10 -p post_data.txt -T 'application/json' http://localhost:8083/query`
 
 #### 输出分析
 
