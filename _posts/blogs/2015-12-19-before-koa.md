@@ -186,3 +186,4 @@ title: 学习KOA 之前需要知道的
 * [Generator 函数的含义与用法](http://www.ruanyifeng.com/blog/2015/04/generator.html)
 * [co 函数库的含义和用法](http://www.ruanyifeng.com/blog/2015/05/co.html)
 * [KOA 最佳实践](https://github.com/koajs/koa/blob/master/docs/guide.md) TODO
+* [Node - 16年，新 Node 项目注意点](https://github.com/gf-rd/blog/issues/29)

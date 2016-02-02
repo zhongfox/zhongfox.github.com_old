@@ -28,7 +28,7 @@ title: 浏览器缓存
 
 这个好像只对使用`Last-Modified` 有效, 对使用`Etag`的方式不知道有没有办法
 
-如果`Cache-Contrl`和`max-age` 同时存在, `max-age`覆盖前者
+如果`Expires` 和`Cache-Contrl: max-age` 同时存在, `max-age`覆盖前者
 
 ---
 
@@ -57,3 +57,16 @@ Mac:
   * command + R:
 
     一般刷新
+
+---
+
+2016/2/1 补充
+
+* 浏览器缓存和缓存协商, 偶尔也叫作强缓存和协商缓存, 两者都希望使用浏览器本地的缓存
+
+* Expires是较老的强缓存管理header，由于它是服务器返回的一个绝对时间，在服务器时间与客户端时间相差较大时，缓存管理容易出现问题，比如随意修改下客户端时间，就能影响缓存命中的结果。所以在http1.1的时候，提出了一个新的header，就是Cache-Control，这是一个相对时间，在配置缓存的时候，以秒为单位
+
+* 协商缓存需要配合强缓存使用，比如，除了Last-Modified这个header，还有强缓存的相关Expires header，因为如果不启用强缓存的话，协商缓存根本没有意义(存疑??)
+
+
+参考: <http://www.cnblogs.com/lyzg/p/5125934.html>
