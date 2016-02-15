@@ -185,3 +185,5 @@ transaction 通过捕获块里的异常来决定数据库回滚，异常会向�
 ### 参考资料
 
 * Active Record Transactions <http://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html>
+
+这个放着备忘: [Rails 中乐观锁与悲观锁的使用](https://ruby-china.org/topics/28963)

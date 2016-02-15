@@ -115,6 +115,8 @@ LC和thread对比:
 
 参考: <http://eventmachine.rubyforge.org/docs/LIGHTWEIGHT_CONCURRENCY.html>
 
+这篇还没看: <http://www.rowkey.me/blog/2016/01/18/io-model/>
+
 ---
 
 ## EventMachine

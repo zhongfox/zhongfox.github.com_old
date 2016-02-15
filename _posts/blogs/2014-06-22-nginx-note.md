@@ -8,15 +8,51 @@ title: nginx 笔记
 
 ---
 
-* alais
+## ngx_http_core_module
+
+<http://nginx.org/en/docs/http/ngx_http_core_module.html>
+
+[ngx_http_core_module模块提供的变量](http://www.ttlsa.com/nginx/the-ngx_http_core_module-module-provides-variable/)
+
+* root
+
+  http, server, location, if in location
+
+
+---
+
+## ngx_http_log_module
+
+<http://nginx.org/en/docs/http/ngx_http_log_module.html>
+
+* `access_log`
+
+  Context:  http, server, location, if in location, `limit_except`
+
+
+
+* alias
 
   环境: location, 但是还是需要配置root
 
-  对于普通匹配, alais会自动把匹配后剩余的path加到alais指定路径的最后面, 忽略参数
+  使用alias时，目录名后面一定要加"/"
 
-  对于正则匹配, alais不会自动追加, 可以在正则中用`()`定义元组, 在alias中用`$1` `$2` 使用
+  对于普通匹配, alias会自动把匹配后剩余的path加到alais指定路径的最后面, 忽略参数
+
+  对于正则匹配, alias不会自动追加, 可以在正则中用`()`定义元组, 在alias中用`$1` `$2` 使用
 
   不能用于命名location里
+
+* root 和 alias 区别
+
+  <http://www.ttlsa.com/nginx/nginx-root_alias-file-path-configuration/>
+
+  root 文件寻找: `root的path + 已经匹配的url + 剩余的url`; 或者就是`root的path + url`
+
+  alias 文件寻找: `alias的path + (去掉匹配的url) 剩余的url`
+
+---
+
 
 * default_type
 
@@ -131,3 +167,6 @@ Location block 的基本语法形式是： `location [=|~|~*|^~|@] pattern { ...
 4. 正则匹配, 按编辑顺序逐个匹配（与顺序有关）
 
 5. (none)前向匹配, 最大前缀匹配（与顺序无关）
+
+---
+

@@ -412,4 +412,8 @@ TODO
 
 
 
+----
 
+备忘:
+
+[无人知晓的 GIL](https://ruby-china.org/topics/28415)
