@@ -91,6 +91,10 @@ lua(原子性??):
 
 ---
 
+## Redis的SETNX中的陷阱
+
+<http://huoding.com/2015/09/14/463>
+
 ## 参考
 
 * <http://www.cnblogs.com/mushroom/p/4752499.html>

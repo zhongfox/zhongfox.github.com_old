@@ -6,6 +6,34 @@ title: Maven
 ---
 {% include JB/setup %}
 
+* mac 安装
+
+  使用brew安装后, mvn 大概位置: `/usr/local/Cellar/maven/3.3.3`
+
+      /usr/local/Cellar/maven/3.3.3/
+      ▾ bin/
+          mvn* [RO]  入口文件, 将JAVA_HOME加上/usr/libexec/java_home, 然后调用libexec/bin/mvn
+          mvnDebug* [RO]
+          mvnyjp* [RO]
+      ▾ libexec/
+        ▾ bin/
+            m2.conf
+            mvn*   真正命令调用文件
+            mvnDebug*
+            mvnyjp*
+        ▾ boot/
+            plexus-classworlds-2.5.2.jar
+        ▾ conf/
+          ▸ logging/
+            settings.xml 全局配置文件
+            toolchains.xml
+        ▸ lib/
+        INSTALL_RECEIPT.json
+        LICENSE
+        NOTICE
+        README.txt
+
+
 * .m2
 
   * 本地配置: `~/.m2/settings.xml` 该文件包含了用户相关的认证,仓库和其它信息的配置
@@ -87,6 +115,34 @@ title: Maven
 
   执行: `java -cp target/hello-nerd-1.0-SNAPSHOT.jar com.di.maven.App`
 
+  package 后的jar包并不包括`Main-Class`的声明, 所有无法使用`java -jar`执行, 需要使用`maven-shade-plugin`
+
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-shade-plugin</artifactId>
+              <version>2.0</version>
+              <configuration>
+                <transformers>
+                  <transformer implementation = "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>com.xxx800.www.fox.App</mainClass>
+                  </transformer>
+                </transformers>
+                <!-- put your configurations here -->
+              </configuration>
+              <executions>
+                <execution>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>shade</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+
 * ` mvn install` 安装当前工程的输出文件到本地仓库
 
   除了 `~/.m2/repository/<groupId>/<artifactId>/<version>/<artifactId>-<version>.<packaging>` 外, 还有些其他文件:
@@ -114,11 +170,21 @@ title: Maven
 
   prepare-package 阶段：(默认无目标)
 
-  package 阶段：jar:jar [把输出目录打包成JAR文件]
+  package 阶段：jar:jar [把输出目录打包成JAR文件], 默认采用artifact-version.jar 命名, 输出到target目录下
 
 * `mvn clean` 删除target目录
 
-* 坐标: groupId, artifactId, version, packaging, 格式`groupId:artifactId:packaging:version`
+* 坐标: groupId, artifactId, version, packaging, classifier 格式`groupId:artifactId:packaging:version`
+
+  一个实际项目可能会有多个maven项目
+
+  groupId: 定义该maven项目隶属的**实际项目**, 因此通常要包括2各层次: 组织, 当前项目
+
+  artifactId: 定义该项目中的当前maven项目, 通常还会以实际项目名作为前缀
+
+  packaging 可选, 默认值是jar
+
+  classifier 不能直接定义
 
 * 依赖管理
 
