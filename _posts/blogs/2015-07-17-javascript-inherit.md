@@ -12,7 +12,7 @@ title: javascript 继承
 
     function A() {};
     A.prototype.a = function() {console.log('a')};
-    function B() {A.call(this)};
+    function B() {A.call(this)}; //目的是让this去执行A方法, 这样this可以有A方法里定义的属性 (类似其他语言中调用super)
     util.inherits(B, A);
 
     var a = new A();
