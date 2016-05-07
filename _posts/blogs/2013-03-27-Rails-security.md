@@ -353,9 +353,11 @@ Rails 有内置的sql特殊字符过滤: 单引号，双引号，NULL 和换行�
 
 
 
+---
 
+## 其他
 
-
+* [html_safe、raw、sanitize和h()](http://www.jianshu.com/p/ZLpFSy)
 
 
 
