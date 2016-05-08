@@ -174,6 +174,10 @@ title: Maven
 
 * `mvn clean` 删除target目录
 
+---
+
+## 坐标
+
 * 坐标: groupId, artifactId, version, packaging, classifier 格式`groupId:artifactId:packaging:version`
 
   一个实际项目可能会有多个maven项目
@@ -186,12 +190,41 @@ title: Maven
 
   classifier 不能直接定义
 
+* 坐标在pom中的定义:
+
+  * groupId, artifactId, version
+  * type 对应坐标中的packaging, 默认jar, 可省
+  * scope 依赖范围
+  * optional 标记依赖是否可选
+  * exclusions: 用来排除依赖传递性
+
+* 文件依赖方式体现在classpath的不同, 有3个classpath: 编译, 测试, 运行
+
+* scope 依赖范围
+
+  如果不声明scope, 默认是compile
+
+  <img src="/assets/images/maven/scope.png" />
+
+* 依赖传递
+
+  第一列是第一依赖, 第一行是第二依赖, 中间交汇处是传递性依赖的scope
+
+  <img src="/assets/images/maven/yilai.png" />
+
+* 依赖调节: 同一个模块, 依赖树中有不同的版本
+
+  * 原则一: 最短路径优先
+  * 原则二: 在pom中最先定义的优先
+
 * 依赖管理
 
   * 传递性依赖
   * 依赖范围(scope): 当一个依赖的范围是test的 时候,说明它在Compiler插件运行compile目标的时候是不可用的。它只有在运 行compiler:testCompile和surefire:test目标的时候才会被加入到classpath中
 
-    如果不声明scope, 默认是compile, 即对主代码和测试代码都有效
+
+---
+
 
 * 当为项目创建JAR文件的时候,它的依赖不会被捆绑在生成的构件中???
 
