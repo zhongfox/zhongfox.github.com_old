@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, server]
-tags : [cache, RedisCluster]
+tags : [cache, RedisCluster, nosql]
 title: RedisCluster
 ---
 {% include JB/setup %}

@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, server]
-tags : [redis]
+tags : [redis, nosql]
 title: Redis 性能调优相关笔记
 ---
 {% include JB/setup %}

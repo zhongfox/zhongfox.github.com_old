@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, server]
-tags : [latency, redis]
+tags : [latency, redis, nosql]
 title: Redis 延迟分析
 ---
 {% include JB/setup %}

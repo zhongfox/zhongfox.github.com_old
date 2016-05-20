@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, server]
-tags : [distributed, redis]
+tags : [distributed, redis, nosql]
 title: Redis 分布式锁
 ---
 {% include JB/setup %}
