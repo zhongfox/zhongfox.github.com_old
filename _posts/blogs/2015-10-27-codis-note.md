@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, nosql]
 tags : [cache, redis]
 title: Codis
 ---

@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, ruby]
 tags : [cache, redis, sidekiq]
 title: Sidekiq笔记
 ---

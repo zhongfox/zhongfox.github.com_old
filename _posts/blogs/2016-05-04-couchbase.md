@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, nosql]
 tags : [distributed, CouchBase]
 title: CouchBase
 ---

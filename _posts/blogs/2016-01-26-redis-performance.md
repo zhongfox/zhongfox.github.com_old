@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, nosql]
 tags : [redis, nosql]
 title: Redis 性能调优相关笔记
 ---

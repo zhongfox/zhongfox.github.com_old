@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, nosql]
 tags : [latency, redis, nosql]
 title: Redis 延迟分析
 ---
