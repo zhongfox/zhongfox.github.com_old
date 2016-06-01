@@ -147,6 +147,20 @@ title: 学习KOA 之前需要知道的
 
 参考 <http://www.ruanyifeng.com/blog/2015/05/thunk.html>
 
+
+另外, es6+thunk实现非阻塞的sleep
+
+    function sleep(ms){
+      return function(callback){
+        setTimeout(callback, ms);
+      };
+    }
+
+    module.exports.net_test = function* () {
+      yield sleep(2000);
+      this.body = '耗时教久的网络请求';
+    };
+
 ---
 
 ## CO
