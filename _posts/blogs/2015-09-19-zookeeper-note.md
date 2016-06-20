@@ -14,9 +14,16 @@ title: zookeeper
   * 可靠性
   * 实时性
 
+ * 设计目标
+
+   * 简单的数据模型
+   * 可构建集群
+   * 顺序访问: 对于客户端的每个更新请求, zk都会分配一个全局唯一的递增编号, 可以反映事务操作的先后顺序
+   * 高性能
+
 * 集群角色
 
-  * Leader
+  * Leader 读和写
   * Follower 提供读
   * Observer 提供读, 不参与Leader选举, 不参与"过半写成功"
 
@@ -31,7 +38,7 @@ title: zookeeper
 
   是否顺序:
 
-  * 顺序节点:  会自动在节点名加上一个数字后缀
+  * 顺序节点: 会自动在节点名加上一个数字后缀
   * 非顺序节点
 
 * 版本: 每个ZNode记录一个stat
@@ -39,6 +46,12 @@ title: zookeeper
   * version 当前ZNode版本
   * cversion 子节点版本
   * aversion ACL版本
+
+* 会话
+
+  客户端和zk之间是一个TCP长连接, 通过心跳保持会话
+
+  可以设置sessionTimeout参数, 当会话异常中断, 在此时间段内重连上任意台zk, 会话任然有效
 
 * Watcher: 客户端可以在指定ZNode上注册事件
 
