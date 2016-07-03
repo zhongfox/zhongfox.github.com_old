@@ -38,6 +38,10 @@ info命令输出的数据可分为10个类别，分别是：
       used_memory_human:9.21G
 
       #从操作系统上显示已经分配的内存总量, 包括碎片
+      # the RSS will stay more near to the peak
+      # the memory consumed by rss is not released to the OS by redis, but will be reused for additional data
+      # 比如在某时刻过期了大量数据, used降低, rss不会降低, peak不变, 会是的mem_fragmentation_ratio增大
+      # redis 释放的内存, (短期内)不返回给系统, 以便重用
       used_memory_rss:11148713984
 
       used_memory_peak:11236792296
