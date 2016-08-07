@@ -201,3 +201,4 @@ title: 学习KOA 之前需要知道的
 * [co 函数库的含义和用法](http://www.ruanyifeng.com/blog/2015/05/co.html)
 * [KOA 最佳实践](https://github.com/koajs/koa/blob/master/docs/guide.md) TODO
 * [Node - 16年，新 Node 项目注意点](https://github.com/gf-rd/blog/issues/29)
+* [关于Promise：你可能不知道的6件事](https://github.com/dwqs/blog/issues/1) 2016.8.3更新
