@@ -97,6 +97,9 @@ title: 学习KOA 之前需要知道的
 
     只要有一个promise对象进入 FulFilled 或者 Rejected 状态的话，就会继续进行后面的处理
 
+    `race` 和 `all` 方法接受一个数组作为参数，元素都是Promise对象的实例，如果不是，就会先调用Promise.resolve方法，将参数转为Promise实例，再进一步处理
+
+     resolve 只能处理thenable和Promise实例, **不能处理生成器或者生成器对象**
 
 * promise chain
 
