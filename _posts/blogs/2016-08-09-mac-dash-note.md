@@ -33,9 +33,7 @@ tagline: 工欲善其事, 必先利其器
 
   其中和vim集成: [dash.vim](https://github.com/rizzatti/dash.vim)
 
-  我通过map F8调用:
-
-  > map <F8> :Dash<cr>
+  我通过map F8调用: `map <F8> :Dash<cr>`
 
 * 全局搜索快捷键
 
