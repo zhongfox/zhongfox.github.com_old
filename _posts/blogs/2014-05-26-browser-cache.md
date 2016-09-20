@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [blog, javascript]
-tags : [cache]
+tags : [cache, http]
 title: 浏览器缓存
 ---
 {% include JB/setup %}
