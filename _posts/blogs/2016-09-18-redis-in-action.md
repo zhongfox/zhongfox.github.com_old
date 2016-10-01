@@ -35,6 +35,12 @@ Redis是单线程的，基于事件驱动的，Redis中有个EventLoop, 有2类�
 
 [Redis缓存失效机制](https://my.oschina.net/andylucc/blog/679222)
 
+redis中大量的key的过期时间设置在同一时刻, 可能导致定期删除执行很久, 造成单线程的redis阻塞较长时间
+
+所以，要善待redis数据，比如不用了就自己清理掉，不要等着redis来帮你; 或者把key的过期时间分散开
+
+[善待Redis里的数据](http://neway6655.github.io/redis/2015/12/19/%E5%96%84%E5%BE%85Redis%E9%87%8C%E7%9A%84%E6%95%B0%E6%8D%AE.html)
+
 ---
 
 ### 持久化选择策略
@@ -90,6 +96,22 @@ Redis是单线程的，基于事件驱动的，Redis中有个EventLoop, 有2类�
   * 如果你的网络稳定性差， 物理环境糟糕情况下，那么 master， slave均采取 AOF，这个在 master， slave角色切换时，可以减少时间成本
 
 [Redis 该选择哪种持久化配置](http://zheng-ji.info/blog/2016/03/10/gai-xuan-ze-na-chong-redischi-jiu-hua-pei-zhi/)
+
+---
+
+### 部署与扩展
+
+* 业务垂直切分: 单redis 的0~15号逻辑库做业务切分, 适合低吞吐量, 高可用不高的业务组
+
+* 业务水平切分: 分配对应单独物理机; 问题: 单redis只能利用单核, 不能充分利用多核, 整体可用性降低:
+
+  1台99.9的可用性, 10台合并可用性降为99
+
+* 10台机器10个分片, 20个实例, 互为主备, 好处提高了可用性, 多核还是没有很好利用
+
+* 为了利用多核, 把redis和业务应用放一起, 问题: 应用和redis争抢cpu和内存, 死锁
+
+* 解决方案: TODO
 
 ---
 
