@@ -1,0 +1,399 @@
+<!--
+    Powered By nodePPT - This is probably the best web presentation tool so far!
+    version: 1.2.3
+    site: https://github.com/ksky521/nodePPT
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>微服务 - By 钟华</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    <link rel="stylesheet" media="print" href="./css/pdf.css">
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>微服务分享</h1>
+<p><small>By：ZhongHua</small></p>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>和具体技术无关, 他更多是一种方法论, 是构建更容易维护和具有更好扩展性的一种方式</p>
+<p>小是微服务一个很明显的特征, 但不是决定性的特征</p>
+<p>可靠应用不是说就是把单一整体分割成小片段，而是去理解各个片段的联系</p>
+<p>需要准确的识别服务边界</p>
+<p>微服务是一个笼统的概念, 微仅仅是这种&quot;可扩展, 易维护, 高内聚, 小而自治&quot;的系统的一个特点</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>微服务的特点</h2>
+
+</hgroup><article>
+
+<ul>
+<li>小而专注</li>
+<li>高度自治</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>比如数据都只用一种, 版本也只能一致
+比如一个组件, 在一个小应用升级替换非常容易, 但是在大应用上就很难, 要避免影响所有现有功能变得非常困难
+一开始你有一个很成功的关键业务应用，后来就变成了一个巨大的，无法理解的怪物。因为采用过时的，效率低的技术，使得雇佣有潜力的开发者很困难。应用无法扩展，可靠性很低，最终，敏捷性开发和部署变的无法完成
+tao800_fire 升级redis</p>
+<p>为什么admin 优化了快了, 又慢了</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>单一庞大应用不足</h2>
+
+</hgroup><article>
+
+<ul>
+<li>逐渐变大, 几年后变成巨大怪物</li>
+<li>开发团队痛苦, 敏捷开发和部署举步维艰, 任何单一开发都不可能搞懂, 团队士气走下坡</li>
+<li>降低开发速度, 启动时间加长</li>
+<li>复杂而巨大的单体式应用也不利于持续性开发</li>
+<li>单体式应用在不同模块发生资源冲突时，扩展将会非常困难</li>
+<li>可靠性降低, bug, 内存泄露将相互影响</li>
+<li>单体式应用使得采用新架构和语言非常困难</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>有的服务注重开发效率, 有的服务注重性能
+nosql CAP
+每个服务都可以有专门开发团队来开发。开发者可以自由选择开发技术，提供API服务; 重写重构,技术迭代变得不是很困难
+发生性能问题, 难以评估
+首页异常
+10个人维护一个项目</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>微服务的好处</h2>
+
+</hgroup><article>
+
+<ul>
+<li>单个服务很容易开发、理解和维护</li>
+<li>技术异构性</li>
+<li>易于独立部署, AB测试，持续化部署</li>
+<li>每个服务独立扩展</li>
+<li>与组织结构相匹配, 属主意识明确</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>水平扩展
+扩展性: 基础设施不需要经常改变, 应用之间较少的依赖和耦合, 对需求敏捷响应
+变的和不变的分开</p>
+<p>伸缩性: 通过增减自身资源的规模, 实现处理能力的增减</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>微服务架构模式</h2>
+
+</hgroup><article>
+
+<p><img src="http://zhongfox.github.io/assets/images/microservice/3d.png" alt="架构模式" title="架构模式"></p>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>没有银弹</p>
+<p>分布式事务提交困难
+收藏/deal service 数据不一致
+测试: 测试环境
+需要部署很多次
+服务边界难以识别, 不是最开始能区分出来</p>
+<p>13年招商, 当时是服务拆分的一个好机会</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>微服务架构的不足</h2>
+
+</hgroup><article>
+
+<ul>
+<li>微服务应用是分布式系统，由此会带来固有的复杂性</li>
+<li>因为数据分区, 也因为CAP理论, 微服务不得不使用最终一致性方案, 因此对开发要求更高</li>
+<li>单体应用容易测试, 微服务测试复杂度提高, 需要各个微服务的stubs</li>
+<li>改动的影响将波及很多应用, 不过这是面向服务架构的特点</li>
+<li>服务拆分后, 服务增多, 部署难道和工作量增加</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>zapi_fire
+收藏(坚守服务边界)
+集成: 限时抢
+根据服务表现, 技术类型</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>微服务构建</h2>
+
+</hgroup><article>
+
+<ul>
+<li>根据业务边界来确定服务边界</li>
+<li>如何寻找平衡, 如何取舍</li>
+<li>分解技术</li>
+<li>集成技术</li>
+<li>注意服务与团队结构的关系</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>一种现象</p>
+<p>招商 商城 主站 限时抢</p>
+<p>注重团队构成对服务划分的影响</p>
+<p>组织的耦合度越低, 创建的系统模块化越好, 耦合也越低</p>
+<p>远程团队无法做到细粒度的沟通</p>
+<p>开发团队存在地理位置的差异 是一个应该对服务进行分解的很明显的信号</p>
+<p>tao800_fire 历程</p>
+<p>电信项目
+学语言是长期的收益, 凑合着开发是短期收益, 之后是负的收益
+之后团队配合需要考虑,</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>康威定律</h2>
+
+</hgroup><article>
+
+<p>任何组织在设计一套系统时, 所交付的设计方案在结构上都与该组织的沟通结构保持一致</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>微服务调用</h2>
+
+</hgroup><article>
+
+<ul>
+<li>客户端到多个微服务直接通信</li>
+<li>API Gateway</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>一个服务可能是用Thrift的RPC协议，而另一个服务可能是用AMQP消息协议。它们都不是浏览或防火墙友好的，并且最好是内部使用。应用应该在防火墙外采用类似HTTP或者WEBSocket协议</p>
+<p>接口设计宽进严出</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>客户端到多个微服务直接通信</h2>
+
+</hgroup><article>
+
+<ul>
+<li>每个微服务暴露的细粒度API数量的不匹配, 客户端(移动端或者PC浏览器)需要发起多个(甚至数百个)服务请求,  在公网上效率非常低, 客户端代码非常复杂</li>
+<li>微服务的协议可能并不是web友好型。</li>
+<li>很难重构微服务: 随着时间推移, 服务可能合并或者拆分, 如果客户端直接与微服务交互，那么这种重构就很难实施.</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>API Gateway可以提供给客户端一个定制化的API, API Gateway通过调用多个服务来处理这一个请求并返回结果</p>
+<p>涉及: 请求转发, 合成和协议转换(在web协议与内部使用的非Web友好型协议间进行转换)</p>
+<p>deal service 合成 角标 (跨团队无法完成)</p>
+<p>接口设计宽进严出: 他不错我不错, 他错了我不错</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>API Gateway</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>封装内部系统架构, 提供API给各个客户端</p>
+</li>
+<li><p>授权, 监控, 负载均衡, 缓存, 请求分片, 请求转发,  协议转换, 管理, 静态响应处理</p>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>瓶颈不仅仅是性能, 一致性</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>API Gateway</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>优点</p>
+<ul>
+<li>封装应用内部结构, 减少了客户端与服务器端的通信次数，也简化了客户端代码</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>必须要高可用, 必须开发,部署和管理 (额外成本)</li>
+<li>可能成为系统的一个瓶颈</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>微服务中的数据库</h2>
+
+</hgroup><article>
+
+<ul>
+<li>强调使用独立应用数据库</li>
+<li>强调可扩展, 大数据, 集群</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>阻抗失衡: 开发效率</p>
+
+</section>
+</aside><section class="slide-wrapper"><hgroup>
+<h2>关系型数据库</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>优势(ACID)</p>
+<ul>
+<li>数据持久化</li>
+<li>并发: RMDB 使用事务控制并发; 事务执行失败可以回滚</li>
+<li>集成: RMDB可以做为&quot;共享数据集成&quot;提供给多个应用使用, 达到数据共享; 同时RMDB有并发控制机制.</li>
+<li>标准模型: 各种RMDB大同小异</li>
+</ul>
+</li>
+<li><p>不足</p>
+<ul>
+<li>阻抗失衡</li>
+<li>集群扩展能力弱</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>数据库在应用共享上的划分</h2>
+
+</hgroup><article>
+
+<ul>
+<li>集成数据库</li>
+<li>应用程序数据库</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Nosql</h2>
+
+</hgroup><article>
+
+<ul>
+<li>不使用关系模型</li>
+<li>专注大数据, 集群</li>
+<li>无模式: 提高开发效率, 优化阻抗失衡</li>
+<li>适合&quot;应用程序数据库&quot;, 不适合&quot;集成数据库&quot;</li>
+<li>开源</li>
+<li>影响: 混合持久化</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>谢谢</h2>
+
+</hgroup><article>
+
+<p>问题&amp;讨论</p>
+
+</article></section></slide>
+        <!--slide class="slide thank-you-slide segue nobackground">
+            <article class="flexbox vleft auto-fadein">
+                <h2>Q &amp; A</h2>
+                <h3>&lt;Thank You!&gt;</h3>
+            </article>
+        </slide-->
+        <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+              <h2 style="color: white;">Powered By nodePPT v1.2.3</h2>
+            </article>
+          </slide>
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = location.pathname.split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'move',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/hljs-0.8.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+<link rel="stylesheet" href="./css/theme.moon.css">
+<!--placeholder-->
+</body>
+</html>

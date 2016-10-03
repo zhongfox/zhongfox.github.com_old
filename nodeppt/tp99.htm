@@ -1,0 +1,423 @@
+<!--
+    Powered By nodePPT - This is probably the best web presentation tool so far!
+    version: 1.2.3
+    site: https://github.com/ksky521/nodePPT
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>折800主站deal列表页性能优化分享 - By 钟华</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    <link rel="stylesheet" media="print" href="./css/pdf.css">
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>折800主站deal列表页性能优化分享</h1>
+<h2>TP99/可用性优化经验分享</h2>
+<p><small>By：ZhongHua</small></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化前后性能对比</h2>
+
+</hgroup><article>
+
+<p>7月22号下午上线后TP99/可用性对比</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化前后性能对比</h2>
+
+</hgroup><article>
+
+<p>今日上新 <a href="http://new.zhe800.com/" target="_blank">http://new.zhe800.com/</a></p>
+<p><img src="./tp99/jinrishangxin.png" alt="今日上新" title="今日上新" width="80%"></p>
+<ul>
+<li>每日访问量12~22万, <span class='red'>5XX从2~5k每日下降到0次</span></li>
+<li>TP99从1000ms+ 下降到290ms左右</li>
+<li>可用性从不稳定的98%左右上升到99.97左右(不可用包含4XX)</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化前后性能对比</h2>
+
+</hgroup><article>
+
+<p>最后疯抢 <a href="http://last.zhe800.com/" target="_blank">http://last.zhe800.com/</a></p>
+<p><img src="./tp99/last.png" alt="最后疯抢" title="最后疯抢" width="80%"></p>
+<ul>
+<li>每日访问量30~40万, 5XX从1k左右每日下降到几次</li>
+<li>TP99从2000ms左右 下降到200ms左右, <span class='red'>性能提升10倍</span></li>
+<li>可用性从不稳定的97%左右上升到99.9以上(不可用包含4XX)</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化前后性能对比</h2>
+
+</hgroup><article>
+
+<p>其他页面:</p>
+<ul>
+<li><p>排行榜:</p>
+<p><a href="http://top.zhe800.com/" target="_blank">http://top.zhe800.com/</a></p>
+<ul>
+<li>每日访问量30万左右, 5XX从几百每日下降到几次</li>
+<li>TP99从1000ms+ 下降到700ms左右</li>
+<li>可用性从98.8提升至99.8</li>
+</ul>
+</li>
+<li><p>九块九包邮, 二十元封顶:</p>
+<p><a href="http://www.zhe800.com/ju_type/baoyou" target="_blank">http://www.zhe800.com/ju_type/baoyou</a>
+<a href="http://www.zhe800.com/ju_type/fengding" target="_blank">http://www.zhe800.com/ju_type/fengding</a></p>
+<ul>
+<li>每日访问量20万左右, 5XX从几百每日下降到零次</li>
+<li>TP99从1000ms+ 下降到700ms+</li>
+<li>可用性从98.8提升至100%, <span class='red'>上线后连续几天100%</span></li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化策略</h2>
+
+</hgroup><article>
+
+<p><img src="./tp99/celue.png" alt="优化策略" title="优化策略" width="70%"></p>
+<ul>
+<li>以上是项目初期, 对TP99/可用性优化制定的7条优化原则</li>
+<li>详见<a href="http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=5734163" target="_blank">http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=5734163</a></li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>优化策略</h2>
+
+</hgroup><article class="fadeIn">
+
+
+<ol>
+<li>流程尽量并发执行</li>
+<li>缓存异步刷新</li>
+<li>技术栈分级使用</li>
+<li>容错</li>
+<li>模块化</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略一: 流程尽量并发执行</h2>
+
+</hgroup><article>
+
+<p><img src="./tp99/bingxing.png" alt="流程尽量并发执行" title="流程尽量并发执行" width="70%"></p>
+<p>9.9/20元处理流程并发执行, 参考:
+<a href="http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=6490684" target="_blank">http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=6490684</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略一: 流程尽量并发执行</h2>
+
+</hgroup><article>
+
+<ul>
+<li>考虑并发执行的流程包括: 网络请求(http, thrift, mysql, redis等), 逻辑处理等等</li>
+<li>性能优化的关键在于更大限度地榨压服务器, 让服务器忙起来</li>
+<li>流程并发处理需要结合具体业务, 没有因果关系的, 没有前置的流程尽量并发执行</li>
+<li>并发执行代码很难写?
+怎么办: 使用nodejs生成器(ES6 + KOA)
+<img src="./tp99/getdata.png" alt="并发获得数据" title="并发获得数据"></li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略二: 缓存异步刷新</h2>
+
+</hgroup><article>
+
+<ul>
+<li>缓存刷新机制:<ul>
+<li>同步(常见): 缓存过期了再去重建缓存</li>
+<li>异步</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略二: 缓存异步刷新</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>同步缓存刷新问题:</p>
+<ul>
+<li>慢(重建时, TP99飙升)</li>
+<li>高并发容易引起雪崩现象(5XX来了)</li>
+<li>一挂全挂(页面缓存空数据, 持续几分钟)</li>
+</ul>
+<p><img src="./tp99/xuebeng.png" alt="雪崩" title="雪崩" width="70%"></p>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略二: 缓存异步刷新</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>策略</p>
+<ul>
+<li>缓存设置较长的过期时间</li>
+<li>缓存后台定期持续自动刷新</li>
+<li>提供缓存miss重建接口(容错机制)</li>
+<li>需要结合具体业务, 设置不同的更新频率, 需要监控无用缓存</li>
+</ul>
+</li>
+<li><p>效果:</p>
+<ul>
+<li>缓存一直存在, TP99值提升并且稳定</li>
+<li>去除了重复的缓存重建, 节约服务器资源</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略二: 缓存异步刷新</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>实现: Data Service</p>
+</li>
+<li><p>参考:</p>
+<ul>
+<li>ruby实现: <a href="http://wiki.tuan800-inc.com/display/cdrubykfb/Ruby+Data+Service" target="_blank">http://wiki.tuan800-inc.com/display/cdrubykfb/Ruby+Data+Service</a></li>
+<li>node client: <a href="http://wiki.tuan800-inc.com/display/cdrubykfb/Union+Data+Service+Node+Client" target="_blank">http://wiki.tuan800-inc.com/display/cdrubykfb/Union+Data+Service+Node+Client</a></li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略三: 技术栈分级使用</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>选择技术栈的主要考虑因素</p>
+<ul>
+<li>业务场景</li>
+<li>语言平台</li>
+<li>团队成员技术现状</li>
+</ul>
+</li>
+<li><p>我们统计了常用网络技术栈造成错误(5XX)的排名(nodejs,ruby项目)</p>
+<p>结果: thrift&gt;http&gt;mysql&gt;redis</p>
+<ul>
+<li>thrift: nodejs和ruby中实现并不完善, 容易受网络影响</li>
+<li>http: http作为RPC传输效率不高, 容易受网络影响</li>
+<li>mysql: 我们虽然独立了部分微服务, 但是mysql仍然会作为共享数据库存在, 项目之间容易被慢查询互相影响; 同时前端团队对sql使用并不熟悉</li>
+<li>redis: 相对稳定, 各语言支持较好, 更容易独立, 适合作为应用程序数据库</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略三: 技术栈分级使用</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>在前端项目(nodejs)中, 减少thrift, http, mysql的使用, 尽量使用redis</p>
+</li>
+<li><p>网络请求尽量转换为Data Service的调用, Data Service数据全是存储于redis</p>
+</li>
+<li><p>http接口主要作为miss接口, 作为容错机制</p>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略四: 容错</h2>
+
+</hgroup><article>
+
+<ul>
+<li>网络是不可靠的: 你的项目没问题, 我的项目没问题, 不代表最后没有问题</li>
+<li>对错误处理的态度: 凡事只要有可能出错，那就一定会出错 (考虑时间因素)</li>
+<li>服务降级? 也可以数据降级, 页面降级, 稍微陈旧一点的数据总比5XX的用户体验要好.</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略四: 容错</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>nodejs中一种实现:</p>
+<p><img src="./tp99/netft.png" alt="网络容错" title="网络容错" width="80%"></p>
+</li>
+</ul>
+<ul>
+<li><p>例子: 如果大数据推荐接口挂了, 就提供一个大众化版本的数据给用户</p>
+<blockquote>
+<p>netFT(getBigDataRecommendDeals(), getCommonVersionDeals(), {timeout: 0.5})</p>
+</blockquote>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略五: 模块化</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>现状</p>
+<ul>
+<li>软件开发中唯一不变的就是变化</li>
+<li>新的需求, 新的网络增加进来, 如何让后续开发主动去思考采用并发还是串行?</li>
+<li>如果一部分网络请求写在controller, 一部分写在view层, 怎么能实现最大化并发执行?</li>
+<li>成都nodejs项目由成都ruby和成都前端共同维护, 如何进行模块责任划分?</li>
+<li>我们已经在nodejs项目中实现了MVC, 但因为业务复杂, 一个action代码往往非常长, 超过几百行, MVC模块化还不够!</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略五: 模块化</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>解决办法</p>
+<p>action再次分层, deal 列表页有很多共性, 我们将共性抽象为5层:</p>
+<ul>
+<li>预处理</li>
+<li>初始化</li>
+<li>数据处理</li>
+<li>逻辑处理</li>
+<li>渲染</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>策略五: 模块化</h2>
+
+</hgroup><article>
+
+<p><img src="./tp99/action2.png" alt="模块化" title="模块化" height="80%">
+<img src="./tp99/action.png" alt="模块化" title="模块化"></p>
+<p>详见: <a href="http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=6492577" target="_blank">http://wiki.tuan800-inc.com/pages/viewpage.action?pageId=6492577</a></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>总结</h2>
+
+</hgroup><article>
+
+<ul>
+<li>性能优化第一定律: 充分利用缓存</li>
+<li>性能优化需要深刻理解业务</li>
+<li>性能优化需要结合语言平台</li>
+<li>性能优化需要考虑团队现状</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>谢谢</h2>
+
+</hgroup><article>
+
+<p>Q/A</p>
+
+</article></section></slide>
+        <!--slide class="slide thank-you-slide segue nobackground">
+            <article class="flexbox vleft auto-fadein">
+                <h2>Q &amp; A</h2>
+                <h3>&lt;Thank You!&gt;</h3>
+            </article>
+        </slide-->
+        <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+              <h2 style="color: white;">Powered By nodePPT v1.2.3</h2>
+            </article>
+          </slide>
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = location.pathname.split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'move',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/hljs-0.8.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+<link rel="stylesheet" href="./css/theme.moon.css">
+<!--placeholder-->
+</body>
+</html>
