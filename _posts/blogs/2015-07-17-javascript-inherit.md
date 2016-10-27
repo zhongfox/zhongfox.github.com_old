@@ -61,9 +61,43 @@ title: javascript 继承
 
 ---
 
+2016.10.27 补充:
+
+
+
+重新整理一下, 然后发现javascript的继承链和[ruby继承链](http://zhongfox.github.io/blog/ruby/2013/03/16/ruby-inheritance-chain)有相似的关系
+
+<img src="/assets/images/javascript_inherit/inherits2.jpg" />
+
+
+* 整理后的图支持Ruby中的方法查找方式: 向左一步, 向上查找
+
+* 对象和类的关系
+
+  黑色 `__proto__` 类似 ruby中`.class`
+
+  如果`obj.__proto__ === klass.prototype`  那么obj是klass的实例
+
+* 类的继承关系
+
+  蓝色`__proto__` 类似 ruby中`.superclass`
+
+  如果`subklass.prototype.__proto__ === superklass.prototype` 那么subklass是superklass的子类
+
+* prototype的作用有点类似ruby中的singletonclass, 都是存放实例方法/属性的地方
+
+* Javascript Function 类比 Ruby Class
+
+* Javascript Object 类比 Ruby Object
+
+
+
+---
+
 ## 参考资料
 
 * <http://blog.oyanglul.us/javascript/understand-prototype.html>
 * <http://blog.rainy.im/2015/07/20/prototype-chain-in-js/>
 * <http://yijiebuyi.com/blog/ea4b2a30f73596a08ce85211626b68e5.html>
 * <http://my.oschina.net/antianlu/blog/262595>
+* <https://zhuanlan.zhihu.com/p/22989691>

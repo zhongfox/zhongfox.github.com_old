@@ -222,6 +222,12 @@ title: Maven
   * 传递性依赖
   * 依赖范围(scope): 当一个依赖的范围是test的 时候,说明它在Compiler插件运行compile目标的时候是不可用的。它只有在运 行compiler:testCompile和surefire:test目标的时候才会被加入到classpath中
 
+* 依赖调解
+
+  项目的包依赖树, 存在相同包的不同版本
+
+  * 路径最近者优先
+  * 第一声明优先, 即在POM中的顺序优先
 
 ---
 
