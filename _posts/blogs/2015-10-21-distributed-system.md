@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, architecture]
 tags : [distributed]
 title: 分布式系统学习
 ---

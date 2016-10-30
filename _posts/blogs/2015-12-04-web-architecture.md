@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, architecture]
 tags : [architecture, distributed]
 title: 大型网站技术架构读书笔记
 tags : [encoding, share]

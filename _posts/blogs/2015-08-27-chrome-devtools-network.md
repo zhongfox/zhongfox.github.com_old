@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, tool]
 tags : [chrome]
 title: Chrome 开发者工具网络视图
 ---

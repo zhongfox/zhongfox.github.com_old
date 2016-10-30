@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, tool]
 tags : [ debug]
 title: 调试技巧一二
 tags : [encoding, share]

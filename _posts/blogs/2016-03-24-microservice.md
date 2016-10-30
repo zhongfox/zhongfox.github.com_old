@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, architecture]
 tags : [architecture, microservice]
 title: 微服务
 ---

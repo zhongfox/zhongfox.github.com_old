@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, architecture]
 tags : [http, tcp, performance, browser, networking]
 title: Web性能权威指南读书笔记
 ---

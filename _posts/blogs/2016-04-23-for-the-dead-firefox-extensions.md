@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, sundry]
+categories: [blog, javascript]
 tags : [firefox]
 title: 纪念逝去的firefox扩展
 ---

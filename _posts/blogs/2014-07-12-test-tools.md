@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: [blog, server]
+categories: [blog, tool]
 tags : [test, tools]
 title: 常用测试和调试工具
 ---
