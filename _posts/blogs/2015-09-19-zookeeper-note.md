@@ -55,14 +55,6 @@ title: zookeeper
 
 * Watcher: 客户端可以在指定ZNode上注册事件
 
-* ACL:
-
-  * CREATE
-  * READ
-  * WRITE
-  * DELETE
-  * ADMIN
-
 * ZAB
 
   * 所有事务必须由一个全局唯一的服务器(leader)来协调处理, 其他服务器为follower
@@ -88,6 +80,26 @@ title: zookeeper
 * `set path data [version]` 更新
 
 * `delete path [version]` 删除叶子节点
+
+* `setAcl path acl`
+
+  acl 格式`scheme:username:pass:acl`
+
+  其中pass是原始`username:pass`进行了sha1, 然后再base64, 类似于:
+
+  > setAcl path scheme:username:base64(sha1(username:pass)):acl
+
+  在命令行addauth时, auth需要传递原始`username:pass` 类似:
+
+  > addauth scheme username:pass
+
+  nodejs中实现sha1 + base64:
+
+  > crypto.createHash('sha1').update('username:pass').digest().toString('base64')
+
+* `getAcl path`
+
+* `addauth scheme auth`
 
 ---
 
@@ -177,6 +189,8 @@ zk的特点:
 
 ## 技术内幕
 
+### Node
+
 * zk事务: 能改变zk服务器状态的操作, 每个事务都有一个全局64位数字的事务
 
 * node属性信息:
@@ -185,8 +199,8 @@ zk的特点:
   * ctime: 创建节点时间
   * mZxid: 更新节点事务id
   * mtime: 更新节点时间
-  * dataVersion/version: 数据版本: 创建后修改的次数
-  * cversion: 子节点版本
+  * dataVersion/version: 数据版本: 创建后修改的次数, 数据内容不变的修改也会触发version改变
+  * cversion: 子节点版本, 子节点内容的变化不会触发cversion的改变
   * aversion: 节点的ACL版本号
   * ephemeralOwner: 临时节点的sessionID, 持久节点为0
   * dataLength: 数据内容长度
@@ -199,9 +213,44 @@ zk的特点:
 
   否则进行更新乐观锁检查
 
+### watcher
+
+* java版本 构造Zookeeper时可以传递默认watcher, node版本好像不支持
+* getData, getChildren, exist 都可以注册watcher
+* 常见事件:
+  * None -1: 建立连接
+  * NodeCreated 1: 监听的节点被创建
+  * NodeDeleted: 2: 监听的节点被删除
+  * NodeDataChanged 3: 数据更新
+  * NodeChildrenChanged 4: 子节点列表变化
+
+### ACL
+
+* 授权模式(Scheme)
+
+  * IP: 通过ip地址或者网段授权
+  * Digest: 通过用户名密码授权
+  * World: 开发授权, 唯一的权限标识 `world:anyone`
+  * Super: 超级用户模式, 是Digest的一种
+
+* 授权对象(ID)
+
+  * IP 模式下是具体ip或者网段
+  * Digest模式下是 `用户名:密码`
+  * World模式下只有一个ID: `anyone`
+  * Super 同Digest
+
+* 权限(Permission)
+
+  * C: 在当前节点下创建子节点, 影响命令 `create currentpath/somechild data`
+  * D: 删除当前节点的**子节点** 所以一个节点是否可以删除, 是父节点的ACL控制的, 影响命令`delete currentpath/somechild`
+  * R: 读取当前节点数据, 读取当前节点的子节点列表, 影响命令 `ls currentpath` `get currentpath`
+  * W: 对当前节点写入数据, 影响命令`set currentpath data`
+  * A: 管理权限, 可以设置当前节点的permission, 影响命令 `setACL currentpath ...`
 
 ---
 
 ## 参考:
 
 * zookeeper web 工具: https://github.com/qiuxiafei/zk-web
+* [从Paxos到Zookeeper](https://book.douban.com/subject/26292004/)
