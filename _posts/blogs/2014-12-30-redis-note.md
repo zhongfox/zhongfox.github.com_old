@@ -34,6 +34,9 @@ title: Redis笔记
 
 * 在 EXEC 命令执行之后所产生的错误， 并没有对它们进行特别处理： 即使事务中有某个/某些命令在执行时产生了错误， 事务中的其他命令仍然会继续执行
 
+
+* WATCH 只能在客户端进入事务状态之前执行， 在事务状态下发送 WATCH 命令会引发一个错误， 但它不会造成整个事务失败， 也不会修改事务队列中已有的数据
+
 * 当使用 AOF 方式做持久化的时候， Redis 会使用单个 write(2) 命令将事务写入到磁盘中
 
 * 不支持回滚
@@ -126,21 +129,6 @@ title: Redis笔记
 
 ---
 
+## 参考资料
 
-<table id='redis_table' class='table'>
-  <thead>
-   <th style="width: 20px"></th>
-   <th>String</th>
-   <th>Hash</th>
-   <th>List</th>
-   <th>Set</th>
-   <th>Zet</th>
-  </thead>
-  <tbody>
-  </tbody>
-<table>
-
-<link rel="stylesheet" type="text/css" href="/assets/css/redis_tooltip.css">
-<script src='/assets/javascripts/jquery-2.1.3.min.js' type='text/javascript'></script>
-<script src='/assets/javascripts/bootstrap.min.js' type='text/javascript'></script>
-<script src='/assets/javascripts/redis_cmd.js' type='text/javascript'></script>
+* <http://redisbook.readthedocs.io/en/latest/feature/transaction.html>
