@@ -3,7 +3,6 @@ layout: post
 categories: [blog, math]
 tags : [math]
 title: 程序员的数学读书笔记
-tags : [encoding, share]
 ---
 {% include JB/setup %}
 

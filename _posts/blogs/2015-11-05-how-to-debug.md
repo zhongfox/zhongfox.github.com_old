@@ -3,7 +3,6 @@ layout: post
 categories: [blog, tool]
 tags : [ debug]
 title: 调试技巧一二
-tags : [encoding, share]
 ---
 {% include JB/setup %}
 
