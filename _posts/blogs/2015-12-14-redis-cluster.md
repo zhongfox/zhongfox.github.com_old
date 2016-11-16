@@ -383,3 +383,6 @@ configEpoch 用于在不同节点提出不同的配置信息的时候（这种�
 * <http://redis.io/topics/cluster-spec>
 * <http://redisdoc.com/topic/cluster-spec.html>
 * <http://www.redis.cn/topics/cluster-spec.html>
+
+2016-11-15更新:
+* <http://ifeve.com/redis-cluster-spec/>
