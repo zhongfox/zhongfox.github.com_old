@@ -101,3 +101,7 @@ title: javascript 继承
 * <http://yijiebuyi.com/blog/ea4b2a30f73596a08ce85211626b68e5.html>
 * <http://my.oschina.net/antianlu/blog/262595>
 * <https://zhuanlan.zhihu.com/p/22989691>
+
+2016-11-21 添加:
+
+* [this 的值到底是什么](https://zhuanlan.zhihu.com/p/23804247)

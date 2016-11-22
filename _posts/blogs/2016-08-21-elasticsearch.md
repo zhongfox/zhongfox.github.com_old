@@ -86,6 +86,8 @@ title: Elasticsearch
 
 * 一个分片(shard)是一个最小级别“工作单元(worker unit)”,它只是保存了索引中所有数据的一部分
 
+  每个索引的分片是独立的, 也就是分片属于索引
+
 * 分片可以是主分片(primary shard)或者是复制分片(replica shard)
 
 * 复制分片可以提供读请求，比如搜索或者从别的shard取回文档

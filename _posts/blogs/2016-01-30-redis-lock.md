@@ -98,3 +98,9 @@ lua(原子性??):
 ## 参考
 
 * <http://www.cnblogs.com/mushroom/p/4752499.html>
+
+2016-11-18 补充:
+
+[分布式锁的实现](https://my.oschina.net/pingpangkuangmo/blog/747851)
+
+文章比较了mysql的悲观锁, redis setnx 以及zookeeper 来实现分布式锁的不同方式, 比较不错!
