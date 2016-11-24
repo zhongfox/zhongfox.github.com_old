@@ -29,4 +29,4 @@ title: gemspec和gemfile
 
 * 其中`gemspec` 告诉bundler使用同目录的` .gemspec` 去解决gem的依赖关系
 
-
+另外可参考 [extract something raw as a gem](https://coderwall.com/p/ckikga/gemfile-and-gemspec)
