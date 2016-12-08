@@ -110,8 +110,8 @@ TODO
 
 * ps + grep 希望保留首行:
 
-  * `ps -ef | { head -1; grep top; }` 适用`-ef` (为什么aux不行呢)
-  * `ps aux  | grep -E "PID|top"` 适用 `-ef` 和 `aux`
+  * `ps -ef | { head -1; grep 进程名字; }` 适用`-ef` (为什么aux不行呢)
+  * `ps aux  | grep -E "PID|进程名字"` 适用 `-ef` 和 `aux`
 
 * `-ef` `aux` `-xj` 首行区别
 
