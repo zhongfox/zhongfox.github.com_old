@@ -195,3 +195,10 @@ API Gateway 的职责:
 * [微服务实战（二）：使用API Gateway](http://dockone.io/article/482)
 * [微服务实战（三）：深入微服务架构的进程间通信](http://dockone.io/article/549)
 * [微服务实战（四）：服务发现的可行方案以及实践案例](http://dockone.io/article/771)
+
+2016-12-20 补充
+
+* [考虑把大型项目拆解成微服务吗？](http://dockone.io/article/1915)
+  收益/代价/DevOps
+
+  > 我非常确信分解一个大型项目到微服务的过程是值得的。然而，这是一个长期的投资，可能需要一段时间才能收到回报
